@@ -239,7 +239,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .wicket-opening-field { min-width: 0; padding: 0; border: 0; margin: 0; }
 .wicket-opening-field legend { padding: 0; margin-bottom: 8px; color: #646d75; font-size: 11px; font-weight: 700; }
 .wicket-opening-grid { display: grid; grid-template-columns: repeat(2, 335px); justify-items: start; align-items: start; gap: 12px; max-width: 100%; overflow-x: auto; }
-.wicket-opening-card { position: relative; display: block; box-sizing: content-box; width: 335px; height: 215px; overflow: hidden; padding: 0; border: 1px solid #dfe3e6; border-radius: 7px; background: #fff; cursor: pointer; transition: border-color .16s, transform .16s; }
+.wicket-opening-card { position: relative; display: block; box-sizing: border-box; width: 335px; height: 215px; overflow: hidden; padding: 0; border: 1px solid #dfe3e6; border-radius: 7px; background: #fff; cursor: pointer; transition: border-color .16s, transform .16s; }
 .wicket-opening-card:hover { border-color: #9ca4aa; }
 .wicket-opening-card:active { transform: scale(.99); }
 .wicket-opening-card.is-selected { border-color: #30373d; box-shadow: inset 0 0 0 2px #30373d; }
@@ -474,7 +474,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 }
 
 /* Scheme image is exactly 335x215 in the questionnaire, the summary and print. */
-.wicket-opening-card { box-sizing: content-box !important; width: 335px !important; height: 215px !important; }
+.wicket-opening-card { box-sizing: border-box !important; width: 335px !important; height: 215px !important; }
 .wicket-opening-card img,
 .wicket-summary-scheme img {
   width: 335px !important; height: 215px !important;
