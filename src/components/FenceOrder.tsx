@@ -477,6 +477,15 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
               {summaryRow('Открывание', form.swing.opening)}
+              <div className="wicket-summary-scheme w-[202px] h-[130px]">
+                <img
+                  src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
+                  alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
+                  width={202}
+                  height={130}
+                  className="w-[202px] h-[130px] object-contain"
+                />
+              </div>
               {summaryRow('Вариант петель', form.swing.hingeVariant)}
               {summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : '')}
             </>}
@@ -486,6 +495,15 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
               {summaryRow('Направление отката', form.sliding.direction)}
+              <div className="wicket-summary-scheme w-[202px] h-[130px]">
+                <img
+                  src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
+                  alt={`Схема отката ворот: ${form.sliding.direction}`}
+                  width={202}
+                  height={130}
+                  className="w-[202px] h-[130px] object-contain"
+                />
+              </div>
             </>}
           </ModalGroup>
         </div>
