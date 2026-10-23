@@ -116,7 +116,7 @@ function WicketOpeningChoice({ value, onChange }: {
     <legend>Вариант открытия калитки<span className="required-mark"> *</span></legend>
     <div className="wicket-opening-grid" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
       {wicketOpeningCards.map((option, index) => <label
-        className={`wicket-opening-card w-[335px] h-[215px] ${value === option.value ? 'is-selected' : ''}`}
+        className={`wicket-opening-card w-[168px] h-[108px] ${value === option.value ? 'is-selected' : ''}`}
         key={option.value}
       >
         <input
@@ -130,7 +130,7 @@ function WicketOpeningChoice({ value, onChange }: {
           onChange={() => onChange(option.value)}
           data-testid={`choice-wicket-opening-${index + 1}`}
         />
-        <img src={option.image} alt="" width={335} height={215} className="w-full h-full object-contain" />
+        <img src={option.image} alt="" width={168} height={108} className="w-full h-full object-contain" />
       </label>)}
     </div>
   </fieldset>;
@@ -414,13 +414,13 @@ export function FenceOrder() {
               {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
               {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
               {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
-              <div className="wicket-summary-scheme w-[335px] h-[215px]">
+              <div className="wicket-summary-scheme w-[168px] h-[108px]">
                 <img
                   src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
                   alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
-                  width={335}
-                  height={215}
-                  className="w-[335px] h-[215px] object-contain"
+                  width={168}
+                  height={108}
+                  className="w-[168px] h-[108px] object-contain"
                 />
               </div>
               {summaryRow('Вариант петель', form.wicket.hingeVariant)}
