@@ -458,11 +458,11 @@ export function FenceOrder() {
               {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
               {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
               {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
-              <div className="mt-2 mb-4 w-[335px] h-[215px]">
+              <div className="mt-1 mb-2 w-[168px] h-[108px]">
                 <img
                   src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
                   alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
-                  className="w-[335px] h-[215px] object-cover rounded-md border border-gray-200"
+                  className="w-[168px] h-[108px] object-contain rounded-md border border-gray-100"
                 />
               </div>
               {summaryRow('Вариант петель', form.wicket.hingeVariant)}
@@ -475,11 +475,11 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
               {summaryRow('Открывание', form.swing.opening)}
-              <div className="mt-2 mb-4 w-[335px] h-[215px]">
+              <div className="mt-1 mb-2 w-[670px] h-[215px]">
                 <img
                   src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
                   alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
-                  className="w-[335px] h-[215px] object-cover rounded-md border border-gray-200"
+                  className="w-[670px] h-[215px] object-contain rounded-md border border-gray-100"
                 />
               </div>
               {summaryRow('Вариант петель', form.swing.hingeVariant)}
@@ -491,11 +491,11 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
               {summaryRow('Направление отката', form.sliding.direction)}
-              <div className="mt-2 mb-4 w-[335px] h-[215px]">
+              <div className="mt-1 mb-2 w-[385px] h-[235px]">
                 <img
                   src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
                   alt={`Схема отката ворот: ${form.sliding.direction}`}
-                  className="w-[335px] h-[215px] object-cover rounded-md border border-gray-200"
+                  className="w-[385px] h-[235px] object-contain rounded-md border border-gray-200"
                 />
               </div>
             </>}
