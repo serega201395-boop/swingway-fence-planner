@@ -451,18 +451,18 @@ export function FenceOrder() {
                 {summaryRow('Ширина (ширина проєму)', row.width ? `${row.width} мм` : '—')}
                 {summaryRow('Высота (высота габаритна)', row.height ? `${row.height} мм` : '—')}
               </div>) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
-          </ModalGroup>
+         </ModalGroup>
           <ModalGroup title="Калитка">
             {form.noWicket ? <Absent /> : <>
               {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
               {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
               {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
-              <div style={{ width: '168px', height: '108px', marginTop: '4px', marginBottom: '8px' }}>
+              <div style={{ width: '168px', height: '108px', marginTop: '6px', marginBottom: '12px' }}>
                 <img
                   src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
                   alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
-                  style={{ width: '168px', height: '108px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB' }}
+                  style={{ width: '168px', height: '108px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
                 />
               </div>
               {summaryRow('Вариант петель', form.wicket.hingeVariant)}
@@ -475,11 +475,11 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
               {summaryRow('Открывание', form.swing.opening)}
-              <div style={{ width: '670px', height: '215px', marginTop: '4px', marginBottom: '8px', maxWidth: '100%' }}>
+              <div style={{ width: '335px', height: '108px', marginTop: '6px', marginBottom: '12px' }}>
                 <img
                   src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
                   alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB' }}
+                  style={{ width: '335px', height: '108px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
                 />
               </div>
               {summaryRow('Вариант петель', form.swing.hingeVariant)}
@@ -491,15 +491,16 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
               {summaryRow('Направление отката', form.sliding.direction)}
-              <div style={{ width: '385px', height: '235px', marginTop: '4px', marginBottom: '8px', maxWidth: '100%' }}>
+              <div style={{ width: '192px', height: '118px', marginTop: '6px', marginBottom: '12px' }}>
                 <img
                   src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
                   alt={`Схема отката ворот: ${form.sliding.direction}`}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB' }}
+                  style={{ width: '192px', height: '118px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
                 />
               </div>
             </>}
           </ModalGroup>
+
         </div>
         <div className="modal-footer">
           <div className="modal-footer-copy">
