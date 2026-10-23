@@ -131,6 +131,9 @@ function WicketOpeningChoice({ value, onChange }: {
           data-testid={`choice-wicket-opening-${index + 1}`}
         />
         <img src={option.image} alt="" width={202} height={130} className="w-full h-full object-contain" />
+        {value === option.value && <span className="wicket-opening-check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+        </span>}
       </label>)}
     </div>
   </fieldset>;
