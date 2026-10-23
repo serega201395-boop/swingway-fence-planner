@@ -452,7 +452,6 @@ export function FenceOrder() {
                 {summaryRow('Высота (высота габаритна)', row.height ? `${row.height} мм` : '—')}
               </div>) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
           </ModalGroup>
-         </ModalGroup>
           <ModalGroup title="Калитка">
             {form.noWicket ? <Absent /> : <>
               {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
