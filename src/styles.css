@@ -238,8 +238,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .wicket-opening-field { min-width: 0; padding: 0; border: 0; margin: 0; }
 .wicket-opening-field legend { padding: 0; margin-bottom: 8px; color: #646d75; font-size: 11px; font-weight: 700; }
-.wicket-opening-grid { display: grid; grid-template-columns: repeat(2, 335px); justify-items: start; align-items: start; gap: 12px; max-width: 100%; overflow-x: auto; }
-.wicket-opening-card { position: relative; display: block; box-sizing: border-box; width: 335px; height: 215px; overflow: hidden; padding: 0; border: 1px solid #dfe3e6; border-radius: 7px; background: #fff; cursor: pointer; transition: border-color .16s, transform .16s; }
+.wicket-opening-grid { display: grid; grid-template-columns: repeat(2, 168px); justify-items: start; align-items: start; gap: 12px; max-width: 100%; overflow-x: auto; }
+.wicket-opening-card { position: relative; display: block; box-sizing: border-box; width: 168px; height: 108px; overflow: hidden; padding: 0; border: 1px solid #dfe3e6; border-radius: 7px; background: #fff; cursor: pointer; transition: border-color .16s, transform .16s; }
 .wicket-opening-card:hover { border-color: #9ca4aa; }
 .wicket-opening-card:active { transform: scale(.99); }
 .wicket-opening-card.is-selected { border-color: #30373d; box-shadow: inset 0 0 0 2px #30373d; }
@@ -301,8 +301,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .modal-group { padding: 17px 0; border-bottom: 1px solid #eceeef; }
 .modal-group:last-child { border-bottom: 0; }
 .modal-group h3 { margin: 0 0 7px; color: #323a40; font-size: 13px; }
-.wicket-summary-scheme { width: 335px; height: 215px; margin: 10px auto 0; break-inside: avoid; page-break-inside: avoid; }
-.wicket-summary-scheme img { display: block; width: 335px; height: 215px; object-fit: contain; }
+.wicket-summary-scheme { width: 168px; height: 108px; margin: 10px auto 0; break-inside: avoid; page-break-inside: avoid; }
+.wicket-summary-scheme img { display: block; width: 168px; height: 108px; object-fit: contain; }
 .modal-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 27px; border-top: 1px solid #eceeef; background: #fcfcfc; }
 .modal-footer-copy { display: grid; gap: 5px; min-width: 0; }
 .modal-footer-copy p { margin: 0; color: #898f94; font-size: 10px; }
@@ -344,7 +344,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .gate-panel-head { align-items: flex-start; flex-direction: column; gap: 13px; padding: 15px; }
   .gate-panel-fields { padding: 0 15px 17px; }
   .choice-grid { grid-template-columns: 1fr; gap: 14px; }
-  .wicket-opening-grid { grid-template-columns: 335px; }
+  .wicket-opening-grid { grid-template-columns: 168px; }
   .hinge-config { grid-template-columns: 1fr; gap: 14px; }
   .absent-message { padding-left: 15px; }
   .card-footer { padding: 14px 16px; gap: 8px; }
@@ -457,8 +457,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 
   .app-shell.order-print-active .wicket-summary-scheme,
   .app-shell.order-print-active .wicket-summary-scheme img {
-    width: 335px !important;
-    height: 215px !important;
+    width: 168px !important;
+    height: 108px !important;
   }
 
   .app-shell.order-print-active .wicket-summary-scheme {
@@ -473,11 +473,11 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   }
 }
 
-/* Scheme image is exactly 335x215 in the questionnaire, the summary and print. */
-.wicket-opening-card { box-sizing: border-box !important; width: 335px !important; height: 215px !important; }
+/* Scheme image is exactly 168x108 in the questionnaire, the summary and print. */
+.wicket-opening-card { box-sizing: border-box !important; width: 168px !important; height: 108px !important; }
 .wicket-opening-card img,
 .wicket-summary-scheme img {
-  width: 335px !important; height: 215px !important;
+  width: 168px !important; height: 108px !important;
   max-width: none !important; max-height: none !important;
   object-fit: contain !important;
 }
