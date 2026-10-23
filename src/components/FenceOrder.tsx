@@ -282,7 +282,7 @@ export function FenceOrder() {
         summaryRow('Открывание', form.swing.opening), summaryRow('Вариант петель', form.swing.hingeVariant),
         summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : ''),
       ]} onEdit={() => setStep(2)} />
-      <ReviewGate title="Откатные ворота" absent={form.noSliding} rows={[
+      <ReviewGate title="Откатные ворота (орієнтація ззовні)" absent={form.noSliding} rows={[
         summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : ''),
         summaryRow('Направление отката', form.sliding.direction),
@@ -402,7 +402,7 @@ export function FenceOrder() {
                 value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
             </div>
           </GatePanel>
-          <GatePanel title="Откатные ворота" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
+          <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
             <div className="field-grid two-col">
               <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
               <Field id="sliding-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.sliding.height} onChange={(v) => changeNested('sliding', 'height', v)} />
@@ -486,7 +486,7 @@ export function FenceOrder() {
               {summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : '')}
             </>}
           </ModalGroup>
-          <ModalGroup title="Откатные ворота">
+          <ModalGroup title="Откатные ворота (орієнтація ззовні)">
             {form.noSliding ? <Absent /> : <>
               {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
