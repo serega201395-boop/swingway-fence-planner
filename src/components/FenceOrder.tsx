@@ -20,6 +20,42 @@ const swingOpeningCards = [
   { value: 'Внутрь', image: '/images/vorota-vnutri.png', label: 'Відкривання у двір (внутрь)' },
 ];
 
+const slidingDirectionCards = [
+  { value: 'Влево', image: '/images/vorota-vnutri.png', label: 'Відкатування вліво' },
+  { value: 'Вправо', image: '/images/vorota-pravorych.png', label: 'Відкатування вправо' }
+];
+
+function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  return (
+    <fieldset className="wicket-opening-field">
+      <legend>Направление отката<span className="required-mark"> *</span></legend>
+      <div className="wicket-opening-grid" role="radiogroup" aria-label="Направление отката">
+        {slidingDirectionCards.map((option) => (
+          <label
+            className={`wicket-opening-card w-[202px] h-[130px] ${value === option.value ? 'is-selected' : ''}`}
+            key={option.value}
+          >
+            <input
+              className="wicket-opening-input"
+              type="radio"
+              name="sliding-direction"
+              value={option.value}
+              checked={value === option.value}
+              onChange={() => onChange(option.value)}
+            />
+            <img src={option.image} alt={option.label} width={202} height={130} className="w-full h-full object-contain" />
+            {value === option.value && (
+              <span className="wicket-opening-check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              </span>
+            )}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 type OrderState = {
   step: number;
   name: string;
@@ -371,7 +407,7 @@ export function FenceOrder() {
               <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
               <Field id="sliding-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.sliding.height} onChange={(v) => changeNested('sliding', 'height', v)} />
             </div>
-            <Choice id="sliding-direction" label="Направление отката" value={form.sliding.direction} options={['Влево', 'Вправо']} onChange={(v) => changeNested('sliding', 'direction', v)} />
+            <SlidingDirectionChoice value={form.sliding.direction} onChange={(val) => changeNested('sliding', 'direction', val)} />
           </GatePanel>
         </div>}
 
