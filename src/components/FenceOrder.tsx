@@ -491,11 +491,11 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
               {summaryRow('Направление отката', form.sliding.direction)}
-              <div style={{ width: '220px', height: '135px', marginTop: '6px', marginBottom: '12px' }}>
+              <div style={{ width: '242px', height: '148px', marginTop: '6px', marginBottom: '12px' }}>
                 <img
                   src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
                   alt={`Схема отката ворот: ${form.sliding.direction}`}
-                  style={{ width: '220px', height: '135px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                  style={{ width: '242px', height: '148px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
                 />
               </div>
             </>}
