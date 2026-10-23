@@ -21,7 +21,7 @@ const swingOpeningCards = [
 ];
 
 const slidingDirectionCards = [
-  { value: 'Влево', image: '/images/vorota-vnutri.png', label: 'Відкатування вліво' },
+  { value: 'Влево', image: '/images/vorota-livorych.png', label: 'Відкатування вліво' },
   { value: 'Вправо', image: '/images/vorota-pravorych.png', label: 'Відкатування вправо' }
 ];
 
