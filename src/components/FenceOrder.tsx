@@ -15,6 +15,11 @@ const wicketOpeningCards: { value: WicketOpening; image: string }[] = [
   { value: 'На улицу, петли слева', image: '/images/naruzhu-leva.png' },
   { value: 'На улицу, петли справа', image: '/images/naruzhu-prava.png' },
 ];
+const swingOpeningCards = [
+  { value: 'Наружу', image: '/images/vorota-naruzhu.png', label: 'Відкривання у двір (назовні)' },
+  { value: 'Внутрь', image: '/images/vorota-vnutri.png', label: 'Відкривання у двір (внутрь)' },
+];
+
 type OrderState = {
   step: number;
   name: string;
@@ -352,7 +357,7 @@ export function FenceOrder() {
               <Field id="swing-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.swing.width} onChange={(v) => changeNested('swing', 'width', v)} />
               <Field id="swing-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.swing.height} onChange={(v) => changeNested('swing', 'height', v)} />
             </div>
-            <Choice id="swing-opening" label="Открывание" value={form.swing.opening} options={['Внутрь', 'Наружу']} onChange={(v) => changeNested('swing', 'opening', v)} />
+            <SwingOpeningChoice value={form.swing.opening} onChange={(val) => changeNested('swing', 'opening', val)} />
             <div className="hinge-config">
               <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant}
                 options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.swingHinge}
@@ -462,6 +467,27 @@ export function FenceOrder() {
       </section>
     </div>}
   </main>;
+}
+
+function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  return (
+    <fieldset className="wicket-opening-field">
+      <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
+      <div className="wicket-opening-grid" role="radiogroup" aria-label="Вариант открытия ворот">
+        {swingOpeningCards.map((option) => (
+          <label className={`wicket-opening-card w-[202px] h-[130px] ${value === option.value ? 'is-selected' : ''}`} key={option.value}>
+            <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+            <img src={option.image} alt={option.label} width={202} height={130} className="w-full h-full object-contain" />
+            {value === option.value && (
+              <span className="wicket-opening-check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              </span>
+            )}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
 }
 
 function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
