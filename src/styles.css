@@ -470,6 +470,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .app-shell.order-print-active *::after {
     animation: none !important;
     box-shadow: none !important;
+  }
+}
 
 /* Scheme image is exactly 335x215 in the questionnaire, the summary and print. */
 .wicket-opening-card { box-sizing: content-box !important; width: 335px !important; height: 215px !important; }
