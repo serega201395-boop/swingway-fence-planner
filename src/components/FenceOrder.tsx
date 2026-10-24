@@ -348,7 +348,7 @@ export function FenceOrder() {
                   ? form.sections.map((row) => ({ ...row, quantity: '', width: '', height: '' }))
                   : form.sections.length ? form.sections : [{ id: `section-${Date.now()}`, quantity: '', width: '', height: '' }]);
               }} />
-              <span className="custom-check"><Check size={18} strokeWidth={3} /></span><span>У меня нет секций</span>
+              <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>У меня нет секций</span>
             </label>
             {!form.noSections && <div className="section-rows">
               <div className="table-labels"><span>№</span><span>Количество</span><span>Ширина (ширина проєму)</span><span>Высота (высота габаритна)</span><span aria-hidden="true" /></div>
@@ -552,7 +552,7 @@ function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
       <div><span className="gate-dot" /><div><h3>{title}</h3><p>{caption}</p></div></div>
       <label className="check-row gate-check">
         <input type="checkbox" checked={absent} onChange={(e) => onAbsent(e.target.checked)} />
-        <span className="custom-check"><Check size={16} strokeWidth={3} /></span><span>{absentText}</span>
+        <span className="custom-check">{absent && <Check size={16} strokeWidth={3.4} />}</span><span>{absentText}</span>
       </label>
     </div>
     {!absent && <div className="gate-panel-fields">{children}</div>}
