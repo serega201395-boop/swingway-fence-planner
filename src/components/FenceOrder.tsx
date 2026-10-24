@@ -29,7 +29,8 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
   return (
     <fieldset className="wicket-opening-field">
       <legend>Направление отката<span className="required-mark"> *</span></legend>
-      <div className="grid grid-cols-2 gap-4 mt-2 max-w-[500px]" role="radiogroup" aria-label="Направление отката">
+      {/* ⚡️ Убрали wicket-opening-grid, теперь сетка на 100% управляется чистым Tailwind */}
+      <div className="grid grid-cols-2 gap-4 mt-2 max-w-[510px]" role="radiogroup" aria-label="Направление отката">
         {slidingDirectionCards.map((option) => (
           <label className={`w-[242px] h-[148px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
