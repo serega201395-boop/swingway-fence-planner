@@ -480,11 +480,12 @@ export function FenceOrder() {
               {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
               {summaryRow('Открывание', form.swing.opening)}
               <div style={{ width: '385px', height: '500px', marginTop: '6px', marginBottom: '12px' }}>
-                <img
-                  src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
-                  alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
-                  style={{ width: '385px', height: '500px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
-                />
+              <img
+                src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
+                alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
+                className="!h-[100px] max-h-[100px] w-[385px] object-contain rounded-[6px] border border-[#E5E7EB] block"
+                style={{ width: '385px', height: '100px', maxHeight: '100px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+              />
               </div>
               {summaryRow('Вариант петель', form.swing.hingeVariant)}
               {summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : '')}
