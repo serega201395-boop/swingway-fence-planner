@@ -318,15 +318,15 @@ export function FenceOrder() {
         </div>)}
       </nav>
 
-      <section className="wizard-card" key={form.step}>
+     <section className="wizard-card" key={form.step}>
         <div className="card-heading">
           <div>
-            <div className="card-kicker">ЭТАП 0{form.step} / 03</div>
             <h2>{form.step === 1 ? 'Основные параметры' : form.step === 2 ? 'Калитка и ворота' : 'Проверьте заказ'}</h2>
             <p>{form.step === 1 ? 'Начните с названия и параметров секций.' : form.step === 2 ? 'Добавьте нужные конструкции или отметьте, что они не нужны.' : 'Все данные можно изменить прямо здесь.'}</p>
           </div>
           <span className="step-icon"><ClipboardList size={22} strokeWidth={1.7} /></span>
         </div>
+
 
         {form.step === 1 && <div className="form-content">
           <section className="form-section">
