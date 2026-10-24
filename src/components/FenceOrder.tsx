@@ -125,7 +125,7 @@ type FieldProps = {
 };
 function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder }: FieldProps) {
   return <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
-    <span className="field-label text-[17px] font-medium" style={{ fontSize: '17px', marginBottom: '6px', display: 'block' }}>
+    <span className="field-label text-[15px] font-medium" style={{ fontSize: '15px', marginBottom: '10px', display: 'block' }}>
       {label}{required && <span className="required-mark"> *</span>}
     </span>
     <span className="input-wrap">
@@ -140,10 +140,10 @@ function Field({ label, value, onChange, type = 'text', suffix, required, error,
         required={required} 
         aria-invalid={error || undefined} 
         onChange={(event) => onChange(event.target.value)} 
-        className="text-[17px] p-2"
-        style={{ fontSize: '17px', height: '44px' }}
+        className="text-[15px] p-2"
+        style={{ fontSize: '15px', height: '35px' }}
       />
-      {suffix && <span className="input-suffix text-[17px]" style={{ fontSize: '17px' }}>{suffix}</span>}
+      {suffix && <span className="input-suffix text-[15px]" style={{ fontSize: '15px' }}>{suffix}</span>}
     </span>
   </label>;
 }
