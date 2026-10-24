@@ -531,14 +531,9 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
       <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
       <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Вариант открытия ворот">
         {swingOpeningCards.map((option) => (
-          <label className={`w-[385px] h-[100px] overflow-hidden relative display-flex flex-col border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm' : 'border-gray-200 hover:border-gray-300'}`} key={option.value}>
+          <label className={`w-[385px] h-[100px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-            {/* ⚡️ Добавили !w-[385px] !h-[100px] в className, чтобы полностью уничтожить влияние CSS */}
-            <img 
-              src={option.image} 
-              alt={option.label} 
-              className="!w-[385px] !h-[100px] w-full h-full object-contain" 
-            />
+            <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
             <span className="wicket-opening-card-label hidden">{option.label}</span>
             {value === option.value && (
               <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
@@ -551,7 +546,6 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
     </fieldset>
   );
 }
-
 
 function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
   title: string; caption: string; absent: boolean; onAbsent: (value: boolean) => void; absentText: string; children: ReactNode;
