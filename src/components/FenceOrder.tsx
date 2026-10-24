@@ -299,7 +299,7 @@ export function FenceOrder() {
       <span className="topbar-note">Конфигуратор заказа</span>
     </header>
 
-    <div className="page-wrap" style={{ maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
+   <div className="page-wrap text-lg" style={{ maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
       <section className="intro">
         <div className="eyebrow">Индивидуальная комплектация</div>
         <h1>Соберите свой<br className="desktop-break" /> заказ ограждения</h1>
