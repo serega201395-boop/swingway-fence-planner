@@ -216,7 +216,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   display: flex;
   align-items: center;
   font-size: 14px !important;
-  font-weight: 400;
+  font-weight: 500;
   color: #374151;
   cursor: pointer;
 }
