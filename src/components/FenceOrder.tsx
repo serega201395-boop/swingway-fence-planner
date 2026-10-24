@@ -334,7 +334,7 @@ export function FenceOrder() {
             <div className="field-grid three-col">
               <Field id="order-name" label="Название заказа" value={form.name} required error={nameError} placeholder="Например, ограждение для дома" onChange={(v) => { update('name', v); if (v.trim()) setNameError(false); }} />
               <Field id="fence-type" label="Тип забора" value={form.fenceType ?? ''} onChange={(v) => update('fenceType', v)} placeholder="Например, евроштакетник" />
-              <Field id="ral-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} placeholder="Например, 7024" />
+              <Field id="ral-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} placeholder="Например, 7016 нажд" />
             </div>
             {nameError && <p className="validation-message" role="alert">Укажите название заказа, чтобы продолжить.</p>}
           </section>
