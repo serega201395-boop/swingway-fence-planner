@@ -29,24 +29,14 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
   return (
     <fieldset className="wicket-opening-field">
       <legend>Направление отката<span className="required-mark"> *</span></legend>
-      <div className="wicket-opening-grid" role="radiogroup" aria-label="Направление отката">
+      <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Направление отката">
         {slidingDirectionCards.map((option) => (
-          <label
-            className={`wicket-opening-card w-[202px] h-[130px] ${value === option.value ? 'is-selected' : ''}`}
-            key={option.value}
-          >
-            <input
-              className="wicket-opening-input"
-              type="radio"
-              name="sliding-direction"
-              value={option.value}
-              checked={value === option.value}
-              onChange={() => onChange(option.value)}
-            />
-            <img src={option.image} alt={option.label} width={202} height={130} className="w-full object-contain" />
+          <label className={`w-[230px] h-[150px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
+            <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+            <img src={option.image} alt={option.label} width={230} height={150} className="w-full max-h-full object-contain" />
             <span className="wicket-opening-card-label hidden">{option.label}</span>
             {value === option.value && (
-              <span className="wicket-opening-check" aria-hidden="true">
+              <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
               </span>
             )}
