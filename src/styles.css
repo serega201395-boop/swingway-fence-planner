@@ -201,10 +201,32 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .validation-message { margin: 11px 0 0; color: #a34941; font-size: 12px; animation: appear .18s ease both; }
 .check-row { display: inline-flex; align-items: center; gap: 9px; color: #68717a; font-size: 12px; cursor: pointer; user-select: none; }
 .check-row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.custom-check { width: 17px; height: 17px; border: 1px solid #cfd4d8; border-radius: 4px; display: grid; place-items: center; color: transparent; background: #fff; transition: background .16s, border-color .16s, color .16s; }
+.custom-check { 
+  width: 22px; 
+  height: 22px; 
+  border: 1px solid #cfd4d8; 
+  border-radius: 4px; 
+  display: grid; 
+  place-items: center; 
+  color: transparent; 
+  background: #fff; 
+  transition: background .16s, border-color .16s, color .16s; 
+}
+.check-row {
+  display: flex;
+  align-items: center;
+  font-size: 16px !important;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+}
+.check-row span:last-child {
+  font-size: 16px !important;
+}
 .check-row input:checked + .custom-check { color: white; border-color: #30373d; background: #30373d; }
 .check-row input:focus-visible + .custom-check { outline: 3px solid rgba(68, 89, 110, .28); outline-offset: 2px; }
 .section-list .section-heading { margin-bottom: 15px; }
+
 .section-rows { margin-top: 18px; animation: appear .22s ease both; }
 .table-labels, .section-row { display: grid; grid-template-columns: 36px minmax(95px, .85fr) minmax(110px, 1fr) minmax(110px, 1fr) 34px; gap: 12px; align-items: end; }
 .table-labels { padding: 0 0 8px; color: #4b5563; font-size: 12px; font-weight: 600; text-transform: uppercase; }
