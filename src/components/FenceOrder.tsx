@@ -552,7 +552,7 @@ function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
       <div><span className="gate-dot" /><div><h3>{title}</h3><p>{caption}</p></div></div>
       <label className="check-row gate-check">
         <input type="checkbox" checked={absent} onChange={(e) => onAbsent(e.target.checked)} />
-        <span className="custom-check"><Check size={16} /></span><span>{absentText}</span>
+      <span className="custom-check"><Check size={14} strokeWidth={3} /></span><span>{absentText}</span>
       </label>
     </div>
     {!absent && <div className="gate-panel-fields">{children}</div>}
