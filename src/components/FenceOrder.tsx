@@ -125,11 +125,25 @@ type FieldProps = {
 };
 function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder }: FieldProps) {
   return <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
-    <span className="field-label">{label}{required && <span className="required-mark"> *</span>}</span>
+    <span className="field-label text-[17px] font-medium" style={{ fontSize: '17px', marginBottom: '6px', display: 'block' }}>
+      {label}{required && <span className="required-mark"> *</span>}
+    </span>
     <span className="input-wrap">
-      <input id={id} data-testid={`input-${id}`} type={type} value={value} min={min} step={step} placeholder={placeholder}
-        required={required} aria-invalid={error || undefined} onChange={(event) => onChange(event.target.value)} />
-      {suffix && <span className="input-suffix">{suffix}</span>}
+      <input 
+        id={id} 
+        data-testid={`input-${id}`} 
+        type={type} 
+        value={value} 
+        min={min} 
+        step={step} 
+        placeholder={placeholder}
+        required={required} 
+        aria-invalid={error || undefined} 
+        onChange={(event) => onChange(event.target.value)} 
+        className="text-[17px] p-2"
+        style={{ fontSize: '17px', height: '44px' }}
+      />
+      {suffix && <span className="input-suffix text-[17px]" style={{ fontSize: '17px' }}>{suffix}</span>}
     </span>
   </label>;
 }
