@@ -44,7 +44,7 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
               onChange={() => onChange(option.value)}
             />
             <img src={option.image} alt={option.label} width={202} height={130} className="w-full object-contain" />
-            <span className="wicket-opening-card-label">{option.label}</span>
+            <span className="wicket-opening-card-label hidden">{option.label}</span>
             {value === option.value && (
               <span className="wicket-opening-check" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
@@ -56,6 +56,7 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
     </fieldset>
   );
 }
+
 
 type OrderState = {
   step: number;
@@ -175,7 +176,7 @@ function WicketOpeningChoice({ value, onChange }: {
           data-testid={`choice-wicket-opening-${index + 1}`}
         />
         <img src={option.image} alt="" width={202} height={130} className="w-full object-contain" />
-        <span className="wicket-opening-card-label">{option.value}</span>
+        <span className="wicket-opening-card-label hidden">{option.value}</span>
         {value === option.value && <span className="wicket-opening-check" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
         </span>}
@@ -529,12 +530,12 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
       <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
       <div className="wicket-opening-grid" role="radiogroup" aria-label="Вариант открытия ворот">
         {swingOpeningCards.map((option) => (
-          <label className={`wicket-opening-card w-[202px] h-[130px] ${value === option.value ? 'is-selected' : ''}`} key={option.value}>
+          <label className={`wicket-opening-card w-[385px] h-[130px] overflow-hidden relative border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'is-selected border-dark bg-light-primary' : 'border-gray-200'}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-            <img src={option.image} alt={option.label} width={202} height={130} className="w-full object-contain" />
-            <span className="wicket-opening-card-label">{option.label}</span>
+            <img src={option.image} alt={option.label} width={385} height={130} className="w-full h-full object-contain" />
+            <span className="wicket-opening-card-label hidden">{option.label}</span>
             {value === option.value && (
-              <span className="wicket-opening-check" aria-hidden="true">
+              <span className="wicket-opening-check absolute top-2 right-2 bg-dark rounded-full p-0.5" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
               </span>
             )}
