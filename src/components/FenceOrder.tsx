@@ -479,11 +479,11 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
               {summaryRow('Открывание', form.swing.opening)}
-              <div style={{ width: '385px', height: '124px', marginTop: '6px', marginBottom: '12px' }}>
+              <div style={{ width: '385px', height: '100px', marginTop: '6px', marginBottom: '12px' }}>
                 <img
                   src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
                   alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
-                  style={{ width: '385px', height: '124px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                  style={{ width: '385px', height: '100px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
                 />
               </div>
               {summaryRow('Вариант петель', form.swing.hingeVariant)}
