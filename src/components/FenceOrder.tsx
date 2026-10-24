@@ -185,6 +185,7 @@ function WicketOpeningChoice({ value, onChange }: {
   </fieldset>;
 }
 
+
 export function FenceOrder() {
   const [form, setForm] = useState<OrderState>(restoreState);
   const [nameError, setNameError] = useState(false);
