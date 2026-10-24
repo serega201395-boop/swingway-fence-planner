@@ -262,17 +262,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .wicket-opening-field legend { padding: 0; margin-bottom: 6px; color: #1f2937; font-size: 14.5px; font-weight: 400; }
 .wicket-opening-grid { display: grid; grid-template-columns: repeat(2, 202px); justify-items: start; align-items: start; gap: 12px; max-width: 100%; overflow-x: auto; padding: 6px; margin-left: -6px; }
 .wicket-opening-card { position: relative; display: flex; flex-direction: column; box-sizing: border-box; width: 202px; overflow: hidden; padding: 0; border: 1px solid #dfe3e6; border-radius: 7px; background: #fff; cursor: pointer; transition: border-color .16s, box-shadow .16s, transform .16s; }
-.wicket-opening-card:hover { border-color: #9ca4aa; }
-.wicket-opening-card:active { transform: scale(.99); }
-.wicket-opening-card.is-selected { border-color: #030712; box-shadow: 0 0 0 3px rgba(3,7,18,.16), 0 7px 16px rgba(3,7,18,.2); transform: translateY(-2px); }
-.wicket-opening-card.is-selected:active { transform: translateY(-2px) scale(.99); }
-.wicket-opening-card::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 6px; box-shadow: inset 0 0 0 3px #030712; opacity: 0; transition: opacity .16s; pointer-events: none; }
-.wicket-opening-card.is-selected::after { opacity: 1; }
 .wicket-opening-card:has(.wicket-opening-input:focus-visible) { outline: 2px solid #68747d; outline-offset: 4px; }
 .wicket-opening-input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.wicket-opening-card img { display: block; width: 100%; height: 130px; object-fit: contain; opacity: .72; filter: grayscale(.3); transition: opacity .16s, filter .16s; }
-.wicket-opening-card:hover img { opacity: .92; filter: none; }
-.wicket-opening-card.is-selected img { opacity: 1; filter: none; }
 .wicket-opening-check { position: absolute; top: 6px; right: 6px; z-index: 2; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: #242a31; box-shadow: 0 2px 6px rgba(0,0,0,.28); animation: wicket-check-pop .18s ease both; }
 @keyframes wicket-check-pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .wicket-opening-card-label { font-size: 12px; text-align: center; padding: 6px 4px 7px; color: #6b7280; line-height: 1.3; }
