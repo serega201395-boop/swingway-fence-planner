@@ -462,7 +462,7 @@ export function FenceOrder() {
               {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
               {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
               {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
-              <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '12px' }}>
+              <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '0px' }}>
                 <img
                   src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
                   alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
@@ -479,7 +479,7 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
               {summaryRow('Открывание', form.swing.opening)}
-              <div style={{ width: '385px', height: '100px', marginTop: '3px', marginBottom: '0px' }}>
+              <div style={{ width: '385px', height: '100px', marginTop: '6px', marginBottom: '0px' }}>
               <img
                 src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
                 alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
@@ -496,7 +496,7 @@ export function FenceOrder() {
               {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
               {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
               {summaryRow('Направление отката', form.sliding.direction)}
-              <div style={{ width: '242px', height: '148px', marginTop: '6px', marginBottom: '12px' }}>
+              <div style={{ width: '242px', height: '148px', marginTop: '6px', marginBottom: '0px' }}>
                 <img
                   src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
                   alt={`Схема отката ворот: ${form.sliding.direction}`}
