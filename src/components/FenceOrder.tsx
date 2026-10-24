@@ -43,7 +43,8 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
               checked={value === option.value}
               onChange={() => onChange(option.value)}
             />
-            <img src={option.image} alt={option.label} width={202} height={130} className="w-full h-full object-contain" />
+            <img src={option.image} alt={option.label} width={202} height={130} className="w-full object-contain" />
+            <span className="wicket-opening-card-label">{option.label}</span>
             {value === option.value && (
               <span className="wicket-opening-check" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
@@ -125,25 +126,13 @@ type FieldProps = {
 };
 function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder }: FieldProps) {
   return <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
-    <span className="field-label text-[15px] font-medium" style={{ fontSize: '15px', marginBottom: '10px', display: 'block' }}>
+    <span className="field-label">
       {label}{required && <span className="required-mark"> *</span>}
     </span>
     <span className="input-wrap">
-      <input 
-        id={id} 
-        data-testid={`input-${id}`} 
-        type={type} 
-        value={value} 
-        min={min} 
-        step={step} 
-        placeholder={placeholder}
-        required={required} 
-        aria-invalid={error || undefined} 
-        onChange={(event) => onChange(event.target.value)} 
-        className="text-[15px] p-2"
-        style={{ fontSize: '15px', height: '35px' }}
-      />
-      {suffix && <span className="input-suffix text-[15px]" style={{ fontSize: '15px' }}>{suffix}</span>}
+      <input id={id} data-testid={`input-${id}`} type={type} value={value} min={min} step={step} placeholder={placeholder}
+        required={required} aria-invalid={error || undefined} onChange={(event) => onChange(event.target.value)} />
+      {suffix && <span className="input-suffix">{suffix}</span>}
     </span>
   </label>;
 }
@@ -185,7 +174,8 @@ function WicketOpeningChoice({ value, onChange }: {
           onChange={() => onChange(option.value)}
           data-testid={`choice-wicket-opening-${index + 1}`}
         />
-        <img src={option.image} alt="" width={202} height={130} className="w-full h-full object-contain" />
+        <img src={option.image} alt="" width={202} height={130} className="w-full object-contain" />
+        <span className="wicket-opening-card-label">{option.value}</span>
         {value === option.value && <span className="wicket-opening-check" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
         </span>}
@@ -313,7 +303,7 @@ export function FenceOrder() {
       <span className="topbar-note">Конфигуратор заказа</span>
     </header>
 
-   <div className="page-wrap text-lg" style={{ maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
+    <div className="page-wrap">
       <section className="intro">
         <div className="eyebrow">Индивидуальная комплектация</div>
         <h1>Соберите свой<br className="desktop-break" /> заказ ограждения</h1>
@@ -540,7 +530,8 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
         {swingOpeningCards.map((option) => (
           <label className={`wicket-opening-card w-[202px] h-[130px] ${value === option.value ? 'is-selected' : ''}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-            <img src={option.image} alt={option.label} width={202} height={130} className="w-full h-full object-contain" />
+            <img src={option.image} alt={option.label} width={202} height={130} className="w-full object-contain" />
+            <span className="wicket-opening-card-label">{option.label}</span>
             {value === option.value && (
               <span className="wicket-opening-check" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
