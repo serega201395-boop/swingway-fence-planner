@@ -310,10 +310,10 @@ export function FenceOrder() {
         <p>Укажите параметры секций и ворот — мы соберём всё в одном понятном списке.</p>
       </section>
 
-      <nav className="progress" aria-label="Этапы заказа">
+      <nav className="progress" aria-label="Этапы заказа" style={{ marginBottom: '24px' }}>
         {steps.map((label, i) => <div className={`progress-step ${form.step === i + 1 ? 'current' : ''} ${form.step > i + 1 ? 'complete' : ''}`} key={label}>
-          <span className="progress-number">{form.step > i + 1 ? <Check size={14} /> : `0${i + 1}`}</span>
-          <span className="progress-label">{label}</span>
+          <span className="progress-number" style={{ fontSize: '16px', fontWeight: '600' }}>{form.step > i + 1 ? <Check size={16} /> : `0${i + 1}`}</span>
+          <span className="progress-label" style={{ fontSize: '17px', fontWeight: '500', marginLeft: '8px' }}>{label}</span>
           {i < steps.length - 1 && <span className="progress-line" />}
         </div>)}
       </nav>
