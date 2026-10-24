@@ -215,13 +215,13 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .check-row {
   display: flex;
   align-items: center;
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 500;
   color: #374151;
   cursor: pointer;
 }
 .check-row span:last-child {
-  font-size: 16px !important;
+  font-size: 14px !important;
 }
 .check-row input:checked + .custom-check { color: white; border-color: #30373d; background: #30373d; }
 .check-row input:focus-visible + .custom-check { outline: 3px solid rgba(68, 89, 110, .28); outline-offset: 2px; }
