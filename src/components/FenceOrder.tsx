@@ -348,7 +348,7 @@ export function FenceOrder() {
                   ? form.sections.map((row) => ({ ...row, quantity: '', width: '', height: '' }))
                   : form.sections.length ? form.sections : [{ id: `section-${Date.now()}`, quantity: '', width: '', height: '' }]);
               }} />
-              <span className="custom-check"><Check size={16} /></span><span>У меня нет секций</span>
+              <span className="custom-check"><Check size={14} strokeWidth={3} /></span><span>У меня нет секций</span>
             </label>
             {!form.noSections && <div className="section-rows">
               <div className="table-labels"><span>№</span><span>Количество</span><span>Ширина (ширина проєму)</span><span>Высота (высота габаритна)</span><span aria-hidden="true" /></div>
