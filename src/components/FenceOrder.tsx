@@ -530,9 +530,9 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
       <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
       <div className="wicket-opening-grid" role="radiogroup" aria-label="Вариант открытия ворот">
         {swingOpeningCards.map((option) => (
-          <label className={`wicket-opening-card w-[385px] h-[130px] overflow-hidden relative border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'is-selected border-dark bg-light-primary' : 'border-gray-200'}`} key={option.value}>
+          <label className={`wicket-opening-card w-[385px] h-[100px] overflow-hidden relative border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'is-selected border-dark bg-light-primary' : 'border-gray-200'}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-            <img src={option.image} alt={option.label} width={385} height={130} className="w-full h-full object-contain" />
+            <img src={option.image} alt={option.label} width={385} height={100} className="w-full h-full object-contain" />
             <span className="wicket-opening-card-label hidden">{option.label}</span>
             {value === option.value && (
               <span className="wicket-opening-check absolute top-2 right-2 bg-dark rounded-full p-0.5" aria-hidden="true">
