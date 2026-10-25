@@ -128,7 +128,7 @@ function WicketOpeningChoice({ value, onChange }: {
                 alt="" 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
+                  transform: isSelected ? 'scale(1.05)' : 'scale(1)',
                   imageRendering: '-webkit-optimize-contrast'
                 }}
               />
