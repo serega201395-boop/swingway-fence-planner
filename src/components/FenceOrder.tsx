@@ -1020,7 +1020,7 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
           onClick={onEdit} 
          /* { w-[84px] — кнопка немного расширена под шрифт 14px }
          /* hover:border-gray-500 — делает рамку чёткой и контрастной при наведении */
-        /* hover:shadow-md — создаёт глубокую, стильную тень */*/
+         /* hover:shadow-md — создаёт глубокую, стильную тень */
           className="w-[84px] h-7 flex items-center justify-center font-medium text-gray-500 bg-[#f9fafb] border border-[#e5e7eb] rounded-[5px] shadow-sm transition-all duration-200 hover:bg-white hover:text-gray-900 hover:border-gray-500 hover:shadow-md active:scale-[0.96] cursor-pointer focus:outline-none"
           style={{ fontSize: '14px', lineHeight: '1' }}
         >
