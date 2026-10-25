@@ -95,7 +95,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
                 alt={option.label} 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.0476) translateZ(0)' : 'scale(1) translateZ(0)',
+                  transform: isSelected ? 'scale(1.1) translateZ(0)' : 'scale(1) translateZ(0)',
                   imageRendering: '-webkit-optimize-contrast'
                 }} 
               />
