@@ -828,10 +828,8 @@ export function FenceOrder() {
                   </span>
                 </div>
 </GatePanel>
-            </div>
-          )}
 
-          {form.step === 3 && (
+{form.step === 3 && (
                 <div className="form-content review-content">
                   <div className="review-note"><span className="review-note-dot" /> Изменения сохраняются автоматически</div>
                   {allReviewFields}
