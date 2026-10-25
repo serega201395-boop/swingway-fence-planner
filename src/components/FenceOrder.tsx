@@ -9,7 +9,6 @@ const wicketOpeningValues = [
   'На улицу, петли справа',
 ] as const;
 type WicketOpening = (typeof wicketOpeningValues)[number];
-
 const wicketOpeningCards: { value: WicketOpening; image: string }[] = [
   { value: 'Во двор, петли слева', image: '/images/vnutri-leva.png' },
   { value: 'Во двор, петли справа', image: '/images/vnutri-prava.png' },
@@ -20,34 +19,255 @@ const swingOpeningCards = [
   { value: 'Наружу', image: '/images/vorota-naruzhu.png', label: 'Відкривання у двір (назовні)' },
   { value: 'Внутрь', image: '/images/vorota-vnutri.png', label: 'Відкривання у двір (внутрь)' },
 ];
+
 const slidingDirectionCards = [
   { value: 'Влево', image: '/images/vorota-livorych.png', label: 'Відкатування вліво' },
   { value: 'Вправо', image: '/images/vorota-pravorych.png', label: 'Відкатування вправо' }
 ];
 const POST_SECTIONS = [
-  '40х80х2', '60х60х2', '60х100х3', '80х80х2', '80х80х3', '100х100х3', '120х120х3', '150х150х4'
+  '40х80х2',
+  '60х60х2',
+  '60х100х3',
+  '80х80х2',
+  '80х80х3',
+  '100х100х3',
+  '120х120х3',
+  '150х150х4'
 ];
 
+function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  return (
+    <fieldset className="wicket-opening-field">
+      <legend>Направление отката<span className="required-mark"> *</span></legend>
+      <div className="flex flex-row items-center justify-start mt-2 max-w-full" role="radiogroup" aria-label="Направление отката">
+        {slidingDirectionCards.map((option, index) => {
+          const isSelected = value === option.value;
+          return (
+            <label 
+              className={`w-[242px] h-[148px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
+              }`}
+              style={{
+                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
+                marginRight: index === 0 ? '24px' : '0px',
+              }}
+              key={option.value}
+            >
+              <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+              <img 
+                src={option.image} 
+                alt={option.label} 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
+                style={{ 
+                  transform: isSelected ? 'scale(1.05) translateZ(0)' : 'scale(1) translateZ(0)',
+                  imageRendering: '-webkit-optimize-contrast',
+                  willChange: 'transform'
+                }} 
+              />
+              <span className="wicket-opening-card-label hidden">{option.label}</span>
+              {value === option.value && (
+                <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                </span>
+              )}
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
+
+function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  return (
+    <fieldset className="wicket-opening-field">
+      <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
+      <div className="flex flex-row items-center justify-start mt-2 max-w-full" role="radiogroup" aria-label="Вариант открытия ворот">
+        {swingOpeningCards.map((option, index) => {
+          const isSelected = value === option.value;
+          return (
+            <label 
+              className={`w-[385px] h-[110px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
+              }`}
+              style={{
+                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
+                marginRight: index === 0 ? '24px' : '0px',
+              }}
+              key={option.value}
+            >
+              <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+              <img 
+                src={option.image} 
+                alt={option.label} 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
+                style={{ 
+                  // Увеличиваем картинку внутри рамки еще на 5% (в сумме с рамкой будет 10%)
+                  transform: isSelected ? 'scale(1.05) translateZ(0)' : 'scale(1) translateZ(0)',
+                  imageRendering: '-webkit-optimize-contrast',
+                  // canny хак для идеальной резкости линий в Chromium:
+                  willChange: 'transform'
+                }} 
+              />
+              <span className="wicket-opening-card-label hidden">{option.label}</span>
+              {value === option.value && (
+                <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                </span>
+              )}
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
+
+function WicketOpeningChoice({ value, onChange }: {
+  value: WicketOpening;
+  onChange: (value: WicketOpening) => void;
+}) {
+  return (
+    <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
+      <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
+      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+        {wicketOpeningCards.map((option, index) => {
+          const isSelected = value === option.value;
+          return (
+            <label
+              className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
+              }`}
+              style={{
+                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isSelected ? '0 14px 28px -4px rgba(10, 25, 47, 0.42), 0 8px 14px -4px rgba(15, 32, 67, 0.35)' : 'none',
+              }}
+              key={option.value}
+            >
+              <input
+                className="wicket-opening-input"
+                type="radio"
+                name="wicket-opening"
+                value={option.value}
+                aria-label={option.value}
+                checked={isSelected}
+                required
+                onChange={() => onChange(option.value)}
+                data-testid={`choice-wicket-opening-${index + 1}`}
+              />
+              <img 
+                src={option.image} 
+                alt="" 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
+                style={{ 
+                  transform: isSelected ? 'scale(1.08)' : 'scale(1)',
+                  imageRendering: '-webkit-optimize-contrast'
+                }}
+              />
+              <span className="wicket-opening-card-label hidden">{option.value}</span>
+              {isSelected && (
+                <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                </span>
+              )}
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
+
+function Choice({ id, label, value, options, required, error, onChange }: {
+  id: string; label: string; value: string; options: string[]; required?: boolean; error?: boolean; onChange: (value: string) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5 my-2">
+      <span className="block text-[#1f2937] text-[14.5px] font-normal">
+        {label}{required && <span className="text-red-500"> *</span>}
+      </span>
+      <div className="flex flex-wrap" style={{ gap: '16px' }} role="radiogroup" aria-label={label}>
+        {options.map((option) => {
+          const isSelected = value === option;
+          return (
+            <button
+              key={option}
+              type="button"
+              onClick={() => onChange(option)}
+              style={{
+                backgroundColor: isSelected ? '#30373d' : '#ffffff',
+                color: isSelected ? '#ffffff' : '#4a5568',
+                borderColor: isSelected ? '#30373d' : '#e5e7eb',
+              }}
+              className="px-4 py-2 text-[14px] font-medium rounded-lg border transition-all cursor-pointer shadow-sm active:scale-[0.99]"
+            >
+              {option}
+            </button>
+          );
+        })}
+      </div>
+      {error && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите один вариант.</p>}
+    </div>
+  );
+}
+
 type OrderState = {
-  step: number; name: string; fenceType: string; color: string; noSections: boolean; sections: FenceRow[];
-  noWicket: boolean; wicket: {
-    width: string; height: string; quantity: string; openingOption: WicketOpening;
-    hingeVariant: string; hingeCount: string; lock: string;
+  step: number;
+  name: string;
+  fenceType: string;
+  color: string;
+  noSections: boolean;
+  sections: FenceRow[];
+  noWicket: boolean;
+  wicket: {
+    width: string; 
+    height: string; 
+    quantity: string; 
+    openingOption: WicketOpening;
+    hingeVariant: string; 
+    hingeCount: string; 
+    lock: string;
     postInstallation: 'бетонирование' | 'на_платформе' | 'к_колоннам' | '';
-    postLength: string; platformSize: string; postSection: string; comment: string;
+    postLength: string; 
+    platformSize: string; 
+    postSection: string;
+    comment: string;
   };
-  noSwing: boolean; swing: { 
-    width: string; height: string; opening: string; hingeVariant: string; hingeCount: string;
+  noSwing: boolean;
+  swing: { 
+    width: string; 
+    height: string; 
+    opening: string; 
+    hingeVariant: string; 
+    hingeCount: string;
     postInstallation: 'бетонирование' | 'на_платформе' | 'к_колоннам' | '';
-    postLength: string; platformSize: string; postSection: string; comment: string;
+    postLength: string; 
+    platformSize: string; 
+    postSection: string;
+    comment: string;
   };
-  noSliding: boolean; sliding: { 
-    width: string; height: string; direction: string;
+  noSliding: boolean;
+  sliding: { 
+    width: string; 
+    height: string; 
+    direction: string;
+    // Столбы для откатных ворот (опорный и упорный)
     postInstallation: 'бетонирование' | 'на_платформе' | 'к_колоннам' | '';
-    supportPostLength: string; supportPostSection: string;
-    catchPostLength: string; catchPostSection: string; platformSize: string; comment: string;
+    supportPostLength: string;
+    supportPostSection: string;
+    catchPostLength: string;
+    catchPostSection: string;
+    platformSize: string;
+    comment: string;
   };
 };
+
+
 
 const STORAGE_KEY = 'fence-order-state-v1';
 const initialState: OrderState = {
@@ -56,22 +276,29 @@ const initialState: OrderState = {
   noWicket: false, wicket: {
     width: '', height: '', quantity: '1', openingOption: 'На улицу, петли справа',
     hingeVariant: '', hingeCount: '', lock: '',
-    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2', comment: ''
+    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2',
+    comment: ''
   },
   noSwing: false, swing: { 
     width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '',
-    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '80х80х3', comment: ''
+    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '80х80х3',
+    comment: ''
   },
-  noSliding: false, sliding: { 
-    width: '', height: '', direction: 'Влево',
-    postInstallation: '', supportPostLength: '', supportPostSection: '80х80х3',
-    catchPostLength: '', catchPostSection: '60х60х2', platformSize: '200х200х8', comment: ''
-  },
-};
+    noSliding: false, sliding: { 
+      width: '', height: '', direction: 'Влево',
+      postInstallation: '', supportPostLength: '', supportPostSection: '80х80х3',
+      catchPostLength: '', catchPostSection: '60х60х2', platformSize: '200х200х8',
+      comment: ''
+    },
+  };
 
 const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
 const emptyGateErrors = { 
-  wicketHinge: false, swingHinge: false, wicketPostInstallation: false, swingPostInstallation: false, slidingPostInstallation: false 
+  wicketHinge: false, 
+  swingHinge: false, 
+  wicketPostInstallation: false, 
+  swingPostInstallation: false,
+  slidingPostInstallation: false 
 };
 
 function restoreState(): OrderState {
@@ -79,76 +306,77 @@ function restoreState(): OrderState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return initialState;
     const saved = JSON.parse(raw) as Partial<OrderState>;
-    return { ...initialState, ...saved } as OrderState;
-  } catch { return initialState; }
+    const savedWicket = (saved.wicket ?? {}) as Partial<OrderState['wicket']> & { opening?: string; hinges?: string; };
+    const { opening: legacyOpening, hinges: legacyHinges, ...savedWicketFields } = savedWicket;
+    const savedOpeningOption = savedWicketFields.openingOption;
+    let openingOption = wicketOpeningValues.includes(savedOpeningOption as WicketOpening)
+      ? savedOpeningOption as WicketOpening
+      : `${legacyOpening === 'Внутрь' ? 'Во двор' : 'На улицу'}, петли ${legacyHinges === 'Слева' ? 'слева' : 'справа'}` as WicketOpening;
+    
+    if (!wicketOpeningValues.includes(openingOption)) {
+      openingOption = 'На улицу, петли справа';
+    }
+
+    return {
+      ...initialState, ...saved,
+      step: Number.isInteger(saved.step) && saved.step! >= 1 && saved.step! <= 3 ? saved.step! : 1,
+      fenceType: typeof saved.fenceType === 'string' ? saved.fenceType : initialState.fenceType,
+      sections: Array.isArray(saved.sections) ? saved.sections.map((row, i) => ({
+        id: typeof row.id === 'string' ? row.id : `section-${i + 1}`,
+        quantity: String(row.quantity ?? '1'), width: String(row.width ?? ''), height: String(row.height ?? ''),
+      })) : initialState.sections,
+      wicket: { ...initialState.wicket, ...savedWicketFields, openingOption, comment: typeof savedWicketFields.comment === 'string' ? savedWicketFields.comment : '' },
+      swing: { ...initialState.swing, ...(saved.swing ?? {}), comment: typeof saved.swing?.comment === 'string' ? saved.swing.comment : '' },
+      sliding: { ...initialState.sliding, ...(saved.sliding ?? {}), comment: typeof saved.sliding?.comment === 'string' ? saved.sliding.comment : '' },
+    };
+  } catch {
+    return initialState;
+  }
 }
+
+
 
 type FieldProps = {
   label: string; value: string; onChange: (value: string) => void; type?: string;
   suffix?: string; required?: boolean; error?: boolean; id: string; min?: string; step?: string; placeholder?: string;
-  disabled?: boolean;
 };
-function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder, disabled }: FieldProps) {
-  return (
-    <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
-      <span className="field-label">{label}{required && <span className="required-mark"> *</span>}</span>
-      <span className="input-wrap">
-        <input id={id} data-testid={`input-${id}`} type={type} value={value} min={min} step={step} placeholder={placeholder}
-          required={required} disabled={disabled} aria-invalid={error || undefined} onChange={(e) => onChange(e.target.value)} />
-        {suffix && <span className="input-suffix">{suffix}</span>}
-      </span>
-    </label>
-  );
+function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder }: FieldProps) {
+  return <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
+    <span className="field-label">
+      {label}{required && <span className="required-mark"> *</span>}
+    </span>
+    <span className="input-wrap">
+      <input id={id} data-testid={`input-${id}`} type={type} value={value} min={min} step={step} placeholder={placeholder}
+        required={required} aria-invalid={error || undefined} onChange={(event) => onChange(event.target.value)} />
+      {suffix && <span className="input-suffix">{suffix}</span>}
+    </span>
+  </label>;
 }
-
-function Choice({ id, label, value, options, required, error, onChange }: any) {
-  return (
-    <div className="flex flex-col gap-1.5 my-2">
-      <span className="block text-[#1f2937] text-[14.5px] font-normal">{label}{required && <span className="text-red-500"> *</span>}</span>
-      <div className="flex flex-wrap gap-4" role="radiogroup" aria-label={label}>
-        {options.map((option: string) => (
-          <button key={option} type="button" onClick={() => onChange(option)} className={`px-4 py-2 text-[14px] font-medium rounded-lg border transition-all ${value === option ? 'bg-[#30373d] text-white border-[#30373d]' : 'bg-white text-gray-700 border-gray-200'}`}>{option}</button>
-        ))}
-      </div>
-      {error && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите один вариант.</p>}
-    </div>
-  );
-}
-
-function SectionSelectWithCustom({ label, value, onChange, options, id }: any) {
+function SectionSelectWithCustom({ label, value, onChange, options, id }: {
+  label: string; value: string; onChange: (val: string) => void; options: string[]; id: string;
+}) {
   const [isCustom, setIsCustom] = useState(!options.includes(value) && value !== '');
   return (
     <div className="field">
       <span className="field-label">{label}<span className="required-mark"> *</span></span>
-      {!isCustom ? (
-        <select id={id} className="w-full h-10 px-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px]" value={value} onChange={(e) => e.target.value === 'custom' ? setIsCustom(true) : onChange(e.target.value)}>
-          <option value="" disabled>Выберите сечение</option>
-          {options.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
-          <option value="custom">Другой размер...</option>
-        </select>
-      ) : (
-        <div className="input-wrap">
-          <input id={id} type="text" value={value} placeholder="Например, 100х50х3" onChange={(e) => onChange(e.target.value)} className="w-full h-10 px-3 border border-[#dfe3e6] rounded-[7px]" />
-          <button type="button" onClick={() => { setIsCustom(false); onChange(options[0]); }} className="absolute right-2 px-2 py-1 text-xs bg-gray-100 rounded">Из списка</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function GatePanel({ title, caption, absent, onAbsent, absentText, children }: any) {
-  return (
-    <section className={`gate-panel ${absent ? 'is-absent' : ''}`}>
-      <div className="gate-panel-head">
-        <div><span className="gate-dot" /><div><h3>{title}</h3><p>{caption}</p></div></div>
-        <label className="check-row gate-check">
-          <input type="checkbox" checked={absent} onChange={(e) => onAbsent(e.target.checked)} />
-          <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>{absentText}</span>
-        </label>
+      <div className="flex flex-col gap-2">
+        {!isCustom ? (
+          <select id={id} className="w-full h-10 px-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] outline-none" value={value} onChange={(e) => {
+            if (e.target.value === 'custom') { setIsCustom(true); onChange(''); }
+            else { onChange(e.target.value); }
+          }}>
+            <option value="" disabled>Выберите сечение</option>
+            {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+            <option value="custom">Другой размер...</option>
+          </select>
+        ) : (
+          <div className="input-wrap">
+            <input id={id} type="text" value={value} placeholder="Например, 100х50х3" onChange={(e) => onChange(e.target.value)} className="w-full h-10 px-3 border border-[#dfe3e6] rounded-[7px] outline-none" />
+            <button type="button" onClick={() => { setIsCustom(false); onChange(options); }} className="absolute right-2 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 rounded">Из списка</button>
+          </div>
+        )}
       </div>
-      {!absent && <div className="gate-panel-fields">{children}</div>}
-      {absent && <p className="absent-message">Эта конструкция не входит в заказ</p>}
-    </section>
+    </div>
   );
 }
 
@@ -157,28 +385,52 @@ export function FenceOrder() {
   const [nameError, setNameError] = useState(false);
   const [gateErrors, setGateErrors] = useState(emptyGateErrors);
   const [modalOpen, setModalOpen] = useState(false);
-  const [storageStatus, setStorageStatus] = useState<'saving' | 'saved' | 'error'>('saved');
+  const [storageStatus, setStorageStatus] = useState<'saving' | 'saved' | 'error'>('saving');
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
+      setStorageStatus('saved');
+    } catch {
+      setStorageStatus('error');
+    }
   }, [form]);
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') setModalOpen(false); };
+    document.addEventListener('keydown', onKeyDown);
+    document.body.style.overflow = 'hidden';
+    return () => { document.removeEventListener('keydown', onKeyDown); document.body.style.overflow = ''; };
+  }, [modalOpen]);
 
-  const update = <K extends keyof OrderState>(key: K, value: OrderState[K]) => setForm((c) => ({ ...c, [key]: value }));
-
+  const update = <K extends keyof OrderState>(key: K, value: OrderState[K]) => setForm((current) => ({ ...current, [key]: value }));
   const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
     setForm((current) => {
       const updatedGroup = { ...current[group], [key]: value };
+      
+      // Авторасчет столбов калитки
       if (group === 'wicket') {
-        if (key === 'postInstallation') updatedGroup.postLength = value === 'бетонирование' && current.wicket.height ? String(Number(current.wicket.height) + 1000) : '';
-        else if (key === 'height' && current.wicket.postInstallation === 'бетонирование') updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
+        if (key === 'postInstallation') {
+          updatedGroup.postLength = value === 'бетонирование' && current.wicket.height ? String(Number(current.wicket.height) + 1000) : '';
+        } else if (key === 'height' && current.wicket.postInstallation === 'бетонирование') {
+          updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
+        }
       }
+      
+      // Авторасчет столбов распашных ворот
       if (group === 'swing') {
-        if (key === 'postInstallation') updatedGroup.postLength = value === 'бетонирование' && current.swing.height ? String(Number(current.swing.height) + 1000) : '';
-        else if (key === 'height' && current.swing.postInstallation === 'бетонирование') updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
+        if (key === 'postInstallation') {
+          updatedGroup.postLength = value === 'бетонирование' && current.swing.height ? String(Number(current.swing.height) + 1000) : '';
+        } else if (key === 'height' && current.swing.postInstallation === 'бетонирование') {
+          updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
+        }
       }
+      
+      // Авторасчет столбов откатных ворот (опорный и упорный одновременно)
       if (group === 'sliding') {
         if (key === 'postInstallation') {
-          const isBeton = value === 'бетонирование'; const h = current.sliding.height;
+          const isBeton = value === 'бетонирование';
+          const h = current.sliding.height;
           updatedGroup.supportPostLength = isBeton && h ? String(Number(h) + 1000) : '';
           updatedGroup.catchPostLength = isBeton && h ? String(Number(h) + 1000) : '';
         } else if (key === 'height' && current.sliding.postInstallation === 'бетонирование') {
@@ -186,10 +438,16 @@ export function FenceOrder() {
           updatedGroup.catchPostLength = value ? String(Number(value) + 1000) : '';
         }
       }
+      
       return { ...current, [group]: updatedGroup };
     });
+    
+    // Сброс ошибок при выборе обязательных параметров
     if (group === 'wicket' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, wicketHinge: false }));
     if (group === 'wicket' && key === 'postInstallation') setGateErrors((c) => ({ ...c, wicketPostInstallation: false }));
+    if (group === 'swing' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, swingHinge: false }));
+    if (group === 'swing' && key === 'postInstallation') setGateErrors((c) => ({ ...c, swingPostInstallation: false }));
+    if (group === 'sliding' && key === 'postInstallation') setGateErrors((c) => ({ ...c, slidingPostInstallation: false }));
   };
 
   const validateGateChoices = () => {
@@ -205,88 +463,528 @@ export function FenceOrder() {
   };
 
   const next = () => {
-    if (form.step === 1 && !form.name.trim()) { setNameError(true); return; }
+    if (form.step === 1 && !form.name.trim()) { setNameError(true); document.getElementById('order-name')?.focus(); return; }
     if (form.step === 2 && !validateGateChoices()) return;
-    update('step', Math.min(3, form.step + 1));
+    setStep(Math.min(3, form.step + 1));
   };
-
-  const addSection = () => update('sections', [...form.sections, { id: `sec-${Date.now()}`, quantity: '1', width: '', height: '' }]);
-  const patchSection = (id: string, key: keyof Omit<FenceRow, 'id'>, value: string) => update('sections', form.sections.map((row) => row.id === id ? { ...row, [key]: value } : row));
+  const submitOrder = () => {
+    if (!form.name.trim()) {
+      setNameError(true);
+      update('step', 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (!validateGateChoices()) {
+      update('step', 2);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    setModalOpen(true);
+  };
+  const printOrder = () => window.print();
+  const addSection = () => update('sections', [...form.sections, { id: `section-${Date.now()}-${form.sections.length}`, quantity: '1', width: '', height: '' }]);
+  const patchSection = (id: string, key: keyof Omit<FenceRow, 'id'>, value: string) =>
+    update('sections', form.sections.map((row) => row.id === id ? { ...row, [key]: value } : row));
   const removeSection = (id: string) => update('sections', form.sections.filter((row) => row.id !== id));
 
-  const summaryRow = (label: string, value: string) => <div className="summary-row" key={label}><span>{label}</span><strong>{value || 'Не указано'}</strong></div>;
+  const summaryRow = (label: string, value: string) => <div className="summary-row" key={label}>
+    <span>{label}</span><strong>{value || 'Не указано'}</strong>
+  </div>;
+  const allReviewFields: ReactNode = <>
+    <div className="review-edit-grid">
+      <Field id="review-name" label="Название заказа" value={form.name} required onChange={(v) => update('name', v)} />
+      <Field id="review-fence-type" label="Тип забора" value={form.fenceType ?? ''} onChange={(v) => update('fenceType', v)} />
+      <Field id="review-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} />
+    </div>
+
+    <div className="review-edit-list">
+      <h3>Секции забора</h3>
+      {form.noSections ? <p className="absent">Отсутствует</p> : form.sections.map((row, i) => (
+        <div className="review-section-edit" key={row.id}>
+          <span className="review-index">0{i + 1}</span>
+          <Field id={`review-section-${row.id}-quantity`} label="Количество" type="number" min="1" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
+          <Field id={`review-section-${row.id}-width`} label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
+          <Field id={`review-section-${row.id}-height`} label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
+        </div>
+      ))}
+      {!form.noSections && <button className="text-button" type="button" onClick={addSection}><Plus size={16} /> Добавить секцию</button>}
+    </div>
+
+    <div className="review-gates-grid">
+      <ReviewGate title="Калитка" absent={form.noWicket} rows={[
+        summaryRow('Ширина (ширина проєму)', form.wicket.width ? form.wicket.width + ' мм' : ''),
+        summaryRow('Высота (высота габаритна)', form.wicket.height ? form.wicket.height + ' мм' : ''),
+        summaryRow('Количество', form.wicket.quantity ? form.wicket.quantity + ' шт.' : ''),
+        summaryRow('Вариант открытия калитки', form.wicket.openingOption),
+        summaryRow('Вариант петель', form.wicket.hingeVariant), 
+        summaryRow('Количество петель на створку', form.wicket.hingeCount ? form.wicket.hingeCount + ' шт.' : ''),
+        summaryRow('Замок', form.wicket.lock),
+        summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Сечение столбов калитки', form.wicket.postSection),
+        form.wicket.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.wicket.platformSize) : null,
+        form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? form.wicket.postLength + ' мм' : '') : null,
+        form.wicket.comment ? summaryRow('Примечание', form.wicket.comment) : null,
+      ].filter(Boolean)} onEdit={() => setStep(2)} />
+
+      <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
+        summaryRow('Ширина (ширина проєму)', form.swing.width ? form.swing.width + ' мм' : ''),
+        summaryRow('Высота (высота габаритна)', form.swing.height ? form.swing.height + ' мм' : ''),
+        summaryRow('Открывание', form.swing.opening), 
+        summaryRow('Вариант петель', form.swing.hingeVariant),
+        summaryRow('Количество петель на створку', form.swing.hingeCount ? form.swing.hingeCount + ' шт.' : ''),
+        summaryRow('Вариант установки столбов', form.swing.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.swing.postInstallation === 'на_платформе' ? 'На платформе' : form.swing.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Сечение столбов ворот', form.swing.postSection),
+        form.swing.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.swing.platformSize) : null,
+        form.swing.postInstallation !== '' ? summaryRow('Высота/длина столбов ворот', form.swing.postLength ? form.swing.postLength + ' мм' : '') : null,
+        form.swing.comment ? summaryRow('Примечание', form.swing.comment) : null,
+      ].filter(Boolean)} onEdit={() => setStep(2)} />
+
+      <ReviewGate title="Откатные ворота (орієнтація ззовні)" absent={form.noSliding} rows={[
+        summaryRow('Ширина (ширина проєму)', form.sliding.width ? form.sliding.width + ' мм' : ''),
+        summaryRow('Высота (высота габаритна)', form.sliding.height ? form.sliding.height + ' мм' : ''),
+        summaryRow('Направление отката', form.sliding.direction),
+        summaryRow('Вариант установки столбов', form.sliding.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.sliding.postInstallation === 'на_платформе' ? 'На платформе' : form.sliding.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Сечение опорного столба/рамки', form.sliding.supportPostSection),
+        form.sliding.postInstallation !== '' ? summaryRow('Длина опорного столба/рамки', form.sliding.supportPostLength ? form.sliding.supportPostLength + ' мм' : '') : null,
+        summaryRow('Сечение упорного столба', form.sliding.catchPostSection),
+        form.sliding.postInstallation !== '' ? summaryRow('Длина упорного столба', form.sliding.catchPostLength ? form.sliding.catchPostLength + ' мм' : '') : null,
+        form.sliding.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.sliding.platformSize) : null,
+        form.sliding.comment ? summaryRow('Примечание', form.sliding.comment) : null,
+      ].filter(Boolean)} onEdit={() => setStep(2)} />
+    </div>
+  </>;
+
 
   return (
     <main className={`app-shell ${modalOpen ? 'order-print-active' : ''}`}>
       <header className="topbar">
-        <span className="brand-name">Ограждение / заказ</span>
+        <a className="brand" href="/" aria-label="Заказ ограждения — главная">
+          <span className="brand-mark"><Fence size={21} strokeWidth={1.8} /></span>
+          <span className="brand-name">Ограждение<span> / заказ</span></span>
+        </a>
+        <span className="topbar-note">Конфигуратор заказа</span>
       </header>
 
       <div className="page-wrap">
+        <section className="intro">
+          <div className="eyebrow">Индивидуальная комплектация</div>
+          <h1>Соберите свой<br className="desktop-break" /> заказ ограждения</h1>
+          <p>Укажите параметры секций и ворот — мы соберём всё в одном понятном списке.</p>
+        </section>
+
         <nav className="progress" aria-label="Этапы заказа" style={{ marginBottom: '24px' }}>
           {steps.map((label, i) => (
-            <div className={`progress-step ${form.step === i + 1 ? 'current' : ''}`} key={label}>
-              <span>0{i + 1} - {label}</span>
+            <div className={`progress-step ${form.step === i + 1 ? 'current' : ''} ${form.step > i + 1 ? 'complete' : ''}`} key={label}>
+              <span className="progress-number" style={{ fontSize: '16px', fontWeight: '600' }}>{form.step > i + 1 ? <Check size={16} /> : `0${i + 1}`}</span>
+              <span className="progress-label" style={{ fontSize: '17px', fontWeight: '500', marginLeft: '8px' }}>{label}</span>
+              {i < steps.length - 1 && <span className="progress-line" />}
             </div>
           ))}
         </nav>
 
-        <section className="wizard-card">
+        <section className="wizard-card" key={form.step}>
+          <div className="card-heading">
+            <div>
+              <h2>{form.step === 1 ? 'Основные параметры' : form.step === 2 ? 'Калитка и ворота' : 'Проверьте заказ'}</h2>
+              <p>{form.step === 1 ? 'Начните с названия и параметров секций.' : form.step === 2 ? 'Добавьте нужные конструкции или отметьте, что они не нужны.' : 'Все данные можно изменить прямо здесь.'}</p>
+            </div>
+            <span className="step-icon"><ClipboardList size={22} strokeWidth={1.7} /></span>
+          </div>
+
           {form.step === 1 && (
             <div className="form-content">
-              <Field id="order-name" label="Название заказа" value={form.name} required error={nameError} onChange={(v) => { update('name', v); if(v.trim()) setNameError(false); }} />
-              <Field id="fence-type" label="Тип забора" value={form.fenceType} onChange={(v) => update('fenceType', v)} />
-              <Field id="ral-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} />
-              
-              <div className="section-rows mt-4">
-                {form.sections.map((row, index) => (
-                  <div className="section-row flex gap-2 items-end mb-2" key={row.id}>
-                    <Field id={`sec-q-${row.id}`} label="Количество" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
-                    <Field id={`sec-w-${row.id}`} label="Ширина" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
-                    <Field id={`sec-h-${row.id}`} label="Высота" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
-                    <button type="button" className="p-2 bg-red-100 text-red-600 rounded" onClick={() => removeSection(row.id)} disabled={form.sections.length === 1}><Trash2 size={16} /></button>
+              <section className="form-section">
+                <div className="section-heading"><span className="section-number">01</span><div><h3>Общие сведения</h3><p>Укажите название заказа, тип забора и цвет RAL.</p></div></div>
+                <div className="field-grid three-col">
+                  <Field id="order-name" label="Название заказа" value={form.name} required error={nameError} placeholder="Например, ограждение для дома" onChange={(v) => { update('name', v); if (v.trim()) setNameError(false); }} />
+                  <Field id="fence-type" label="Тип забора" value={form.fenceType ?? ''} onChange={(v) => update('fenceType', v)} placeholder="Например, евроштакетник" />
+                  <Field id="ral-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} placeholder="Например, 7016 нажд" />
+                </div>
+                {nameError && <p className="validation-message" role="alert">Укажите название заказа, чтобы продолжить.</p>}
+              </section>
+              <section className="form-section section-list">
+                <div className="section-heading"><span className="section-number">02</span><div><h3>Секции забора</h3><p>Задайте количество и размер каждой секции.</p></div></div>
+                <label className="check-row">
+                  <input type="checkbox" checked={form.noSections} onChange={(e) => {
+                    const disabled = e.target.checked;
+                    update('noSections', disabled);
+                    update('sections', disabled
+                      ? form.sections.map((row) => ({ ...row, quantity: '', width: '', height: '' }))
+                      : form.sections.length ? form.sections : [{ id: `section-${Date.now()}`, quantity: '', width: '', height: '' }]);
+                  }} />
+                  <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>У меня нет секций</span>
+                </label>
+                {!form.noSections && (
+                  <div className="section-rows">
+                    <div className="table-labels"><span>№</span><span>Количество</span><span>Ширина (ширина проєму)</span><span>Высота (высота габаритна)</span><span aria-hidden="true" /></div>
+                    {form.sections.map((row, index) => (
+                      <div className="section-row" key={row.id} data-testid={`row-section-${index}`}>
+                        <span className="row-index">{String(index + 1).padStart(2, '0')}</span>
+                        <Field id={`section-${row.id}-quantity`} label="Количество" type="number" min="1" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
+                        <Field id={`section-${row.id}-width`} label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" placeholder="3000" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
+                        <Field id={`section-${row.id}-height`} label="Высота (высота габаритна)" type="number" min="1" suffix="мм" placeholder="1800" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
+                        <button type="button" className="icon-button remove-button" aria-label={`Удалить секцию ${index + 1}`} disabled={form.sections.length === 1} onClick={() => removeSection(row.id)} data-testid={`button-remove-section-${index}`}><Trash2 size={17} /></button>
+                      </div>
+                    ))}
+                    <button type="button" className="add-button" onClick={addSection} data-testid="button-add-section"><span><Plus size={17} /></span> Добавить секцию</button>
                   </div>
-                ))}
-                <button type="button" className="add-button p-2 bg-gray-100 rounded mt-2" onClick={addSection}>+ Добавить секцию</button>
-              </div>
+                )}
+              </section>
             </div>
           )}
 
           {form.step === 2 && (
             <div className="form-content gate-content">
-              <GatePanel title="Калитка" absent={form.noWicket} onAbsent={(v: boolean) => update('noWicket', v)} absentText="У меня нет калитки">
+              <GatePanel title="Калитка" caption="Проходная дверь в ограждении" absent={form.noWicket} onAbsent={(v) => {
+                update('noWicket', v);
+                setGateErrors((current) => ({ ...current, wicketHinge: false }));
+              }} absentText="У меня нет калитки">
                 <div className="field-grid three-col">
-                  <Field id="wicket-width" label="Ширина" value={form.wicket.width} onChange={(v) => changeNested('wicket', 'width', v)} />
-                  <Field id="wicket-height" label="Высота" value={form.wicket.height} onChange={(v) => changeNested('wicket', 'height', v)} />
+                  <Field id="wicket-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.wicket.width} onChange={(v) => changeNested('wicket', 'width', v)} />
+                  <Field id="wicket-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.wicket.height} onChange={(v) => changeNested('wicket', 'height', v)} />
+                  <Field id="wicket-quantity" label="Количество" type="number" min="1" suffix="шт." value={form.wicket.quantity} onChange={(v) => changeNested('wicket', 'quantity', v)} />
                 </div>
-                <Choice id="wicket-hinge-variant" label="Вариант петель" value={form.wicket.hingeVariant} options={['Петли болтовые', 'Петли скрытые']} error={gateErrors.wicketHinge} onChange={(v: string) => changeNested('wicket', 'hingeVariant', v)} />
-              </GatePanel>
-            </div>
-          )}
+                <WicketOpeningChoice value={form.wicket.openingOption} onChange={(value) => changeNested('wicket', 'openingOption', value)} />
+                <div className="hinge-config">
+                  <Choice id="wicket-hinge-variant" label="Вариант петель" value={form.wicket.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.wicketHinge} onChange={(v) => changeNested('wicket', 'hingeVariant', v)} />
+                  <Field id="wicket-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.wicket.hingeCount} onChange={(v) => changeNested('wicket', 'hingeCount', v)} />
+                </div>
+               <Choice id="wicket-lock" label="Замок" value={form.wicket.lock} options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']} onChange={(v) => changeNested('wicket', 'lock', v)} />
+<div className="border-t border-[#eceeef] pt-5 mt-3">
+  <div className="flex flex-col gap-1.5 mb-4">
+    <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов калитки<span className="text-red-500"> *</span></span>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Вариант установки столбов">
+      {[
+        { id: 'бетонирование', label: 'Под бетонировку', desc: 'Автомат. +1000 мм' },
+        { id: 'на_платформе', label: 'На платформе', desc: 'На готовый фундамент' },
+        { id: 'к_колоннам', label: 'Крепление к колоннам', desc: 'Фиксация к анкерам' }
+      ].map((item) => {
+        const isSelected = form.wicket.postInstallation === item.id;
+        return (
+          <button key={item.id} type="button" onClick={() => changeNested('wicket', 'postInstallation', item.id)} className={`p-3 text-left border rounded-lg transition-all cursor-pointer ${isSelected ? 'border-gray-900 bg-[#f9fafb] ring-1 ring-gray-950' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+            <div className="text-[13px] font-bold text-gray-900">{item.label}</div>
+            <div className="text-[11px] text-gray-500 mt-0.5">{item.desc}</div>
+          </button>
+        );
+      })}
+    </div>
+    {gateErrors.wicketPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
+  </div>
 
-          {form.step === 3 && (
-            <div className="form-content review-content">
-              <h3>Проверка спецификации</h3>
-              {summaryRow('Название', form.name)}
-              {summaryRow('Тип забора', form.fenceType)}
-            </div>
-          )}
+  {form.wicket.postInstallation !== '' && (
+    <div className="field-grid two-col animate-fadeIn">
+      <SectionSelectWithCustom id="wicket-post-section" label="Сечение столбов калитки" value={form.wicket.postSection} options={POST_SECTIONS} onChange={(v) => changeNested('wicket', 'postSection', v)} />
+      {form.wicket.postInstallation === 'бетонирование' && <Field id="wicket-post-length-auto" label="Длина столбов (рассчитано автоматически)" value={form.wicket.postLength} suffix="мм" disabled onChange={() => {}} />}
+      {form.wicket.postInstallation === 'на_платформе' && <Field id="wicket-platform-size" label="Размер металлической платформы" value={form.wicket.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('wicket', 'platformSize', v)} />}
+            {form.wicket.postInstallation === 'к_колоннам' && <Field id="wicket-post-length-manual" label="Высота столбов (укажите вручную)" type="number" min="1" value={form.wicket.postLength} placeholder="Введите высоту в мм" suffix="мм" required onChange={(v) => changeNested('wicket', 'postLength', v)} />}
+    </div>
+  )}
+</div>
 
-          <div className="card-footer flex justify-between mt-4 border-t pt-4">
-            <button type="button" className="button button-quiet" onClick={() => update('step', form.step - 1)} disabled={form.step === 1}>Назад</button>
-            <button type="button" className="button button-dark" onClick={form.step < 3 ? next : () => setModalOpen(true)}>{form.step < 3 ? 'Продолжить' : 'Оформить заказ'}</button>
+<div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
+  <label htmlFor="wicket-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к калитке</label>
+  <span className="input-wrap block">
+    <textarea
+      id="wicket-comment"
+      value={form.wicket.comment}
+      placeholder="Например: нужен замок особого типа, петли с доводчиком или специфический зазор от земли..."
+      onChange={(e) => changeNested('wicket', 'comment', e.target.value)}
+      className="w-full min-h-[90px] p-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] font-normal outline-none focus:border-[#58636d] focus:shadow-[0_0_0_3px_rgba(63,77,89,0.08)] hover:border-[#b8bec3] transition-all resize-y"
+    />
+  </span>
+</div>
+</GatePanel>
+
+<GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
+                update('noSwing', v);
+                setGateErrors((current) => ({ ...current, swingHinge: false }));
+              }} absentText="У меня нет распашных ворот">
+                <div className="field-grid two-col">
+                  <Field id="swing-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.swing.width} onChange={(v) => changeNested('swing', 'width', v)} />
+                  <Field id="swing-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.swing.height} onChange={(v) => changeNested('swing', 'height', v)} />
+                </div>
+                <SwingOpeningChoice value={form.swing.opening} onChange={(val) => changeNested('swing', 'opening', val)} />
+                <div className="hinge-config">
+                  <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.swingHinge} onChange={(v) => changeNested('swing', 'hingeVariant', v)} />
+                    <Field id="swing-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
+</div>
+
+{/* --- БЛОК: СТОЛБЫ РАСПАШНЫХ ВОРОТ --- */}
+<div className="border-t border-[#eceeef] pt-5 mt-3">
+  <div className="flex flex-col gap-1.5 mb-4">
+    <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов ворот<span className="text-red-500"> *</span></span>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Вариант установки столбов ворот">
+      {[
+        { id: 'бетонирование', label: 'Под бетонировку', desc: 'Автомат. +1000 мм' },
+        { id: 'на_платформе', label: 'На платформе', desc: 'На готовый фундамент' },
+        { id: 'к_колоннам', label: 'Крепление к колоннам', desc: 'Фиксация к анкерам' }
+      ].map((item) => {
+        const isSelected = form.swing.postInstallation === item.id;
+        return (
+          <button key={item.id} type="button" onClick={() => changeNested('swing', 'postInstallation', item.id)} className={`p-3 text-left border rounded-lg transition-all cursor-pointer ${isSelected ? 'border-gray-900 bg-[#f9fafb] ring-1 ring-gray-950' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+            <div className="text-[13px] font-bold text-gray-900">{item.label}</div>
+            <div className="text-[11px] text-gray-500 mt-0.5">{item.desc}</div>
+          </button>
+        );
+      })}
+    </div>
+    {gateErrors.swingPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
+  </div>
+
+  {form.swing.postInstallation !== '' && (
+    <div className="field-grid two-col animate-fadeIn">
+      <SectionSelectWithCustom id="swing-post-section" label="Сечение столбов ворот" value={form.swing.postSection} options={POST_SECTIONS} onChange={(v) => changeNested('swing', 'postSection', v)} />
+      {form.swing.postInstallation === 'бетонирование' && <Field id="swing-post-length-auto" label="Длина столбов (рассчитано автоматически)" value={form.swing.postLength} suffix="мм" disabled onChange={() => {}} />}
+      {form.swing.postInstallation === 'на_платформе' && <Field id="swing-platform-size" label="Размер металлической платформы" value={form.swing.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('swing', 'platformSize', v)} />}
+      {form.swing.postInstallation === 'к_колоннам' && <Field id="swing-post-length-manual" label="Высота столбов (укажите вручную)" type="number" min="1" value={form.swing.postLength} placeholder="Введите высоту в мм" suffix="мм" required onChange={(v) => changeNested('swing', 'postLength', v)} />}
+    </div>
+  )}
+</div>
+
+{/* --- ПРИМЕЧАНИЕ К РАСПАШНЫМ ВОРОТАМ --- */}
+<div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
+  <label htmlFor="swing-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к распашным воротам</label>
+  <span className="input-wrap block">
+    <textarea
+      id="swing-comment"
+      value={form.swing.comment}
+      placeholder="Например: нужны усиленные петли, упоры в землю или автоматика определенного бренда..."
+      onChange={(e) => changeNested('swing', 'comment', e.target.value)}
+      className="w-full min-h-[90px] p-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] font-normal outline-none focus:border-[#58636d] focus:shadow-[0_0_0_3px_rgba(63,77,89,0.08)] hover:border-[#b8bec3] transition-all resize-y"
+    />
+  </span>
+</div>
+</GatePanel>
+
+                           <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
+                <div className="field-grid two-col">
+                  <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
+                  <Field id="sliding-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.sliding.height} onChange={(v) => changeNested('sliding', 'height', v)} />
+                </div>
+                <SlidingDirectionChoice value={form.sliding.direction} onChange={(val) => changeNested('sliding', 'direction', val)} />
+
+                {/* --- БЛОК: СТОЛБЫ ОТКАТНЫХ ВОРОТ --- */}
+                <div className="border-t border-[#eceeef] pt-5 mt-3">
+                  <div className="flex flex-col gap-1.5 mb-4">
+                    <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов откатных ворот<span className="text-red-500"> *</span></span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Вариант установки столбов откатных ворот">
+                      {[
+                        { id: 'бетонирование', label: 'Под бетонировку', desc: 'Автомат. +1000 мм' },
+                        { id: 'на_платформе', label: 'На платформе', desc: 'На готовый фундамент' },
+                        { id: 'к_колоннам', label: 'Крепление к колоннам', desc: 'Фиксация к анкерам' }
+                      ].map((item) => {
+                        const isSelected = form.sliding.postInstallation === item.id;
+                        return (
+                          <button key={item.id} type="button" onClick={() => changeNested('sliding', 'postInstallation', item.id)} className={`p-3 text-left border rounded-lg transition-all cursor-pointer ${isSelected ? 'border-gray-900 bg-[#f9fafb] ring-1 ring-gray-950' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                            <div className="text-[13px] font-bold text-gray-900">{item.label}</div>
+                            <div className="text-[11px] text-gray-500 mt-0.5">{item.desc}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {gateErrors.slidingPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите variant установки столбов.</p>}
+                  </div>
+
+                  {form.sliding.postInstallation !== '' && (
+                    <div className="flex flex-col gap-4 animate-fadeIn">
+                      {/* Настройки Опорного столба */}
+                      <div className="field-grid two-col bg-[#fafbfb] p-3 rounded-lg border border-[#e6e9eb]">
+                        <SectionSelectWithCustom id="sliding-support-section" label="Сечение опорного столба/рамки" value={form.sliding.supportPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'supportPostSection', v)} />
+                        {form.sliding.postInstallation === 'бетонирование' ? (
+                          <Field id="sliding-support-length-auto" label="Длина опорного столба (авто)" value={form.sliding.supportPostLength} suffix="мм" disabled onChange={() => {}} />
+                        ) : (
+                          <Field id="sliding-support-length-manual" label="Высота опорного столба (вручную)" type="number" min="1" value={form.sliding.supportPostLength} placeholder="Высота в мм" suffix="мм" required onChange={(v) => changeNested('sliding', 'supportPostLength', v)} />
+                        )}
+                      </div>
+
+                      {/* Настройки Упорного столба */}
+                      <div className="field-grid two-col bg-[#fafbfb] p-3 rounded-lg border border-[#e6e9eb]">
+                        <SectionSelectWithCustom id="sliding-catch-section" label="Сечение упорного столба" value={form.sliding.catchPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'catchPostSection', v)} />
+                        {form.sliding.postInstallation === 'бетонирование' ? (
+                          <Field id="sliding-catch-length-auto" label="Длина упорного столба (авто)" value={form.sliding.catchPostLength} suffix="мм" disabled onChange={() => {}} />
+                        ) : (
+                          <Field id="sliding-catch-length-manual" label="Высота упорного столба (вручную)" type="number" min="1" value={form.sliding.catchPostLength} placeholder="Высота в мм" suffix="мм" required onChange={(v) => changeNested('sliding', 'catchPostLength', v)} />
+                        )}
+                      </div>
+
+                      {form.sliding.postInstallation === 'на_платформе' && (
+                        <Field id="sliding-platform-size" label="Размер металлической платформы" value={form.sliding.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('sliding', 'platformSize', v)} />
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* --- ПРИМЕЧАНИЕ К ОТКАТНЫМ ВОРОТАМ --- */}
+                <div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
+                  <label htmlFor="sliding-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к откатным воротам</label>
+                  <span className="input-wrap block">
+                    <textarea
+                      id="sliding-comment"
+                      value={form.sliding.comment}
+                      placeholder="Например: нужен встроенный электропривод, зубчатая рейка из стали или закладной швеллер..."
+                      onChange={(e) => changeNested('sliding', 'comment', e.target.value)}
+                      className="w-full min-h-[90px] p-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] font-normal outline-none focus:border-[#58636d] focus:shadow-[0_0_0_3px_rgba(63,77,89,0.08)] hover:border-[#b8bec3] transition-all resize-y"
+                    />
+                  </span>
+                </div>
+</GatePanel>
+
+{form.step === 3 && (
+                <div className="form-content review-content">
+                  <div className="review-note"><span className="review-note-dot" /> Изменения сохраняются автоматически</div>
+                  {allReviewFields}
+                </div>
+              )}
+
+
+            <div className="card-footer">
+            <button type="button" className="button button-quiet" onClick={() => form.step > 1 && update('step', form.step - 1)} disabled={form.step === 1} data-testid="button-back">
+              <ChevronLeft size={17} /> Назад
+            </button>
+            <span className={`save-note ${storageStatus === 'error' ? 'save-note-error' : ''}`} role="status">
+              <span className="save-dot" />
+              {storageStatus === 'error' ? 'Не удалось сохранить черновик' : storageStatus === 'saving' ? 'Сохранение…' : 'Данные сохранены'}
+            </span>
+            {form.step < 3
+              ? <button type="button" className="button button-dark" onClick={next} data-testid="button-next">Продолжить <ChevronRight size={17} /></button>
+              : <button type="button" className="button button-dark" onClick={submitOrder} data-testid="button-submit">Оформить заказ <ChevronRight size={17} /></button>}
           </div>
-        </section>
-      </div>
+        
+        </section> {/* Теперь этот тег правильно закрывает <section className="wizard-card"> */}
+
+      </div> {/* Этот тег правильно закрывает <div className="page-wrap"> */}
+      
+      <footer className="page-footer"><span>Конфигуратор ограждения</span><span>Состав заказа можно изменить в любой момент</span></footer>
+    </main>
+  );
+}
+
 
       {modalOpen && (
-        <div className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <h2>Итоговый заказ оформлен!</h2>
-            <button type="button" className="mt-4 p-2 bg-gray-900 text-white rounded w-full" onClick={() => setModalOpen(false)}>Закрыть</button>
-          </div>
+        <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}>
+          <section className="order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <header className="modal-header">
+              <div><div className="modal-kicker">СВОДКА КОМПЛЕКТАЦИИ</div><h2 id="modal-title">Итоговый заказ</h2><p>Проверьте состав заказа перед завершением.</p></div>
+              <button type="button" className="icon-button modal-close" aria-label="Закрыть окно" onClick={() => setModalOpen(false)} data-testid="button-close-modal"><X size={20} /></button>
+            </header>
+            <div className="modal-body">
+              <ModalGroup title="Заказ">
+                {summaryRow('Название', form.name)}
+                {summaryRow('Тип забора', form.fenceType)}
+                {summaryRow('Цвет RAL', form.color)}
+              </ModalGroup>
+              <ModalGroup title="Секции забора">
+                {form.noSections ? <div className="summary-row"><span>Комплектация</span><strong className="absent">Отсутствует</strong></div> :
+                  form.sections.length ? form.sections.map((row, i) => (
+                    <div className="section-summary" key={row.id}>
+                      {summaryRow(`Секция ${i + 1}`, `${row.quantity || '—'} шт.`)}
+                      {summaryRow('Ширина (ширина проєму)', row.width ? `${row.width} мм` : '—')}
+                      {summaryRow('Высота (высота габаритна)', row.height ? `${row.height} мм` : '—')}
+                    </div>
+                  )) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
+              </ModalGroup>
+              
+                          <ModalGroup title="Калитка">
+                {form.noWicket ? <Absent /> : <>
+                  {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
+                  {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
+                  {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
+                  {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
+                  <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '6px' }}>
+                    <img
+                      src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
+                      alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
+                      style={{ width: '193px', height: '124px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                    />
+                  </div>
+                  {summaryRow('Вариант петель', form.wicket.hingeVariant)}
+                  {summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : '')}
+                  {summaryRow('Замок', form.wicket.lock)}
+                  {summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано')}
+                  {summaryRow('Сечение столбов калитки', form.wicket.postSection)}
+                  {form.wicket.postInstallation === 'на_платформе' && summaryRow('Размер платформы', form.wicket.platformSize)}
+                  {form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '') : null}
+                  {form.wicket.comment && summaryRow('Примечание', form.wicket.comment)}
+                </>}
+              </ModalGroup>
+
+
+              <ModalGroup title="Распашные ворота">
+                {form.noSwing ? <Absent /> : <>
+                  {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
+                  {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
+                  {summaryRow('Открывание', form.swing.opening)}
+                  <div style={{ width: '385px', height: '100px', marginTop: '6px', marginBottom: '0px' }}>
+                    <img
+                      src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
+                      alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
+                      style={{ width: '385px', height: '100px', maxHeight: '100px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                    />
+                  </div>
+                  {summaryRow('Вариант петель', form.swing.hingeVariant)}
+                  {summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : '')}
+                </>}
+              </ModalGroup>
+              <ModalGroup title="Откатные ворота (орієнтація ззовні)">
+                {form.noSliding ? <Absent /> : <>
+                  {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
+                  {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
+                  {summaryRow('Направление отката', form.sliding.direction)}
+                  <div style={{ width: '242px', height: '148px', marginTop: '6px', marginBottom: '0px' }}>
+                    <img
+                      src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
+                      alt={`Схема отката ворот: ${form.sliding.direction}`}
+                      style={{ width: '242px', height: '148px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                    />
+                  </div>
+                </>}
+              </ModalGroup>
+            </div>
+            <div className="modal-footer">
+              <div className="modal-footer-copy">
+                <p>Это сводка вашей конфигурации — заказ не отправлен.</p>
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="button button-dark" onClick={printOrder} data-testid="button-save-pdf">
+                  <Printer size={17} /> Сохранить в PDF
+                </button>
+                <button type="button" className="button button-quiet" onClick={() => setModalOpen(false)} data-testid="button-modal-done">Понятно <Check size={17} /></button>
+              </div>
+            </div>
+          </section>
         </div>
       )}
     </main>
+  );
+}
+
+function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
+  title: string; caption: string; absent: boolean; onAbsent: (value: boolean) => void; absentText: string; children: ReactNode;
+}) {
+  return (
+    <section className={`gate-panel ${absent ? 'is-absent' : ''}`}>
+      <div className="gate-panel-head">
+        <div><span className="gate-dot" /><div><h3>{title}</h3><p>{caption}</p></div></div>
+        <label className="check-row gate-check">
+          <input type="checkbox" checked={absent} onChange={(e) => onAbsent(e.target.checked)} />
+          <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>{absentText}</span>
+        </label>
+      </div>
+      {!absent && <div className="gate-panel-fields">{children}</div>}
+      {absent && <p className="absent-message">Эта конструкция не входит в заказ</p>}
+    </section>
+  );
+}
+
+function ModalGroup({ title, children }: { title: string; children: ReactNode }) {
+  return <section className="modal-group"><h3>{title}</h3><div>{children}</div></section>;
+}
+function Absent() { return <div className="summary-row"><span>Комплектация</span><strong className="absent">Отсутствует</strong></div>; }
+function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
+  return (
+    <section className="review-gate">
+      <div className="review-gate-head"><h3>{title}</h3><button type="button" onClick={onEdit} className="text-button">Изменить</button></div>
+      {absent ? <p className="absent">Отсутствует</p> : <div>{rows}</div>}
+    </section>
   );
 }
