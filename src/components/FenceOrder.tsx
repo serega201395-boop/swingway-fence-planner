@@ -109,7 +109,7 @@ function WicketOpeningChoice({ value, onChange }: {
               }`}
               style={{
                 transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                boxShadow: isSelected ? '0 10px 20px -4px rgba(0, 0, 0, 0.16), 0 6px 10px -4px rgba(0, 0, 0, 0.12)' : 'none',
+                boxShadow: isSelected ? '0 12px 24px -4px rgba(26, 54, 114, 0.22), 0 6px 12px -4px rgba(29, 78, 216, 0.16)' : 'none',
               }}
               key={option.value}
             >
@@ -146,8 +146,6 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
-
-
 
 
 function Choice({ id, label, value, options, required, error, onChange }: {
