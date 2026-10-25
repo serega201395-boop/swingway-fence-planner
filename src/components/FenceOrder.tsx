@@ -148,8 +148,7 @@ function WicketOpeningChoice({ value, onChange }: {
 }) {
   return <fieldset className="wicket-opening-field">
     <legend>Вариант открытия калитки<span className="required-mark"> *</span></legend>
-    {/* ⚡️ Исправлена сетка: жесткие 2 колонки и ограничение ширины в 420px соберут карточки вместе */}
-    <div className="grid grid-cols-2 gap-3 mt-2 max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+    <div className="grid grid-cols-2 gap-3 mt-2 !w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
       {wicketOpeningCards.map((option, index) => {
         const isSelected = value === option.value;
         return (
@@ -183,6 +182,7 @@ function WicketOpeningChoice({ value, onChange }: {
     </div>
   </fieldset>;
 }
+
 
 
 export function FenceOrder() {
