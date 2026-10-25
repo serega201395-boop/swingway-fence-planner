@@ -364,7 +364,7 @@ export function FenceOrder() {
   }, [modalOpen]);
 
   const update = <K extends keyof OrderState>(key: K, value: OrderState[K]) => setForm((current) => ({ ...current, [key]: value }));
-  const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
+   const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
     setForm((current) => {
       const updatedGroup = { ...current[group], [key]: value };
       if (group === 'wicket' && (key === 'height' || key === 'postInstallation')) {
@@ -378,6 +378,7 @@ export function FenceOrder() {
     if (group === 'wicket' && key === 'postInstallation') setGateErrors((c) => ({ ...c, wicketPostInstallation: false }));
     if (group === 'swing' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, swingHinge: false }));
   };
+
   const setStep = (step: number) => {
     update('step', step);
     setNameError(false);
