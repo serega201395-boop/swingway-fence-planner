@@ -757,16 +757,78 @@ export function FenceOrder() {
 </div>
 </GatePanel>
 
-
               <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
                 <div className="field-grid two-col">
                   <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
                   <Field id="sliding-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.sliding.height} onChange={(v) => changeNested('sliding', 'height', v)} />
                 </div>
-                <SlidingDirectionChoice value={form.sliding.direction} onChange={(val) => changeNested('sliding', 'direction', val)} />
-              </GatePanel>
-            </div>
+                  <SlidingDirectionChoice value={form.sliding.direction} onChange={(val) => changeNested('sliding', 'direction', val)} />
+
+  {/* --- БЛОК: СТОЛБЫ ОТКАТНЫХ ВОРОТ --- */}
+  <div className="border-t border-[#eceeef] pt-5 mt-3">
+    <div className="flex flex-col gap-1.5 mb-4">
+      <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов откатных ворот<span className="text-red-500"> *</span></span>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Вариант установки столбов откатных ворот">
+        {[
+          { id: 'бетонирование', label: 'Под бетонировку', desc: 'Автомат. +1000 мм' },
+          { id: 'на_платформе', label: 'На платформе', desc: 'На готовый фундамент' },
+          { id: 'к_колоннам', label: 'Крепление к колоннам', desc: 'Фиксация к анкерам' }
+        ].map((item) => {
+          const isSelected = form.sliding.postInstallation === item.id;
+          return (
+            <button key={item.id} type="button" onClick={() => changeNested('sliding', 'postInstallation', item.id)} className={`p-3 text-left border rounded-lg transition-all cursor-pointer ${isSelected ? 'border-gray-900 bg-[#f9fafb] ring-1 ring-gray-950' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+              <div className="text-[13px] font-bold text-gray-900">{item.label}</div>
+              <div className="text-[11px] text-gray-500 mt-0.5">{item.desc}</div>
+            </button>
+          );
+        })}
+      </div>
+      {gateErrors.slidingPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
+    </div>
+
+    {form.sliding.postInstallation !== '' && (
+      <div className="flex flex-col gap-4 animate-fadeIn">
+        {/* Настройки Опорного столба */}
+        <div className="field-grid two-col bg-[#fafbfb] p-3 rounded-lg border border-[#e6e9eb]">
+          <SectionSelectWithCustom id="sliding-support-section" label="Сечение опорного столба/рамки" value={form.sliding.supportPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'supportPostSection', v)} />
+          {form.sliding.postInstallation === 'бетонирование' ? (
+            <Field id="sliding-support-length-auto" label="Длина опорного столба (авто)" value={form.sliding.supportPostLength} suffix="мм" disabled onChange={() => {}} />
+          ) : (
+            <Field id="sliding-support-length-manual" label="Высота опорного столба (вручную)" type="number" min="1" value={form.sliding.supportPostLength} placeholder="Высота в мм" suffix="мм" required onChange={(v) => changeNested('sliding', 'supportPostLength', v)} />
           )}
+        </div>
+
+        {/* Настройки Упорного столба */}
+        <div className="field-grid two-col bg-[#fafbfb] p-3 rounded-lg border border-[#e6e9eb]">
+          <SectionSelectWithCustom id="sliding-catch-section" label="Сечение упорного столба" value={form.sliding.catchPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'catchPostSection', v)} />
+          {form.sliding.postInstallation === 'бетонирование' ? (
+            <Field id="sliding-catch-length-auto" label="Длина упорного столба (авто)" value={form.sliding.catchPostLength} suffix="мм" disabled onChange={() => {}} />
+          ) : (
+            <Field id="sliding-catch-length-manual" label="Высота упорного столба (вручную)" type="number" min="1" value={form.sliding.catchPostLength} placeholder="Высота in мм" suffix="мм" required onChange={(v) => changeNested('sliding', 'catchPostLength', v)} />
+          )}
+        </div>
+
+        {form.sliding.postInstallation === 'на_платформе' && (
+          <Field id="sliding-platform-size" label="Размер металлической платформы" value={form.sliding.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('sliding', 'platformSize', v)} />
+        )}
+      </div>
+    )}
+  </div>
+
+  {/* --- ПРИМЕЧАНИЕ К ОТКАТНЫМ ВОРОТАМ --- */}
+  <div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
+    <label htmlFor="sliding-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к откатным воротам</label>
+    <span className="input-wrap block">
+      <textarea
+        id="sliding-comment"
+        value={form.sliding.comment}
+        placeholder="Например: нужен встроенный электропривод, зубчатая рейка из стали или закладной швеллер..."
+        onChange={(e) => changeNested('sliding', 'comment', e.target.value)}
+        className="w-full min-h-[90px] p-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] font-normal outline-none focus:border-[#58636d] focus:shadow-[0_0_0_3px_rgba(63,77,89,0.08)] hover:border-[#b8bec3] transition-all resize-y"
+      />
+    </span>
+  </div>
+</GatePanel>
 
           {form.step === 3 && (
             <div className="form-content review-content">
