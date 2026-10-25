@@ -31,7 +31,7 @@ const POST_SECTIONS = [
   '80х80х3',
   '60х100х3',
   '100х100х3',
-  '120х120х3'
+  '120х120х4'
 ];
 
 function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
