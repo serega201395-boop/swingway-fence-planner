@@ -448,7 +448,7 @@ export function FenceOrder() {
         summaryRow('Вариант петель', form.wicket.hingeVariant), 
         summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : ''),
         summaryRow('Замок', form.wicket.lock),
-        summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку (+1000 мм авто)' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе на фундамент' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
         summaryRow('Сечение столбов калитки', form.wicket.postSection),
         form.wicket.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.wicket.platformSize) : null,
  form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '—') : null,
