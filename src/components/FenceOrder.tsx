@@ -1010,7 +1010,7 @@ function ModalGroup({ title, children }: { title: string; children: ReactNode })
   );
 }
 
-import { useState } from 'react'; // Убедитесь, что useState импортирован вверху файла
+import { useState } from 'react';
 
 function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
   // Локальный стейт для отслеживания наведения мыши
