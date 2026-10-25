@@ -498,54 +498,58 @@ export function FenceOrder() {
       <Field id="review-fence-type" label="Тип забора" value={form.fenceType ?? ''} onChange={(v) => update('fenceType', v)} />
       <Field id="review-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} />
     </div>
+
     <div className="review-edit-list">
       <h3>Секции забора</h3>
-      {form.noSections ? <p className="absent">Отсутствует</p> : form.sections.map((row, i) => <div className="review-section-edit" key={row.id}>
-        <span className="review-index">0{i + 1}</span>
-        <Field id={`review-section-${row.id}-quantity`} label="Количество" type="number" min="1" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
-        <Field id={`review-section-${row.id}-width`} label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
-        <Field id={`review-section-${row.id}-height`} label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
-      </div>)}
+      {form.noSections ? <p className="absent">Отсутствует</p> : form.sections.map((row, i) => (
+        <div className="review-section-edit" key={row.id}>
+          <span className="review-index">0{i + 1}</span>
+          <Field id={`review-section-${row.id}-quantity`} label="Количество" type="number" min="1" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
+          <Field id={`review-section-${row.id}-width`} label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
+          <Field id={`review-section-${row.id}-height`} label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
+        </div>
+      ))}
       {!form.noSections && <button className="text-button" type="button" onClick={addSection}><Plus size={16} /> Добавить секцию</button>}
     </div>
-      <div className="review-gates-grid">
+
+    <div className="review-gates-grid">
       <ReviewGate title="Калитка" absent={form.noWicket} rows={[
-        summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : ''),
-        summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : ''),
-        summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : ''),
+        summaryRow('Ширина (ширина проєму)', form.wicket.width ? form.wicket.width + ' мм' : ''),
+        summaryRow('Высота (высота габаритна)', form.wicket.height ? form.wicket.height + ' мм' : ''),
+        summaryRow('Количество', form.wicket.quantity ? form.wicket.quantity + ' шт.' : ''),
         summaryRow('Вариант открытия калитки', form.wicket.openingOption),
         summaryRow('Вариант петель', form.wicket.hingeVariant), 
-        summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : ''),
+        summaryRow('Количество петель на створку', form.wicket.hingeCount ? form.wicket.hingeCount + ' шт.' : ''),
         summaryRow('Замок', form.wicket.lock),
         summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
         summaryRow('Сечение столбов калитки', form.wicket.postSection),
         form.wicket.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.wicket.platformSize) : null,
-        form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '') : null,
+        form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? form.wicket.postLength + ' мм' : '') : null,
         form.wicket.comment ? summaryRow('Примечание', form.wicket.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
 
       <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
-        summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : ''),
-        summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : ''),
+        summaryRow('Ширина (ширина проєму)', form.swing.width ? form.swing.width + ' мм' : ''),
+        summaryRow('Высота (высота габаритна)', form.swing.height ? form.swing.height + ' мм' : ''),
         summaryRow('Открывание', form.swing.opening), 
         summaryRow('Вариант петель', form.swing.hingeVariant),
-        summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : ''),
+        summaryRow('Количество петель на створку', form.swing.hingeCount ? form.swing.hingeCount + ' шт.' : ''),
         summaryRow('Вариант установки столбов', form.swing.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.swing.postInstallation === 'на_платформе' ? 'На платформе' : form.swing.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
         summaryRow('Сечение столбов ворот', form.swing.postSection),
         form.swing.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.swing.platformSize) : null,
-        form.swing.postInstallation !== '' ? summaryRow('Высота/длина столбов ворот', form.swing.postLength ? `${form.swing.postLength} мм` : '') : null,
+        form.swing.postInstallation !== '' ? summaryRow('Высота/длина столбов ворот', form.swing.postLength ? form.swing.postLength + ' мм' : '') : null,
         form.swing.comment ? summaryRow('Примечание', form.swing.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
 
       <ReviewGate title="Откатные ворота (орієнтація ззовні)" absent={form.noSliding} rows={[
-        summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : ''),
-        summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : ''),
+        summaryRow('Ширина (ширина проєму)', form.sliding.width ? form.sliding.width + ' мм' : ''),
+        summaryRow('Высота (высота габаритна)', form.sliding.height ? form.sliding.height + ' мм' : ''),
         summaryRow('Направление отката', form.sliding.direction),
         summaryRow('Вариант установки столбов', form.sliding.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.sliding.postInstallation === 'на_платформе' ? 'На платформе' : form.sliding.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
         summaryRow('Сечение опорного столба/рамки', form.sliding.supportPostSection),
-        form.sliding.postInstallation !== '' ? summaryRow('Длина опорного столба/рамки', form.sliding.supportPostLength ? `${form.sliding.supportPostLength} мм` : '') : null,
+        form.sliding.postInstallation !== '' ? summaryRow('Длина опорного столба/рамки', form.sliding.supportPostLength ? form.sliding.supportPostLength + ' мм' : '') : null,
         summaryRow('Сечение упорного столба', form.sliding.catchPostSection),
-        form.sliding.postInstallation !== '' ? summaryRow('Длина упорного столба', form.sliding.catchPostLength ? `${form.sliding.catchPostLength} мм` : '') : null,
+        form.sliding.postInstallation !== '' ? summaryRow('Длина упорного столба', form.sliding.catchPostLength ? form.sliding.catchPostLength + ' мм' : '') : null,
         form.sliding.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.sliding.platformSize) : null,
         form.sliding.comment ? summaryRow('Примечание', form.sliding.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
