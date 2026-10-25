@@ -329,7 +329,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .modal-actions { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }
 .modal-actions .button { white-space: nowrap; }
 @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slide-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slide-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @media (max-width: 640px) {
