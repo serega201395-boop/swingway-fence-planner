@@ -590,13 +590,26 @@ export function FenceOrder() {
       <SectionSelectWithCustom id="wicket-post-section" label="Сечение столбов калитки" value={form.wicket.postSection} options={POST_SECTIONS} onChange={(v) => changeNested('wicket', 'postSection', v)} />
       {form.wicket.postInstallation === 'бетонирование' && <Field id="wicket-post-length-auto" label="Длина столбов (рассчитано автоматически)" value={form.wicket.postLength} suffix="мм" disabled onChange={() => {}} />}
       {form.wicket.postInstallation === 'на_платформе' && <Field id="wicket-platform-size" label="Размер металлической платформы" value={form.wicket.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('wicket', 'platformSize', v)} />}
-      {form.wicket.postInstallation === 'к_колоннам' && <Field id="wicket-post-length-manual" label="Высота столбов (укажите вручную)" type="number" min="1" value={form.wicket.postLength} placeholder="Введите высоту в мм" suffix="мм" required onChange={(v) => changeNested('wicket', 'postLength', v)} />}
+            {form.wicket.postInstallation === 'к_колоннам' && <Field id="wicket-post-length-manual" label="Высота столбов (укажите вручную)" type="number" min="1" value={form.wicket.postLength} placeholder="Введите высоту в мм" suffix="мм" required onChange={(v) => changeNested('wicket', 'postLength', v)} />}
     </div>
   )}
 </div>
-              </GatePanel>
 
-              <GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
+<div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
+  <label htmlFor="wicket-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к калитке</label>
+  <span className="input-wrap block">
+    <textarea
+      id="wicket-comment"
+      value={form.wicket.comment}
+      placeholder="Например: нужен замок особого типа, петли с доводчиком или специфический зазор от земли..."
+      onChange={(e) => changeNested('wicket', 'comment', e.target.value)}
+      className="w-full min-h-[90px] p-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] font-normal outline-none focus:border-[#58636d] focus:shadow-[0_0_0_3px_rgba(63,77,89,0.08)] hover:border-[#b8bec3] transition-all resize-y"
+    />
+  </span>
+</div>
+</GatePanel>
+
+<GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
                 update('noSwing', v);
                 setGateErrors((current) => ({ ...current, swingHinge: false }));
               }} absentText="У меня нет распашных ворот">
