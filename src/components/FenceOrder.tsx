@@ -78,14 +78,15 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
           const isSelected = value === option.value;
           return (
             <label 
-              className={`w-[385px] h-[110px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
+              className={`w-[385px] h-[110px] relative flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
+                isSelected 
+                  ? 'border-gray-900 bg-light-primary z-10 p-0.5' 
+                  : 'border-gray-200 hover:border-gray-300 bg-white p-2'
               }`}
               style={{
-                transform: isSelected ? 'scale(1.05) translateZ(0)' : 'scale(1) translateZ(0)',
+                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
                 boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
                 marginRight: index === 0 ? '24px' : '0px',
-                willChange: 'transform',
               }}
               key={option.value}
             >
@@ -93,11 +94,8 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
               <img 
                 src={option.image} 
                 alt={option.label} 
-                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
-                style={{ 
-                  transform: isSelected ? 'scale(1.1) translateZ(0)' : 'scale(1) translateZ(0)',
-                  imageRendering: '-webkit-optimize-contrast'
-                }} 
+                className="w-full h-full object-contain" 
+                style={{ imageRendering: '-webkit-optimize-contrast' }} 
               />
               <span className="wicket-opening-card-label hidden">{option.label}</span>
               {value === option.value && (
@@ -112,7 +110,6 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
     </fieldset>
   );
 }
-
 
 
 function WicketOpeningChoice({ value, onChange }: {
