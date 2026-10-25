@@ -122,7 +122,7 @@ function Choice({ id, label, value, options, required, error, onChange }: {
       <span className="block text-[#1f2937] text-[14.5px] font-normal">
         {label}{required && <span className="text-red-500"> *</span>}
       </span>
-      <div className="flex flex-wrap gap-4 mt-1" role="radiogroup" aria-label={label}>
+      <div className="flex flex-wrap gap-2.5" role="radiogroup" aria-label={label}>
         {options.map((option) => {
           const isSelected = value === option;
           return (
@@ -130,10 +130,10 @@ function Choice({ id, label, value, options, required, error, onChange }: {
               key={option}
               type="button"
               onClick={() => onChange(option)}
-              className={`px-5 py-2.5 text-[14px] font-medium rounded-lg border transition-all cursor-pointer ${
+              className={`px-4 py-2 text-[14px] font-medium rounded-lg border transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-[#2d3748] text-white border-[#2d3748] shadow-sm scale-[0.99]'
-                  : 'bg-white text-[#4a5568] border-gray-200 hover:border-gray-300 active:scale-[0.99]'
+                  ? 'bg-[#30373d] text-white border-[#30373d] shadow-sm'
+                  : 'bg-white text-[#4a5568] border-gray-200 hover:border-gray-300'
               }`}
             >
               {option}
