@@ -1017,13 +1017,11 @@ function Absent() {
 function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
   return (
     <section className="review-gate">
-      {/* Мягкий отступ снизу pb-3 и центрирование элементов по вертикали */}
       <div className="review-gate-head flex items-center justify-between border-b border-[#eceeef] pb-3 mb-3">
         <h3>{title}</h3>
         <button 
           type="button" 
           onClick={onEdit} 
-          {/* Жестко фиксируем высоту h-6 и ширину w-[74px] для идеальных пропорций прямоугольника */}
           className="w-[74px] h-6 flex items-center justify-center text-[11px] font-medium text-gray-500 bg-[#f9fafb] border border-[#e5e7eb] rounded-[5px] shadow-sm transition-all duration-150 hover:bg-white hover:text-gray-900 hover:border-gray-300 active:scale-[0.96] cursor-pointer focus:outline-none"
         >
           Изменить
@@ -1033,4 +1031,3 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
     </section>
   );
 }
-
