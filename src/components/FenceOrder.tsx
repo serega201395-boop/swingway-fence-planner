@@ -104,15 +104,9 @@ function WicketOpeningChoice({ value, onChange }: {
           const isSelected = value === option.value;
           return (
             <label
-              className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected 
-                  ? 'border-gray-900 bg-light-primary shadow-md z-10' 
-                  : 'border-gray-200 hover:border-gray-300 shadow-none bg-white'
+              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+                isSelected ? 'border-gray-900 bg-light-primary shadow-sm' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
-              style={{
-                transform: isSelected ? 'scale(1.04) translateZ(0)' : 'scale(1) translateZ(0)',
-                willChange: 'transform',
-              }}
               key={option.value}
             >
               <input
@@ -129,10 +123,10 @@ function WicketOpeningChoice({ value, onChange }: {
               <img 
                 src={option.image} 
                 alt="" 
-                className="w-full max-h-full object-contain" 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  imageRendering: '-webkit-optimize-contrast',
-                  transform: 'translateZ(0)',
+                  transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                  imageRendering: '-webkit-optimize-contrast'
                 }}
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
@@ -148,6 +142,7 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
+
 
 
 
