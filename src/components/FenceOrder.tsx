@@ -98,7 +98,7 @@ function WicketOpeningChoice({ value, onChange }: {
               <img 
                 src={option.image} 
                 alt="" 
-                className={`w-full max-h-full object-contain transition-all duration-150 ${isSelected ? 'opacity-100 grayscale-0' : 'opacity-72 grayscale hover:opacity-92 hover:grayscale-0'}`} 
+                className="w-full max-h-full object-contain" 
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
               {isSelected && (
