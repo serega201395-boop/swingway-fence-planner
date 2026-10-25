@@ -802,11 +802,12 @@ export function FenceOrder() {
                       </div>
 
 
+                      {/* Общее поле платформы, выстроенное по сетке */}
                       {form.sliding.postInstallation === 'на_платформе' && (
-                        <div className="w-full mt-2">
+                        <div className="field-grid three-col mt-2">
                           <Field 
                             id="sliding-platform-size" 
-                            label="Размер металлической платформы (общий для столбов)" 
+                            label="Размер металлической платформы" 
                             value={form.sliding.platformSize} 
                             placeholder="Пример: 200х200х8" 
                             required 
@@ -834,6 +835,7 @@ export function FenceOrder() {
               </GatePanel>
             </div>
           )}
+
 
 
           {form.step === 3 && (
