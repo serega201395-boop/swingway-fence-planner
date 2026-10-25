@@ -352,6 +352,7 @@ export function FenceOrder() {
         <span className="topbar-note">Конфигуратор заказа</span>
       </header>
 
+      <div className="page-wrap">
         <section className="intro">
           <div className="eyebrow">Индивидуальная комплектация</div>
           <h1>Соберите свой<br className="desktop-break" /> заказ ограждения</h1>
