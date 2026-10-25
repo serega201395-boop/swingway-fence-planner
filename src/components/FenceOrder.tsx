@@ -26,12 +26,13 @@ const slidingDirectionCards = [
 ];
 const POST_SECTIONS = [
   '40х80х2',
-  '60х80х2',
+  '60х60х2',
+  '60х100х3',
   '80х80х2',
   '80х80х3',
-  '60х100х3',
   '100х100х3',
-  '120х120х4'
+  '120х120х3',
+  '150х150х4'
 ];
 
 function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
@@ -223,7 +224,7 @@ type OrderState = {
   noSections: boolean;
   sections: FenceRow[];
   noWicket: boolean;
-    wicket: {
+  wicket: {
     width: string; 
     height: string; 
     quantity: string; 
@@ -235,13 +236,37 @@ type OrderState = {
     postLength: string; 
     platformSize: string; 
     postSection: string;
-    comment: string; // <-- ДОБАВИТЬ ЭТУ СТРОКУ (отвечает зап римечание)
+    comment: string;
   };
   noSwing: boolean;
-  swing: { width: string; height: string; opening: string; hingeVariant: string; hingeCount: string };
+  swing: { 
+    width: string; 
+    height: string; 
+    opening: string; 
+    hingeVariant: string; 
+    hingeCount: string;
+    postInstallation: 'бетонирование' | 'на_платформе' | 'к_колоннам' | '';
+    postLength: string; 
+    platformSize: string; 
+    postSection: string;
+    comment: string;
+  };
   noSliding: boolean;
-  sliding: { width: string; height: string; direction: string };
+  sliding: { 
+    width: string; 
+    height: string; 
+    direction: string;
+    // Столбы для откатных ворот (опорный и упорный)
+    postInstallation: 'бетонирование' | 'на_платформе' | 'к_колоннам' | '';
+    supportPostLength: string;
+    supportPostSection: string;
+    catchPostLength: string;
+    catchPostSection: string;
+    platformSize: string;
+    comment: string;
+  };
 };
+
 
 
 const STORAGE_KEY = 'fence-order-state-v1';
@@ -254,9 +279,27 @@ const initialState: OrderState = {
     postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2',
     comment: ''
   },
-  noSwing: false, swing: { width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '' },
-  noSliding: false, sliding: { width: '', height: '', direction: 'Влево' },
+  noSwing: false, swing: { 
+    width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '',
+    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '80х80х3',
+    comment: ''
+  },
+  noSliding: false, sliding: { 
+    width: '', height: '', direction: 'Влево',
+    postInstallation: '', supportPostLength: '', supportPostSection: '80х80х3',
+    catchPostLength: '', catchPostSection: '60х60х2', platformSize: '200х200х8',
+    comment: ''
+  },
 };
+const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
+const emptyGateErrors = { 
+  wicketHinge: false, 
+  swingHinge: false, 
+  wicketPostInstallation: false, 
+  swingPostInstallation: false,
+  slidingPostInstallation: false 
+};
+
 const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
 const emptyGateErrors = { wicketHinge: false, swingHinge: false, wicketPostInstallation: false };
 
@@ -265,10 +308,7 @@ function restoreState(): OrderState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return initialState;
     const saved = JSON.parse(raw) as Partial<OrderState>;
-    const savedWicket = (saved.wicket ?? {}) as Partial<OrderState['wicket']> & {
-      opening?: string;
-      hinges?: string;
-    };
+    const savedWicket = (saved.wicket ?? {}) as Partial<OrderState['wicket']> & { opening?: string; hinges?: string; };
     const { opening: legacyOpening, hinges: legacyHinges, ...savedWicketFields } = savedWicket;
     const savedOpeningOption = savedWicketFields.openingOption;
     let openingOption = wicketOpeningValues.includes(savedOpeningOption as WicketOpening)
@@ -288,13 +328,14 @@ function restoreState(): OrderState {
         quantity: String(row.quantity ?? '1'), width: String(row.width ?? ''), height: String(row.height ?? ''),
       })) : initialState.sections,
       wicket: { ...initialState.wicket, ...savedWicketFields, openingOption, comment: typeof savedWicketFields.comment === 'string' ? savedWicketFields.comment : '' },
-      swing: { ...initialState.swing, ...(saved.swing ?? {}) },
-      sliding: { ...initialState.sliding, ...(saved.sliding ?? {}) },
+      swing: { ...initialState.swing, ...(saved.swing ?? {}), comment: typeof saved.swing?.comment === 'string' ? saved.swing.comment : '' },
+      sliding: { ...initialState.sliding, ...(saved.sliding ?? {}), comment: typeof saved.sliding?.comment === 'string' ? saved.sliding.comment : '' },
     };
   } catch {
     return initialState;
   }
 }
+
 
 
 type FieldProps = {
@@ -365,41 +406,63 @@ export function FenceOrder() {
   }, [modalOpen]);
 
   const update = <K extends keyof OrderState>(key: K, value: OrderState[K]) => setForm((current) => ({ ...current, [key]: value }));
-   const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
+  const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
     setForm((current) => {
       const updatedGroup = { ...current[group], [key]: value };
+      
+      // Авторасчет столбов калитки
       if (group === 'wicket') {
         if (key === 'postInstallation') {
-          // Если переключились на бетонирование — рассчитываем автоматически, если на колонны/платформу — сбрасываем старую авто-длину
           updatedGroup.postLength = value === 'бетонирование' && current.wicket.height ? String(Number(current.wicket.height) + 1000) : '';
         } else if (key === 'height' && current.wicket.postInstallation === 'бетонирование') {
-          // Пересчитываем только если уже выбрано бетонирование
           updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
         }
       }
+      
+      // Авторасчет столбов распашных ворот
+      if (group === 'swing') {
+        if (key === 'postInstallation') {
+          updatedGroup.postLength = value === 'бетонирование' && current.swing.height ? String(Number(current.swing.height) + 1000) : '';
+        } else if (key === 'height' && current.swing.postInstallation === 'бетонирование') {
+          updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
+        }
+      }
+      
+      // Авторасчет столбов откатных ворот (опорный и упорный одновременно)
+      if (group === 'sliding') {
+        if (key === 'postInstallation') {
+          const isBeton = value === 'бетонирование';
+          const h = current.sliding.height;
+          updatedGroup.supportPostLength = isBeton && h ? String(Number(h) + 1000) : '';
+          updatedGroup.catchPostLength = isBeton && h ? String(Number(h) + 1000) : '';
+        } else if (key === 'height' && current.sliding.postInstallation === 'бетонирование') {
+          updatedGroup.supportPostLength = value ? String(Number(value) + 1000) : '';
+          updatedGroup.catchPostLength = value ? String(Number(value) + 1000) : '';
+        }
+      }
+      
       return { ...current, [group]: updatedGroup };
     });
+    
+    // Сброс ошибок при выборе обязательных параметров
     if (group === 'wicket' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, wicketHinge: false }));
     if (group === 'wicket' && key === 'postInstallation') setGateErrors((c) => ({ ...c, wicketPostInstallation: false }));
     if (group === 'swing' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, swingHinge: false }));
+    if (group === 'swing' && key === 'postInstallation') setGateErrors((c) => ({ ...c, swingPostInstallation: false }));
+    if (group === 'sliding' && key === 'postInstallation') setGateErrors((c) => ({ ...c, slidingPostInstallation: false }));
   };
 
-  const setStep = (step: number) => {
-    update('step', step);
-    setNameError(false);
-    setGateErrors(emptyGateErrors);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
   const validateGateChoices = () => {
     const errors = {
       wicketHinge: !form.noWicket && !form.wicket.hingeVariant,
       wicketPostInstallation: !form.noWicket && !form.wicket.postInstallation,
       swingHinge: !form.noSwing && !form.swing.hingeVariant,
+      swingPostInstallation: !form.noSwing && !form.swing.postInstallation,
+      slidingPostInstallation: !form.noSliding && !form.sliding.postInstallation,
     };
     setGateErrors(errors);
     return !Object.values(errors).some(Boolean);
   };
-
 
   const next = () => {
     if (form.step === 1 && !form.name.trim()) { setNameError(true); document.getElementById('order-name')?.focus(); return; }
@@ -460,18 +523,33 @@ export function FenceOrder() {
 form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '') : null,
         form.wicket.comment ? summaryRow('Примечание', form.wicket.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
-      <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
+       <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
         summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : ''),
-        summaryRow('Открывание', form.swing.opening), summaryRow('Вариант петель', form.swing.hingeVariant),
+        summaryRow('Открывание', form.swing.opening), 
+        summaryRow('Вариант петель', form.swing.hingeVariant),
         summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : ''),
-      ]} onEdit={() => setStep(2)} />
+        summaryRow('Вариант установки столбов', form.swing.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.swing.postInstallation === 'на_платформе' ? 'На платформе' : form.swing.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Сечение столбов ворот', form.swing.postSection),
+        form.swing.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.swing.platformSize) : null,
+        form.swing.postInstallation !== '' ? summaryRow('Высота/длина столбов ворот', form.swing.postLength ? `${form.swing.postLength} мм` : '') : null,
+        form.swing.comment ? summaryRow('Примечание', form.swing.comment) : null,
+      ].filter(Boolean)} onEdit={() => setStep(2)} />
+
       <ReviewGate title="Откатные ворота (орієнтація ззовні)" absent={form.noSliding} rows={[
         summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : ''),
         summaryRow('Направление отката', form.sliding.direction),
-      ]} onEdit={() => setStep(2)} />
+        summaryRow('Вариант установки столбов', form.sliding.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.sliding.postInstallation === 'на_платформе' ? 'На платформе' : form.sliding.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Сечение опорного столба/рамки', form.sliding.supportPostSection),
+        form.sliding.postInstallation !== '' ? summaryRow('Длина опорного столба/рамки', form.sliding.supportPostLength ? `${form.sliding.supportPostLength} мм` : '') : null,
+        summaryRow('Сечение упорного столба', form.sliding.catchPostSection),
+        form.sliding.postInstallation !== '' ? summaryRow('Длина упорного столба', form.sliding.catchPostLength ? `${form.sliding.catchPostLength} мм` : '') : null,
+        form.sliding.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.sliding.platformSize) : null,
+        form.sliding.comment ? summaryRow('Примечание', form.sliding.comment) : null,
+      ].filter(Boolean)} onEdit={() => setStep(2)} />
     </div>
+
   </>;
 
   return (
@@ -626,9 +704,56 @@ form.wicket.postInstallation !== '' ? summaryRow('Высота/длина сто
                 <SwingOpeningChoice value={form.swing.opening} onChange={(val) => changeNested('swing', 'opening', val)} />
                 <div className="hinge-config">
                   <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.swingHinge} onChange={(v) => changeNested('swing', 'hingeVariant', v)} />
-                  <Field id="swing-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
-                </div>
-              </GatePanel>
+                    <Field id="swing-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
+</div>
+
+{/* --- БЛОК: СТОЛБЫ РАСПАШНЫХ ВОРОТ --- */}
+<div className="border-t border-[#eceeef] pt-5 mt-3">
+  <div className="flex flex-col gap-1.5 mb-4">
+    <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов ворот<span className="text-red-500"> *</span></span>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Вариант установки столбов ворот">
+      {[
+        { id: 'бетонирование', label: 'Под бетонировку', desc: 'Автомат. +1000 мм' },
+        { id: 'на_платформе', label: 'На платформе', desc: 'На готовый фундамент' },
+        { id: 'к_колоннам', label: 'Крепление к колоннам', desc: 'Фиксация к анкерам' }
+      ].map((item) => {
+        const isSelected = form.swing.postInstallation === item.id;
+        return (
+          <button key={item.id} type="button" onClick={() => changeNested('swing', 'postInstallation', item.id)} className={`p-3 text-left border rounded-lg transition-all cursor-pointer ${isSelected ? 'border-gray-900 bg-[#f9fafb] ring-1 ring-gray-950' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+            <div className="text-[13px] font-bold text-gray-900">{item.label}</div>
+            <div className="text-[11px] text-gray-500 mt-0.5">{item.desc}</div>
+          </button>
+        );
+      })}
+    </div>
+    {gateErrors.swingPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
+  </div>
+
+  {form.swing.postInstallation !== '' && (
+    <div className="field-grid two-col animate-fadeIn">
+      <SectionSelectWithCustom id="swing-post-section" label="Сечение столбов ворот" value={form.swing.postSection} options={POST_SECTIONS} onChange={(v) => changeNested('swing', 'postSection', v)} />
+      {form.swing.postInstallation === 'бетонирование' && <Field id="swing-post-length-auto" label="Длина столбов (рассчитано автоматически)" value={form.swing.postLength} suffix="мм" disabled onChange={() => {}} />}
+      {form.swing.postInstallation === 'на_платформе' && <Field id="swing-platform-size" label="Размер металлической платформы" value={form.swing.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('swing', 'platformSize', v)} />}
+      {form.swing.postInstallation === 'к_колоннам' && <Field id="swing-post-length-manual" label="Высота столбов (укажите вручную)" type="number" min="1" value={form.swing.postLength} placeholder="Введите высоту в мм" suffix="мм" required onChange={(v) => changeNested('swing', 'postLength', v)} />}
+    </div>
+  )}
+</div>
+
+{/* --- ПРИМЕЧАНИЕ К РАСПАШНЫМ ВОРОТАМ --- */}
+<div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
+  <label htmlFor="swing-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к распашным воротам</label>
+  <span className="input-wrap block">
+    <textarea
+      id="swing-comment"
+      value={form.swing.comment}
+      placeholder="Например: нужны усиленные петли, упоры в землю или автоматика определенного бренда..."
+      onChange={(e) => changeNested('swing', 'comment', e.target.value)}
+      className="w-full min-h-[90px] p-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] font-normal outline-none focus:border-[#58636d] focus:shadow-[0_0_0_3px_rgba(63,77,89,0.08)] hover:border-[#b8bec3] transition-all resize-y"
+    />
+  </span>
+</div>
+</GatePanel>
+
 
               <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
                 <div className="field-grid two-col">
