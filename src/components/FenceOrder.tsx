@@ -81,7 +81,11 @@ function WicketOpeningChoice({ value, onChange }: {
           const isSelected = value === option.value;
           return (
             <label
-              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer ${isSelected ? 'border-dark bg-light-primary shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}
+              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-250 ease-in-out ${
+                isSelected 
+                  ? 'border-dark bg-light-primary p-0 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]' 
+                  : 'border-gray-200 hover:border-gray-300 p-2'
+              }`}
               key={option.value}
             >
               <input
@@ -96,9 +100,9 @@ function WicketOpeningChoice({ value, onChange }: {
                 data-testid={`choice-wicket-opening-${index + 1}`}
               />
               <img 
-                  src={option.image} 
-  alt="" 
-  className="w-full max-h-full object-contain" 
+                src={option.image} 
+                alt="" 
+                className="w-full h-full object-contain" 
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
               {isSelected && (
