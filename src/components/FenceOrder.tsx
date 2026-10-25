@@ -800,12 +800,22 @@ export function FenceOrder() {
                       </div>
 
                       {form.sliding.postInstallation === 'на_платформе' && (
-                        <Field id="sliding-platform-size" label="Размер металлической платформы" value={form.sliding.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('sliding', 'platformSize', v)} />
+                        <div className="w-full mt-2">
+                          <Field 
+                            id="sliding-platform-size" 
+                            label="Размер металлической платформы (общий для столбов)" 
+                            value={form.sliding.platformSize} 
+                            placeholder="Пример: 200х200х8" 
+                            required 
+                            onChange={(v) => changeNested('sliding', 'platformSize', v)} 
+                          />
+                        </div>
                       )}
                     </div>
                   )}
                 </div>
 
+                {/* --- ПРИМЕЧАНИЕ К ОТКАТНЫМ ВОРОТАМ --- */}
                 <div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
                   <label htmlFor="sliding-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к откатным воротам</label>
                   <span className="input-wrap block">
