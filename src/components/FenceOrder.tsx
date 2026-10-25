@@ -530,6 +530,7 @@ export function FenceOrder() {
         form.swing.comment ? summaryRow('Примечание', form.swing.comment) : null,
       ].filter(Boolean)} onEdit={() => update('step', 2)} />
 
+      {/* 1. Обновление для Шага 3 (Превью на странице) */}
       <ReviewGate title="Откатные ворота (орієнтація ззовні)" absent={form.noSliding} rows={[
         summaryRow('Ширина (ширина проєму)', form.sliding.width ? form.sliding.width + ' мм' : ''),
         summaryRow('Высота (высота габаритна)', form.sliding.height ? form.sliding.height + ' мм' : ''),
