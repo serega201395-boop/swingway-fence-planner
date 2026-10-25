@@ -105,10 +105,11 @@ function WicketOpeningChoice({ value, onChange }: {
           return (
             <label
               className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected ? 'border-gray-900 bg-light-primary shadow-[0_15px_30px_-5px_rgba(0,0,0,0.14),0_10px_15px_-6px_rgba(0,0,0,0.1)] z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
                 transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isSelected ? '0 10px 20px -4px rgba(0, 0, 0, 0.16), 0 6px 10px -4px rgba(0, 0, 0, 0.12)' : 'none',
               }}
               key={option.value}
             >
