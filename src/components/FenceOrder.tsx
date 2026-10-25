@@ -508,7 +508,6 @@ export function FenceOrder() {
       </div>)}
       {!form.noSections && <button className="text-button" type="button" onClick={addSection}><Plus size={16} /> Добавить секцию</button>}
     </div>
-    <div className="review-gates-grid">
       <div className="review-gates-grid">
       <ReviewGate title="Калитка" absent={form.noWicket} rows={[
         summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : ''),
