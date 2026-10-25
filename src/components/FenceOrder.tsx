@@ -118,25 +118,31 @@ function Choice({ id, label, value, options, required, error, onChange }: {
   id: string; label: string; value: string; options: string[]; required?: boolean; error?: boolean; onChange: (value: string) => void;
 }) {
   return (
-    <fieldset className={`choice-field ${error ? 'choice-field-error' : ''}`} aria-describedby={error ? `${id}-error` : undefined}>
-      <legend>{label}{required && <span className="required-mark"> *</span>}</legend>
-      <div className="choice-group" role="radiogroup" aria-label={label} aria-required={required || undefined} aria-invalid={error || undefined}>
-        {options.map((option, index) => (
-          <button
-            type="button"
-            role="radio"
-            aria-checked={value === option}
-            className={`choice ${value === option ? 'selected' : ''}`}
-            key={option}
-            onClick={() => onChange(option)}
-            data-testid={`choice-${id}-${index + 1}`}
-          >
-            {option}
-          </button>
-        ))}
+    <div className="flex flex-col gap-1.5 my-2">
+      <span className="block text-[#1f2937] text-[14.5px] font-normal">
+        {label}{required && <span className="text-red-500"> *</span>}
+      </span>
+      <div className="flex flex-wrap gap-2.5" role="radiogroup" aria-label={label}>
+        {options.map((option) => {
+          const isSelected = value === option;
+          return (
+            <button
+              key={option}
+              type="button"
+              onClick={() => onChange(option)}
+              className={`px-4 py-2 text-[14px] font-medium rounded-lg border transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-[#2d3748] text-white border-[#2d3748] shadow-sm'
+                  : 'bg-white text-[#4a5568] border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              {option}
+            </button>
+          );
+        })}
       </div>
-      {error && <p className="choice-error" id={`${id}-error`} role="alert">Выберите один вариант.</p>}
-    </fieldset>
+      {error && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите один вариант.</p>}
+    </div>
   );
 }
 
@@ -335,14 +341,15 @@ export function FenceOrder() {
     </div>
   </>;
 
-  return <main className={`app-shell ${modalOpen ? 'order-print-active' : ''}`}>
-    <header className="topbar">
-      <a className="brand" href="/" aria-label="Заказ ограждения — главная">
-        <span className="brand-mark"><Fence size={21} strokeWidth={1.8} /></span>
-        <span className="brand-name">Ограждение<span> / заказ</span></span>
-      </a>
-      <span className="topbar-note">Конфигуратор заказа</span>
-    </header>
+  return (
+    <main className={`app-shell ${modalOpen ? 'order-print-active' : ''}`}>
+      <header className="topbar">
+        <a className="brand" href="/" aria-label="Заказ ограждения — главная">
+          <span className="brand-mark"><Fence size={21} strokeWidth={1.8} /></span>
+          <span className="brand-name">Ограждение<span> / заказ</span></span>
+        </a>
+        <span className="topbar-note">Конфигуратор заказа</span>
+      </header>
 
       <section className="intro">
         <div className="eyebrow">Индивидуальная комплектация</div>
@@ -351,14 +358,16 @@ export function FenceOrder() {
       </section>
 
       <nav className="progress" aria-label="Этапы заказа" style={{ marginBottom: '24px' }}>
-        {steps.map((label, i) => <div className={`progress-step ${form.step === i + 1 ? 'current' : ''} ${form.step > i + 1 ? 'complete' : ''}`} key={label}>
-          <span className="progress-number" style={{ fontSize: '16px', fontWeight: '600' }}>{form.step > i + 1 ? <Check size={16} /> : `0${i + 1}`}</span>
-          <span className="progress-label" style={{ fontSize: '17px', fontWeight: '500', marginLeft: '8px' }}>{label}</span>
-          {i < steps.length - 1 && <span className="progress-line" />}
-        </div>)}
+        {steps.map((label, i) => (
+          <div className={`progress-step ${form.step === i + 1 ? 'current' : ''} ${form.step > i + 1 ? 'complete' : ''}`} key={label}>
+            <span className="progress-number" style={{ fontSize: '16px', fontWeight: '600' }}>{form.step > i + 1 ? <Check size={16} /> : `0${i + 1}`}</span>
+            <span className="progress-label" style={{ fontSize: '17px', fontWeight: '500', marginLeft: '8px' }}>{label}</span>
+            {i < steps.length - 1 && <span className="progress-line" />}
+          </div>
+        ))}
       </nav>
 
-     <section className="wizard-card" key={form.step}>
+      <section className="wizard-card" key={form.step}>
         <div className="card-heading">
           <div>
             <h2>{form.step === 1 ? 'Основные параметры' : form.step === 2 ? 'Калитка и ворота' : 'Проверьте заказ'}</h2>
@@ -367,98 +376,98 @@ export function FenceOrder() {
           <span className="step-icon"><ClipboardList size={22} strokeWidth={1.7} /></span>
         </div>
 
+        {form.step === 1 && (
+          <div className="form-content">
+            <section className="form-section">
+              <div className="section-heading"><span className="section-number">01</span><div><h3>Общие сведения</h3><p>Укажите название заказа, тип забора и цвет RAL.</p></div></div>
+              <div className="field-grid three-col">
+                <Field id="order-name" label="Название заказа" value={form.name} required error={nameError} placeholder="Например, ограждение для дома" onChange={(v) => { update('name', v); if (v.trim()) setNameError(false); }} />
+                <Field id="fence-type" label="Тип забора" value={form.fenceType ?? ''} onChange={(v) => update('fenceType', v)} placeholder="Например, евроштакетник" />
+                <Field id="ral-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} placeholder="Например, 7016 нажд" />
+              </div>
+              {nameError && <p className="validation-message" role="alert">Укажите название заказа, чтобы продолжить.</p>}
+            </section>
+            <section className="form-section section-list">
+              <div className="section-heading"><span className="section-number">02</span><div><h3>Секции забора</h3><p>Задайте количество и размер каждой секции.</p></div></div>
+              <label className="check-row">
+                <input type="checkbox" checked={form.noSections} onChange={(e) => {
+                  const disabled = e.target.checked;
+                  update('noSections', disabled);
+                  update('sections', disabled
+                    ? form.sections.map((row) => ({ ...row, quantity: '', width: '', height: '' }))
+                    : form.sections.length ? form.sections : [{ id: `section-${Date.now()}`, quantity: '', width: '', height: '' }]);
+                }} />
+                <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>У меня нет секций</span>
+              </label>
+              {!form.noSections && (
+                <div className="section-rows">
+                  <div className="table-labels"><span>№</span><span>Количество</span><span>Ширина (ширина проєму)</span><span>Высота (высота габаритна)</span><span aria-hidden="true" /></div>
+                  {form.sections.map((row, index) => (
+                    <div className="section-row" key={row.id} data-testid={`row-section-${index}`}>
+                      <span className="row-index">{String(index + 1).padStart(2, '0')}</span>
+                      <Field id={`section-${row.id}-quantity`} label="Количество" type="number" min="1" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
+                      <Field id={`section-${row.id}-width`} label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" placeholder="3000" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
+                      <Field id={`section-${row.id}-height`} label="Высота (высота габаритна)" type="number" min="1" suffix="мм" placeholder="1800" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
+                      <button type="button" className="icon-button remove-button" aria-label={`Удалить секцию ${index + 1}`} disabled={form.sections.length === 1} onClick={() => removeSection(row.id)} data-testid={`button-remove-section-${index}`}><Trash2 size={17} /></button>
+                    </div>
+                  ))}
+                  <button type="button" className="add-button" onClick={addSection} data-testid="button-add-section"><span><Plus size={17} /></span> Добавить секцию</button>
+                </div>
+              )}
+            </section>
+          </div>
+        )}
 
-        {form.step === 1 && <div className="form-content">
-          <section className="form-section">
-            <div className="section-heading"><span className="section-number">01</span><div><h3>Общие сведения</h3><p>Укажите название заказа, тип забора и цвет RAL.</p></div></div>
-            <div className="field-grid three-col">
-              <Field id="order-name" label="Название заказа" value={form.name} required error={nameError} placeholder="Например, ограждение для дома" onChange={(v) => { update('name', v); if (v.trim()) setNameError(false); }} />
-              <Field id="fence-type" label="Тип забора" value={form.fenceType ?? ''} onChange={(v) => update('fenceType', v)} placeholder="Например, евроштакетник" />
-              <Field id="ral-color" label="Цвет RAL" value={form.color} onChange={(v) => update('color', v)} placeholder="Например, 7016 нажд" />
-            </div>
-            {nameError && <p className="validation-message" role="alert">Укажите название заказа, чтобы продолжить.</p>}
-          </section>
-          <section className="form-section section-list">
-            <div className="section-heading"><span className="section-number">02</span><div><h3>Секции забора</h3><p>Задайте количество и размер каждой секции.</p></div></div>
-            <label className="check-row">
-              <input type="checkbox" checked={form.noSections} onChange={(e) => {
-                const disabled = e.target.checked;
-                update('noSections', disabled);
-                update('sections', disabled
-                  ? form.sections.map((row) => ({ ...row, quantity: '', width: '', height: '' }))
-                  : form.sections.length ? form.sections : [{ id: `section-${Date.now()}`, quantity: '', width: '', height: '' }]);
-              }} />
-              <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>У меня нет секций</span>
-            </label>
-            {!form.noSections && <div className="section-rows">
-              <div className="table-labels"><span>№</span><span>Количество</span><span>Ширина (ширина проєму)</span><span>Высота (высота габаритна)</span><span aria-hidden="true" /></div>
-              {form.sections.map((row, index) => <div className="section-row" key={row.id} data-testid={`row-section-${index}`}>
-                <span className="row-index">{String(index + 1).padStart(2, '0')}</span>
-                <Field id={`section-${row.id}-quantity`} label="Количество" type="number" min="1" value={row.quantity} onChange={(v) => patchSection(row.id, 'quantity', v)} />
-                <Field id={`section-${row.id}-width`} label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" placeholder="3000" value={row.width} onChange={(v) => patchSection(row.id, 'width', v)} />
-                <Field id={`section-${row.id}-height`} label="Высота (высота габаритна)" type="number" min="1" suffix="мм" placeholder="1800" value={row.height} onChange={(v) => patchSection(row.id, 'height', v)} />
-                <button type="button" className="icon-button remove-button" aria-label={`Удалить секцию ${index + 1}`} disabled={form.sections.length === 1} onClick={() => removeSection(row.id)} data-testid={`button-remove-section-${index}`}><Trash2 size={17} /></button>
-              </div>)}
-              <button type="button" className="add-button" onClick={addSection} data-testid="button-add-section"><span><Plus size={17} /></span> Добавить секцию</button>
-            </div>}
-          </section>
-        </div>}
+        {form.step === 2 && (
+          <div className="form-content gate-content">
+            <GatePanel title="Калитка" caption="Проходная дверь в ограждении" absent={form.noWicket} onAbsent={(v) => {
+              update('noWicket', v);
+              setGateErrors((current) => ({ ...current, wicketHinge: false }));
+            }} absentText="У меня нет калитки">
+              <div className="field-grid three-col">
+                <Field id="wicket-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.wicket.width} onChange={(v) => changeNested('wicket', 'width', v)} />
+                <Field id="wicket-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.wicket.height} onChange={(v) => changeNested('wicket', 'height', v)} />
+                <Field id="wicket-quantity" label="Количество" type="number" min="1" suffix="шт." value={form.wicket.quantity} onChange={(v) => changeNested('wicket', 'quantity', v)} />
+              </div>
+              <WicketOpeningChoice value={form.wicket.openingOption} onChange={(value) => changeNested('wicket', 'openingOption', value)} />
+              <div className="hinge-config">
+                <Choice id="wicket-hinge-variant" label="Вариант петель" value={form.wicket.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.wicketHinge} onChange={(v) => changeNested('wicket', 'hingeVariant', v)} />
+                <Field id="wicket-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.wicket.hingeCount} onChange={(v) => changeNested('wicket', 'hingeCount', v)} />
+              </div>
+              <Choice id="wicket-lock" label="Замок" value={form.wicket.lock} options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']} onChange={(v) => changeNested('wicket', 'lock', v)} />
+            </GatePanel>
 
-        {form.step === 2 && <div className="form-content gate-content">
-          <GatePanel title="Калитка" caption="Проходная дверь в ограждении" absent={form.noWicket} onAbsent={(v) => {
-            update('noWicket', v);
-            setGateErrors((current) => ({ ...current, wicketHinge: false }));
-          }} absentText="У меня нет калитки">
-            <div className="field-grid three-col">
-              <Field id="wicket-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.wicket.width} onChange={(v) => changeNested('wicket', 'width', v)} />
-              <Field id="wicket-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.wicket.height} onChange={(v) => changeNested('wicket', 'height', v)} />
-              <Field id="wicket-quantity" label="Количество" type="number" min="1" suffix="шт." value={form.wicket.quantity} onChange={(v) => changeNested('wicket', 'quantity', v)} />
-            </div>
-            <WicketOpeningChoice
-              value={form.wicket.openingOption}
-              onChange={(value) => changeNested('wicket', 'openingOption', value)}
-            />
-            <div className="hinge-config">
-              <Choice id="wicket-hinge-variant" label="Вариант петель" value={form.wicket.hingeVariant}
-                options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.wicketHinge}
-                onChange={(v) => changeNested('wicket', 'hingeVariant', v)} />
-              <Field id="wicket-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1"
-                value={form.wicket.hingeCount} onChange={(v) => changeNested('wicket', 'hingeCount', v)} />
-            </div>
-            <Choice id="wicket-lock" label="Замок" value={form.wicket.lock}
-              options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']}
-              onChange={(v) => changeNested('wicket', 'lock', v)} />
-          </GatePanel>
-          <GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
-            update('noSwing', v);
-            setGateErrors((current) => ({ ...current, swingHinge: false }));
-          }} absentText="У меня нет распашных ворот">
-            <div className="field-grid two-col">
-              <Field id="swing-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.swing.width} onChange={(v) => changeNested('swing', 'width', v)} />
-              <Field id="swing-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.swing.height} onChange={(v) => changeNested('swing', 'height', v)} />
-            </div>
-            <SwingOpeningChoice value={form.swing.opening} onChange={(val) => changeNested('swing', 'opening', val)} />
-            <div className="hinge-config">
-              <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant}
-                options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.swingHinge}
-                onChange={(v) => changeNested('swing', 'hingeVariant', v)} />
-              <Field id="swing-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1"
-                value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
-            </div>
-          </GatePanel>
-          <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
-            <div className="field-grid two-col">
-              <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
-              <Field id="sliding-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.sliding.height} onChange={(v) => changeNested('sliding', 'height', v)} />
-            </div>
-            <SlidingDirectionChoice value={form.sliding.direction} onChange={(val) => changeNested('sliding', 'direction', val)} />
-          </GatePanel>
-        </div>}
+            <GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
+              update('noSwing', v);
+              setGateErrors((current) => ({ ...current, swingHinge: false }));
+            }} absentText="У меня нет распашных ворот">
+              <div className="field-grid two-col">
+                <Field id="swing-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.swing.width} onChange={(v) => changeNested('swing', 'width', v)} />
+                <Field id="swing-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.swing.height} onChange={(v) => changeNested('swing', 'height', v)} />
+              </div>
+              <SwingOpeningChoice value={form.swing.opening} onChange={(val) => changeNested('swing', 'opening', val)} />
+              <div className="hinge-config">
+                <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.swingHinge} onChange={(v) => changeNested('swing', 'hingeVariant', v)} />
+                <Field id="swing-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
+              </div>
+            </GatePanel>
 
-        {form.step === 3 && <div className="form-content review-content">
-          <div className="review-note"><span className="review-note-dot" /> Изменения сохраняются автоматически</div>
-          {allReviewFields}
-        </div>}
+            <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
+              <div className="field-grid two-col">
+                <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
+                <Field id="sliding-height" label="Высота (высота габаритна)" type="number" min="1" suffix="мм" value={form.sliding.height} onChange={(v) => changeNested('sliding', 'height', v)} />
+              </div>
+              <SlidingDirectionChoice value={form.sliding.direction} onChange={(val) => changeNested('sliding', 'direction', val)} />
+            </GatePanel>
+          </div>
+        )}
+
+        {form.step === 3 && (
+          <div className="form-content review-content">
+            <div className="review-note"><span className="review-note-dot" /> Изменения сохраняются автоматически</div>
+            {allReviewFields}
+          </div>
+        )}
 
         <div className="card-footer">
           <button type="button" className="button button-quiet" onClick={() => form.step > 1 && setStep(form.step - 1)} disabled={form.step === 1} data-testid="button-back">
@@ -476,107 +485,112 @@ export function FenceOrder() {
       <footer className="page-footer"><span>Конфигуратор ограждения</span><span>Состав заказа можно изменить в любой момент</span></footer>
     </div>
 
-    {modalOpen && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}>
-      <section className="order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <header className="modal-header">
-          <div><div className="modal-kicker">СВОДКА КОМПНЕКТАЦИИ</div><h2 id="modal-title">Итоговый заказ</h2><p>Проверьте состав заказа перед завершением.</p></div>
-          <button type="button" className="icon-button modal-close" aria-label="Закрыть окно" onClick={() => setModalOpen(false)} data-testid="button-close-modal"><X size={20} /></button>
-        </header>
-        <div className="modal-body">
-          <ModalGroup title="Заказ">
-            {summaryRow('Название', form.name)}
-            {summaryRow('Тип забора', form.fenceType)}
-            {summaryRow('Цвет RAL', form.color)}
-          </ModalGroup>
-          <ModalGroup title="Секции забора">
-            {form.noSections ? <div className="summary-row"><span>Комплектация</span><strong className="absent">Отсутствует</strong></div> :
-              form.sections.length ? form.sections.map((row, i) => <div className="section-summary" key={row.id}>
-                {summaryRow(`Секция ${i + 1}`, `${row.quantity || '—'} шт.`)}
-                {summaryRow('Ширина (ширина проєму)', row.width ? `${row.width} мм` : '—')}
-                {summaryRow('Высота (высота габаритна)', row.height ? `${row.height} мм` : '—')}
-              </div>) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
-         </ModalGroup>
-          <ModalGroup title="Калитка">
-            {form.noWicket ? <Absent /> : <>
-              {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
-              {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
-              {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
-              {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
-              <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '0px' }}>
-                <img
-                  src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
-                  alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
-                  style={{ width: '193px', height: '124px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
-                />
-              </div>
-              {summaryRow('Вариант петель', form.wicket.hingeVariant)}
-              {summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : '')}
-              {summaryRow('Замок', form.wicket.lock)}
-            </>}
-          </ModalGroup>
-          <ModalGroup title="Распашные ворота">
-            {form.noSwing ? <Absent /> : <>
-              {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
-              {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
-              {summaryRow('Открывание', form.swing.opening)}
-              <div style={{ width: '385px', height: '100px', marginTop: '6px', marginBottom: '0px' }}>
-              <img
-                src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
-                alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
-                className="!h-[100px] max-h-[100px] w-[385px] object-contain rounded-[6px] border border-[#E5E7EB] block"
-                style={{ width: '385px', height: '100px', maxHeight: '100px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
-              />
-              </div>
-              {summaryRow('Вариант петель', form.swing.hingeVariant)}
-              {summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : '')}
-            </>}
-          </ModalGroup>
-          <ModalGroup title="Откатные ворота (орієнтація ззовні)">
-            {form.noSliding ? <Absent /> : <>
-              {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
-              {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
-              {summaryRow('Направление отката', form.sliding.direction)}
-              <div style={{ width: '242px', height: '148px', marginTop: '6px', marginBottom: '0px' }}>
-                <img
-                  src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
-                  alt={`Схема отката ворот: ${form.sliding.direction}`}
-                  style={{ width: '242px', height: '148px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
-                />
-              </div>
-            </>}
-          </ModalGroup>
-
-        </div>
-        <div className="modal-footer">
-          <div className="modal-footer-copy">
-            <p>Это сводка вашей конфигурации — заказ не отправлен.</p>
+    {modalOpen && (
+      <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}>
+        <section className="order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+          <header className="modal-header">
+            <div><div className="modal-kicker">СВОДКА КОМПЛЕКТАЦИИ</div><h2 id="modal-title">Итоговый заказ</h2><p>Проверьте состав заказа перед завершением.</p></div>
+            <button type="button" className="icon-button modal-close" aria-label="Закрыть окно" onClick={() => setModalOpen(false)} data-testid="button-close-modal"><X size={20} /></button>
+          </header>
+          <div className="modal-body">
+            <ModalGroup title="Заказ">
+              {summaryRow('Название', form.name)}
+              {summaryRow('Тип забора', form.fenceType)}
+              {summaryRow('Цвет RAL', form.color)}
+            </ModalGroup>
+            <ModalGroup title="Секции забора">
+              {form.noSections ? <div className="summary-row"><span>Комплектация</span><strong className="absent">Отсутствует</strong></div> :
+                form.sections.length ? form.sections.map((row, i) => (
+                  <div className="section-summary" key={row.id}>
+                    {summaryRow(`Секция ${i + 1}`, `${row.quantity || '—'} шт.`)}
+                    {summaryRow('Ширина (ширина проєму)', row.width ? `${row.width} мм` : '—')}
+                    {summaryRow('Высота (высота габаритна)', row.height ? `${row.height} мм` : '—')}
+                  </div>
+                )) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
+            </ModalGroup>
+            <ModalGroup title="Калитка">
+              {form.noWicket ? <Absent /> : <>
+                {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
+                {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
+                {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
+                {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
+                <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '0px' }}>
+                  <img
+                    src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
+                    alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
+                    style={{ width: '193px', height: '124px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                  />
+                </div>
+                {summaryRow('Вариант петель', form.wicket.hingeVariant)}
+                {summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : '')}
+                {summaryRow('Замок', form.wicket.lock)}
+              </>}
+            </ModalGroup>
+            <ModalGroup title="Распашные ворота">
+              {form.noSwing ? <Absent /> : <>
+                {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
+                {summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : '')}
+                {summaryRow('Открывание', form.swing.opening)}
+                <div style={{ width: '385px', height: '100px', marginTop: '6px', marginBottom: '0px' }}>
+                  <img
+                    src={swingOpeningCards.find((option) => option.value === form.swing.opening)?.image}
+                    alt={`Схема открытия распашных ворот: ${form.swing.opening}`}
+                    style={{ width: '385px', height: '100px', maxHeight: '100px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                  />
+                </div>
+                {summaryRow('Вариант петель', form.swing.hingeVariant)}
+                {summaryRow('Количество петель на створку', form.swing.hingeCount ? `${form.swing.hingeCount} шт.` : '')}
+              </>}
+            </ModalGroup>
+            <ModalGroup title="Откатные ворота (орієнтація ззовні)">
+              {form.noSliding ? <Absent /> : <>
+                {summaryRow('Ширина (ширина проєму)', form.sliding.width ? `${form.sliding.width} мм` : '')}
+                {summaryRow('Высота (высота габаритна)', form.sliding.height ? `${form.sliding.height} мм` : '')}
+                {summaryRow('Направление отката', form.sliding.direction)}
+                <div style={{ width: '242px', height: '148px', marginTop: '6px', marginBottom: '0px' }}>
+                  <img
+                    src={slidingDirectionCards.find((option) => option.value === form.sliding.direction)?.image}
+                    alt={`Схема отката ворот: ${form.sliding.direction}`}
+                    style={{ width: '242px', height: '148px', objectFit: 'contain', borderRadius: '6px', border: '1px solid #E5E7EB', display: 'block' }}
+                  />
+                </div>
+              </>}
+            </ModalGroup>
           </div>
-          <div className="modal-actions">
-            <button type="button" className="button button-dark" onClick={printOrder} data-testid="button-save-pdf">
-              <Printer size={17} /> Сохранить в PDF
-            </button>
-            <button type="button" className="button button-quiet" onClick={() => setModalOpen(false)} data-testid="button-modal-done">Понятно <Check size={17} /></button>
+          <div className="modal-footer">
+            <div className="modal-footer-copy">
+              <p>Это сводка вашей конфигурации — заказ не отправлен.</p>
+            </div>
+            <div className="modal-actions">
+              <button type="button" className="button button-dark" onClick={printOrder} data-testid="button-save-pdf">
+                <Printer size={17} /> Сохранить в PDF
+              </button>
+              <button type="button" className="button button-quiet" onClick={() => setModalOpen(false)} data-testid="button-modal-done">Понятно <Check size={17} /></button>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>}
-  </main>;
+        </section>
+      </div>
+    )}
+  </main>
+);
 }
 
 function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
   title: string; caption: string; absent: boolean; onAbsent: (value: boolean) => void; absentText: string; children: ReactNode;
 }) {
-  return <section className={`gate-panel ${absent ? 'is-absent' : ''}`}>
-    <div className="gate-panel-head">
-      <div><span className="gate-dot" /><div><h3>{title}</h3><p>{caption}</p></div></div>
-      <label className="check-row gate-check">
-        <input type="checkbox" checked={absent} onChange={(e) => onAbsent(e.target.checked)} />
-        <span className="custom-check">{absent && <Check size={16} strokeWidth={3.4} />}</span><span>{absentText}</span>
-      </label>
-    </div>
-    {!absent && <div className="gate-panel-fields">{children}</div>}
-    {absent && <p className="absent-message">Эта конструкция не входит в заказ</p>}
-  </section>;
+  return (
+    <section className={`gate-panel ${absent ? 'is-absent' : ''}`}>
+      <div className="gate-panel-head">
+        <div><span className="gate-dot" /><div><h3>{title}</h3><p>{caption}</p></div></div>
+        <label className="check-row gate-check">
+          <input type="checkbox" checked={absent} onChange={(e) => onAbsent(e.target.checked)} />
+          <span className="custom-check"><Check size={16} strokeWidth={3.4} /></span><span>{absentText}</span>
+        </label>
+      </div>
+      {!absent && <div className="gate-panel-fields">{children}</div>}
+      {absent && <p className="absent-message">Эта конструкция не входит в заказ</p>}
+    </section>
+  );
 }
 
 function ModalGroup({ title, children }: { title: string; children: ReactNode }) {
@@ -584,8 +598,10 @@ function ModalGroup({ title, children }: { title: string; children: ReactNode })
 }
 function Absent() { return <div className="summary-row"><span>Комплектация</span><strong className="absent">Отсутствует</strong></div>; }
 function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
-  return <section className="review-gate">
-    <div className="review-gate-head"><h3>{title}</h3><button type="button" onClick={onEdit} className="text-button">Изменить</button></div>
-    {absent ? <p className="absent">Отсутствует</p> : <div>{rows}</div>}
-  </section>;
+  return (
+    <section className="review-gate">
+      <div className="review-gate-head"><h3>{title}</h3><button type="button" onClick={onEdit} className="text-button">Изменить</button></div>
+      {absent ? <p className="absent">Отсутствует</p> : <div>{rows}</div>}
+    </section>
+  );
 }
