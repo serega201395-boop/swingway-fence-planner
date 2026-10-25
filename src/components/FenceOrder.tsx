@@ -509,7 +509,8 @@ export function FenceOrder() {
       {!form.noSections && <button className="text-button" type="button" onClick={addSection}><Plus size={16} /> Добавить секцию</button>}
     </div>
     <div className="review-gates-grid">
-            <ReviewGate title="Калитка" absent={form.noWicket} rows={[
+      <div className="review-gates-grid">
+      <ReviewGate title="Калитка" absent={form.noWicket} rows={[
         summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : ''),
         summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : ''),
@@ -520,10 +521,11 @@ export function FenceOrder() {
         summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
         summaryRow('Сечение столбов калитки', form.wicket.postSection),
         form.wicket.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.wicket.platformSize) : null,
-form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '') : null,
+        form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '') : null,
         form.wicket.comment ? summaryRow('Примечание', form.wicket.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
-       <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
+
+      <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
         summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : ''),
         summaryRow('Открывание', form.swing.opening), 
@@ -549,8 +551,8 @@ form.wicket.postInstallation !== '' ? summaryRow('Высота/длина сто
         form.sliding.comment ? summaryRow('Примечание', form.sliding.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
     </div>
-
   </>;
+
 
   return (
     <main className={`app-shell ${modalOpen ? 'order-print-active' : ''}`}>
