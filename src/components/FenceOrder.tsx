@@ -78,10 +78,8 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
           const isSelected = value === option.value;
           return (
             <label 
-              className={`w-[385px] h-[110px] relative flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected 
-                  ? 'border-gray-900 bg-light-primary z-10 p-0.5' 
-                  : 'border-gray-200 hover:border-gray-300 bg-white p-2'
+              className={`w-[385px] h-[110px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
                 transform: isSelected ? 'scale(1.05)' : 'scale(1)',
@@ -94,8 +92,14 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
               <img 
                 src={option.image} 
                 alt={option.label} 
-                className="w-full h-full object-contain" 
-                style={{ imageRendering: '-webkit-optimize-contrast' }} 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
+                style={{ 
+                  // Увеличиваем картинку внутри рамки еще на 5% (в сумме с рамкой будет 10%)
+                  transform: isSelected ? 'scale(1.05) translateZ(0)' : 'scale(1) translateZ(0)',
+                  imageRendering: '-webkit-optimize-contrast',
+                  // canny хак для идеальной резкости линий в Chromium:
+                  willChange: 'transform'
+                }} 
               />
               <span className="wicket-opening-card-label hidden">{option.label}</span>
               {value === option.value && (
