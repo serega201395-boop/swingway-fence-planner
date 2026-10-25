@@ -1022,7 +1022,7 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
         <button 
           type="button" 
           onClick={onEdit} 
-          className="px-3 py-1 text-[11px] font-medium text-gray-500 bg-white border border-gray-300 rounded-[6px] shadow-sm transition-all duration-150 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 active:scale-[0.96] cursor-pointer focus:outline-none"
+          className="px-2 py-0.5 text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded-[5px] shadow-sm transition-all duration-150 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 active:scale-[0.96] cursor-pointer focus:outline-none"
           style={{ lineHeight: '1.2' }}
         >
           Изменить
