@@ -97,18 +97,22 @@ function WicketOpeningChoice({ value, onChange }: {
   onChange: (value: WicketOpening) => void;
 }) {
   return (
-    <fieldset className="border-0 p-0 m-0 w-[434px] max-w-[434px] block">
+    <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
       <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
-      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[434px] max-w-[434px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
         {wicketOpeningCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
             <label
-              className={`w-[210px] h-[135px] overflow-hidden relative flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
+              className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
                 isSelected 
-                  ? 'border-gray-900 bg-light-primary shadow-xl z-10 p-1' 
-                  : 'border-gray-200 hover:border-gray-300 shadow-none bg-white p-2.5'
+                  ? 'border-gray-900 bg-light-primary shadow-md z-10' 
+                  : 'border-gray-200 hover:border-gray-300 shadow-none bg-white'
               }`}
+              style={{
+                transform: isSelected ? 'scale(1.04) translateZ(0)' : 'scale(1) translateZ(0)',
+                willChange: 'transform',
+              }}
               key={option.value}
             >
               <input
@@ -125,8 +129,11 @@ function WicketOpeningChoice({ value, onChange }: {
               <img 
                 src={option.image} 
                 alt="" 
-                className="w-full h-full object-contain" 
-                style={{ imageRendering: '-webkit-optimize-contrast' }}
+                className="w-full max-h-full object-contain" 
+                style={{ 
+                  imageRendering: '-webkit-optimize-contrast',
+                  transform: 'translateZ(0)',
+                }}
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
               {isSelected && (
