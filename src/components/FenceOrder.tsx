@@ -40,7 +40,6 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
               style={{
                 transform: isSelected ? 'scale(1.05)' : 'scale(1)',
                 boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
-                // Разделяем элементы фиксированным отступом:
                 marginRight: index === 0 ? '24px' : '0px',
               }}
               key={option.value}
@@ -51,8 +50,9 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
                 alt={option.label} 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
-                  imageRendering: '-webkit-optimize-contrast'
+                  transform: isSelected ? 'scale(1.05) translateZ(0)' : 'scale(1) translateZ(0)',
+                  imageRendering: '-webkit-optimize-contrast',
+                  willChange: 'transform'
                 }} 
               />
               <span className="wicket-opening-card-label hidden">{option.label}</span>
@@ -68,6 +68,7 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
     </fieldset>
   );
 }
+
 
 function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
   return (
