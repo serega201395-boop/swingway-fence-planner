@@ -536,10 +536,16 @@ export function FenceOrder() {
         summaryRow('Высота (высота габаритна)', form.sliding.height ? form.sliding.height + ' мм' : ''),
         summaryRow('Направление отката', form.sliding.direction),
         summaryRow('Вариант установки столбов', form.sliding.postInstallation === 'бетонирование' ? 'Под бетонировку' : form.sliding.postInstallation === 'на_платформе' ? 'На платформе' : form.sliding.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        
+        // Опорный столб
         summaryRow('Сечение опорного столба/рамки', form.sliding.supportPostSection),
         form.sliding.postInstallation !== '' ? summaryRow('Длина опорного столба/рамки', form.sliding.supportPostLength ? form.sliding.supportPostLength + ' мм' : '') : null,
+        
+        // Упорный столб
         summaryRow('Сечение упорного столба', form.sliding.catchPostSection),
         form.sliding.postInstallation !== '' ? summaryRow('Длина упорного столба', form.sliding.catchPostLength ? form.sliding.catchPostLength + ' мм' : '') : null,
+        
+        // Размер платформы выводится ровно ОДИН раз
         form.sliding.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.sliding.platformSize) : null,
         form.sliding.comment ? summaryRow('Примечание', form.sliding.comment) : null,
       ].filter(Boolean)} onEdit={() => update('step', 2)} />
@@ -835,9 +841,6 @@ export function FenceOrder() {
               </GatePanel>
             </div>
           )}
-
-
-
 
           {form.step === 3 && (
             <div className="form-content review-content">
