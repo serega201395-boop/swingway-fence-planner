@@ -148,28 +148,38 @@ function WicketOpeningChoice({ value, onChange }: {
 }) {
   return <fieldset className="wicket-opening-field">
     <legend>Вариант открытия калитки<span className="required-mark"> *</span></legend>
-    <div className="grid grid-cols-2 gap-4 mt-2 max-w-[430px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
-      {wicketOpeningCards.map((option, index) => <label
-        className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`}
-        key={option.value}
-      >
-        <input
-          className="wicket-opening-input"
-          type="radio"
-          name="wicket-opening"
-          value={option.value}
-          aria-label={option.value}
-          checked={value === option.value}
-          required
-          onChange={() => onChange(option.value)}
-          data-testid={`choice-wicket-opening-${index + 1}`}
-        />
-        <img src={option.image} alt="" className="w-full max-h-full object-contain" />
-        <span className="wicket-opening-card-label hidden">{option.value}</span>
-        {value === option.value && <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-        </span>}
-      </label>)}
+    {/* ⚡️ Исправлена сетка: жесткие 2 колонки и ограничение ширины в 420px соберут карточки вместе */}
+    <div className="grid grid-cols-2 gap-3 mt-2 max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+      {wicketOpeningCards.map((option, index) => {
+        const isSelected = value === option.value;
+        return (
+          <label
+            className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${isSelected ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`}
+            key={option.value}
+          >
+            <input
+              className="wicket-opening-input"
+              type="radio"
+              name="wicket-opening"
+              value={option.value}
+              aria-label={option.value}
+              checked={isSelected}
+              required
+              onChange={() => onChange(option.value)}
+              data-testid={`choice-wicket-opening-${index + 1}`}
+            />
+            <img 
+              src={option.image} 
+              alt="" 
+              className={`w-full max-h-full object-contain transition-all duration-150 ${isSelected ? 'opacity-100 grayscale-0' : 'opacity-72 grayscale hover:opacity-92 hover:grayscale-0'}`} 
+            />
+            <span className="wicket-opening-card-label hidden">{option.value}</span>
+            {isSelected && <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+            </span>}
+          </label>
+        );
+      })}
     </div>
   </fieldset>;
 }
