@@ -159,9 +159,11 @@ function WicketOpeningChoice({ value, onChange }: {
                 className={`w-full max-h-full object-contain transition-all duration-150 ${isSelected ? 'opacity-100 grayscale-0' : 'opacity-72 grayscale hover:opacity-92 hover:grayscale-0'}`} 
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
-              {isSelected && <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-              </span>}
+              {isSelected && (
+                <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                </span>
+              )}
             </label>
           );
         })}
@@ -169,7 +171,6 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
-
 
 export function FenceOrder() {
   const [form, setForm] = useState<OrderState>(restoreState);
