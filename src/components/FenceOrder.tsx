@@ -250,15 +250,14 @@ const initialState: OrderState = {
   noWicket: false, wicket: {
     width: '', height: '', quantity: '1', openingOption: 'На улицу, петли справа',
     hingeVariant: '', hingeCount: '', lock: '',
-    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2'
-    comment: '' // <-- ДОБАВИТЬ ЭТУ СТРОКУ
+    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2',
+    comment: ''
   },
   noSwing: false, swing: { width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '' },
   noSliding: false, sliding: { width: '', height: '', direction: 'Влево' },
 };
 const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
 const emptyGateErrors = { wicketHinge: false, swingHinge: false, wicketPostInstallation: false };
-
 
 function restoreState(): OrderState {
   try {
@@ -287,7 +286,7 @@ function restoreState(): OrderState {
         id: typeof row.id === 'string' ? row.id : `section-${i + 1}`,
         quantity: String(row.quantity ?? '1'), width: String(row.width ?? ''), height: String(row.height ?? ''),
       })) : initialState.sections,
-      wicket: { ...initialState.wicket, ...savedWicketFields, openingOption },
+      wicket: { ...initialState.wicket, ...savedWicketFields, openingOption, comment: typeof savedWicketFields.comment === 'string' ? savedWicketFields.comment : '' },
       swing: { ...initialState.swing, ...(saved.swing ?? {}) },
       sliding: { ...initialState.sliding, ...(saved.sliding ?? {}) },
     };
@@ -295,6 +294,7 @@ function restoreState(): OrderState {
     return initialState;
   }
 }
+
 
 type FieldProps = {
   label: string; value: string; onChange: (value: string) => void; type?: string;
