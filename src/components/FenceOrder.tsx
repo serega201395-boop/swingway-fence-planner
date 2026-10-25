@@ -82,10 +82,10 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
                 isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
-                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                boxShadow: isSelected ? '0 14px 28px -4px rgba(10, 25, 47, 0.42), 0 8px 14px -4px rgba(15, 32, 67, 0.35)' : 'none',
-                // Жесткий инлайн-отступ для первой карточки гарантирует зазор и исключает наложение:
+                transform: isSelected ? 'scale(1.05) translateZ(0)' : 'scale(1) translateZ(0)',
+                boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
                 marginRight: index === 0 ? '24px' : '0px',
+                willChange: 'transform',
               }}
               key={option.value}
             >
@@ -95,7 +95,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
                 alt={option.label} 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
+                  transform: isSelected ? 'scale(1.0476) translateZ(0)' : 'scale(1) translateZ(0)',
                   imageRendering: '-webkit-optimize-contrast'
                 }} 
               />
@@ -112,6 +112,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
     </fieldset>
   );
 }
+
 
 
 function WicketOpeningChoice({ value, onChange }: {
