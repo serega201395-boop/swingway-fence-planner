@@ -76,7 +76,7 @@ function WicketOpeningChoice({ value, onChange }: {
   return (
     <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
       <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
-      <div className="grid grid-cols-2 gap-3 mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
         {wicketOpeningCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
