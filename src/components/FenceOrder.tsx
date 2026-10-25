@@ -81,9 +81,9 @@ function WicketOpeningChoice({ value, onChange }: {
           const isSelected = value === option.value;
           return (
             <label
-              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out transform-gpu ${
+              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
                 isSelected 
-                  ? 'border-dark bg-light-primary scale-[1.02] shadow-[0_12px_20px_-4px_rgba(0,0,0,0.12),0_8px_12px_-6px_rgba(0,0,0,0.08)] outline-[1.5px] outline-dark z-10' 
+                  ? 'border-black bg-light-primary scale-105 shadow-lg outline-2 outline-black z-10' 
                   : 'border-gray-200 hover:border-gray-300 scale-100'
               }`}
               key={option.value}
@@ -117,6 +117,7 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
+
 
 function Choice({ id, label, value, options, required, error, onChange }: {
   id: string; label: string; value: string; options: string[]; required?: boolean; error?: boolean; onChange: (value: string) => void;
