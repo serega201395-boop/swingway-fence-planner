@@ -1022,7 +1022,7 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
         <button 
           type="button" 
           onClick={onEdit} 
-          className="w-[74px] h-6 flex items-center justify-center text-[9px] font-medium text-gray-500 bg-[#f9fafb] border border-[#e5e7eb] rounded-[5px] shadow-sm transition-all duration-150 hover:bg-white hover:text-gray-900 hover:border-gray-300 active:scale-[0.96] cursor-pointer focus:outline-none"
+          className="w-[74px] h-6 flex items-center justify-center text-[5px] font-medium text-gray-500 bg-[#f9fafb] border border-[#e5e7eb] rounded-[5px] shadow-sm transition-all duration-150 hover:bg-white hover:text-gray-900 hover:border-gray-300 active:scale-[0.96] cursor-pointer focus:outline-none"
         >
           Изменить
         </button>
