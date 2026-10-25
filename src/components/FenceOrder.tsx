@@ -1017,12 +1017,12 @@ function Absent() {
 function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
   return (
     <section className="review-gate">
-      <div className="review-gate-head flex items-center justify-between border-b border-[#eceeef] pb-3 mb-3">
+      <div className="review-gate-head flex items-center justify-between border-b border-[#eceeef] pb-2 mb-3">
         <h3>{title}</h3>
         <button 
           type="button" 
           onClick={onEdit} 
-          className="px-3 py-1.5 text-[9px] font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-1"
+          className="px-2 py-0.5 text-[11.5px] font-medium text-gray-600 bg-white border border-gray-300 rounded-[5px] shadow-sm transition-all duration-150 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 active:scale-[0.97] cursor-pointer focus:outline-none"
         >
           Изменить
         </button>
