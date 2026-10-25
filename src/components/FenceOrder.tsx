@@ -96,9 +96,9 @@ function WicketOpeningChoice({ value, onChange }: {
                 data-testid={`choice-wicket-opening-${index + 1}`}
               />
               <img 
-                src={option.image} 
-                alt="" 
-                className="w-full max-h-full object-contain" 
+                  src={option.image} 
+  alt="" 
+  className="w-full max-h-full object-contain" 
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
               {isSelected && (
