@@ -852,8 +852,9 @@ export function FenceOrder() {
         </div>
       </section>
       <footer className="page-footer"><span>Конфигуратор ограждения</span><span>Состав заказа можно изменить в любой момент</span></footer>
-    </main>
-
+    </div>
+  );
+}
 
 
       {modalOpen && (
