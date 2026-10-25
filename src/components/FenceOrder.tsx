@@ -1031,14 +1031,4 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
     </section>
   );
 }
-/*function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
-  return (
-    <section className="review-gate">
-      <div className="review-gate-head">
-        <h3>{title}</h3>
-        <button type="button" onClick={onEdit} className="text-button">Изменить</button>
-      </div>
-      {absent ? <p className="absent">Отсутствует</p> : <div>{rows}</div>}
-    </section>
-  );
-}
+
