@@ -284,13 +284,15 @@ const initialState: OrderState = {
     postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '80х80х3',
     comment: ''
   },
-  noSliding: false, sliding: { 
-    width: '', height: '', direction: 'Влево',
-    postInstallation: '', supportPostLength: '', supportPostSection: '80х80х3',
-    catchPostLength: '', catchPostSection: '60х60х2', platformSize: '200х200х8',
-    comment: ''
-  },
-};
+      noSliding: false, sliding: { 
+      width: '', height: '', direction: 'Влево',
+      postInstallation: '', supportPostLength: '', supportPostSection: '80х80х3',
+      catchPostLength: '', catchPostSection: '60х60х2', platformSize: '200х200х8',
+      comment: ''
+    },
+  };
+}
+
 const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
 const emptyGateErrors = { 
   wicketHinge: false, 
@@ -299,9 +301,6 @@ const emptyGateErrors = {
   swingPostInstallation: false,
   slidingPostInstallation: false 
 };
-
-const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
-const emptyGateErrors = { wicketHinge: false, swingHinge: false, wicketPostInstallation: false };
 
 function restoreState(): OrderState {
   try {
