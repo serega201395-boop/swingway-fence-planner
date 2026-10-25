@@ -650,7 +650,6 @@ export function FenceOrder() {
                   <Field id="wicket-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.wicket.hingeCount} onChange={(v) => changeNested('wicket', 'hingeCount', v)} />
                 </div>
                <Choice id="wicket-lock" label="Замок" value={form.wicket.lock} options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']} onChange={(v) => changeNested('wicket', 'lock', v)} />
-
 <div className="border-t border-[#eceeef] pt-5 mt-3">
   <div className="flex flex-col gap-1.5 mb-4">
     <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов калитки<span className="text-red-500"> *</span></span>
