@@ -62,8 +62,8 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
   return (
     <fieldset className="wicket-opening-field">
       <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
-      {/* Используем простой flex с gap-3, чтобы карточки стояли близко друг к другу без разброса */}
-      <div className="flex flex-row gap-3 items-center justify-start mt-2 max-w-full" role="radiogroup" aria-label="Вариант открытия ворот">
+      {/* Увеличиваем зазор до gap-6 (24px) для компенсации 5% масштабирования карточек */}
+      <div className="flex flex-row gap-6 items-center justify-start mt-2 max-w-full" role="radiogroup" aria-label="Вариант открытия ворот">
         {swingOpeningCards.map((option) => {
           const isSelected = value === option.value;
           return (
@@ -100,6 +100,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
     </fieldset>
   );
 }
+
 
 
 
