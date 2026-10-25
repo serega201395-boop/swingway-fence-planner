@@ -110,7 +110,8 @@ function WicketOpeningChoice({ value, onChange }: {
                   : 'border-gray-200 hover:border-gray-300 shadow-none'
               }`}
               style={{
-                transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+                scale: isSelected ? '1.04' : '1',
+                transform: 'translateZ(0)',
               }}
               key={option.value}
             >
@@ -129,6 +130,7 @@ function WicketOpeningChoice({ value, onChange }: {
                 src={option.image} 
                 alt="" 
                 className="w-full max-h-full object-contain" 
+                style={{ imageRendering: '-webkit-optimize-contrast' }}
               />
               <span className="wicket-opening-card-label hidden">{option.value}</span>
               {isSelected && (
@@ -143,6 +145,7 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
+
 
 
 
