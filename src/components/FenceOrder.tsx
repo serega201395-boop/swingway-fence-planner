@@ -837,7 +837,24 @@ export function FenceOrder() {
               )}
 
 
-
+          <div className="card-footer">
+            <button type="button" className="button button-quiet" onClick={() => form.step > 1 && setStep(form.step - 1)} disabled={form.step === 1} data-testid="button-back">
+              <ChevronLeft size={17} /> Назад
+            </button>
+            <span className={`save-note ${storageStatus === 'error' ? 'save-note-error' : ''}`} role="status">
+              <span className="save-dot" />
+              {storageStatus === 'error' ? 'Не удалось сохранить черновик' : storageStatus === 'saving' ? 'Сохранение…' : 'Данные сохранены'}
+            </span>
+            {form.step < 3
+              ? <button type="button" className="button button-dark" onClick={next} data-testid="button-next">Продолжить <ChevronRight size={17} /></button>
+              : <button type="button" className="button button-dark" onClick={submitOrder} data-testid="button-submit">Оформить заказ <ChevronRight size={17} /></button>}
+          </div>
+        </div>
+      </section>
+      <footer className="page-footer"><span>Конфигуратор ограждения</span><span>Состав заказа можно изменить в любой момент</span></footer>
+    </main>
+  );
+}
 
 
       {modalOpen && (
