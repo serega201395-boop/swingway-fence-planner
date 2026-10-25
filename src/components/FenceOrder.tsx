@@ -108,7 +108,7 @@ function WicketOpeningChoice({ value, onChange }: {
                 isSelected ? 'border-gray-900 bg-light-primary shadow-lg z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
-                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                transform: isSelected ? 'scale(1.1)' : 'scale(1)',
               }}
               key={option.value}
             >
