@@ -492,7 +492,13 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
     box-shadow: none !important;
   }
 }
-
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease forwards;
+}
 /* Scheme image is exactly 202x130 in the questionnaire, the summary and print. */
 /*.wicket-opening-card { box-sizing: border-box !important; width: 202px !important; }
 .wicket-opening-card img,
