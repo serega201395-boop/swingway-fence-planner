@@ -62,7 +62,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
   return (
     <fieldset className="wicket-opening-field">
       <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
-      <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Вариант открытия ворот">
+      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[782px] max-w-[782px]" role="radiogroup" aria-label="Вариант открытия ворот">
         {swingOpeningCards.map((option) => {
           const isSelected = value === option.value;
           return (
@@ -72,7 +72,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
               }`}
               style={{
                 transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
+                boxShadow: isSelected ? '0 14px 28px -4px rgba(10, 25, 47, 0.42), 0 8px 14px -4px rgba(15, 32, 67, 0.35)' : 'none',
               }}
               key={option.value}
             >
@@ -82,7 +82,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
                 alt={option.label} 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.07)' : 'scale(1)',
+                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
                   imageRendering: '-webkit-optimize-contrast'
                 }} 
               />
