@@ -451,7 +451,8 @@ export function FenceOrder() {
         summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку (+1000 мм авто)' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе на фундамент' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
         summaryRow('Сечение столбов калитки', form.wicket.postSection),
         form.wicket.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.wicket.platformSize) : null,
-        form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '—') : null,
+ form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '—') : null,
+        form.wicket.comment ? summaryRow('Примечание', form.wicket.comment) : null,
       ].filter(Boolean)} onEdit={() => setStep(2)} />
       <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
         summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : ''),
@@ -666,7 +667,8 @@ export function FenceOrder() {
                     </div>
                   )) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
               </ModalGroup>
-                            <ModalGroup title="Калитка">
+              
+              <ModalGroup title="Калитка">
                 {form.noWicket ? <Absent /> : <>
                   {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
                   {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
@@ -686,6 +688,7 @@ export function FenceOrder() {
                   {summaryRow('Сечение столбов калитки', form.wicket.postSection)}
                   {form.wicket.postInstallation === 'на_платформе' && summaryRow('Размер платформы', form.wicket.platformSize)}
                   {form.wicket.postInstallation !== '' && summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '—')}
+                  {form.wicket.comment && summaryRow('Примечание', form.wicket.comment)}
                 </>}
               </ModalGroup>
 
