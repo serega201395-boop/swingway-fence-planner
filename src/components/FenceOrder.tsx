@@ -29,21 +29,32 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
   return (
     <fieldset className="wicket-opening-field">
       <legend>Направление отката<span className="required-mark"> *</span></legend>
-      <div className="grid grid-cols-2 gap-4 mt-2 max-w-[510px]" role="radiogroup" aria-label="Направление отката">
-        {slidingDirectionCards.map((option) => {
+      <div className="flex flex-row items-center justify-start mt-2 max-w-full" role="radiogroup" aria-label="Направление отката">
+        {slidingDirectionCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
             <label 
               className={`w-[242px] h-[148px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected ? 'border-gray-900 bg-light-primary shadow-xl z-10' : 'border-gray-200 hover:border-gray-300 shadow-none'
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
-                transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
+                // Разделяем элементы фиксированным отступом:
+                marginRight: index === 0 ? '24px' : '0px',
               }}
               key={option.value}
             >
               <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-              <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
+              <img 
+                src={option.image} 
+                alt={option.label} 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
+                style={{ 
+                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
+                  imageRendering: '-webkit-optimize-contrast'
+                }} 
+              />
               <span className="wicket-opening-card-label hidden">{option.label}</span>
               {value === option.value && (
                 <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
