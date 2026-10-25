@@ -1018,8 +1018,8 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
   const baseStyle = {
     fontSize: '12px',
     lineHeight: '1',
-    width: '80px',
-    height: '25px',
+    width: '70px',
+    height: '22px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
