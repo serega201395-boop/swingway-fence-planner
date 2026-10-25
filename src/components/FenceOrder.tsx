@@ -367,10 +367,14 @@ export function FenceOrder() {
    const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
     setForm((current) => {
       const updatedGroup = { ...current[group], [key]: value };
-      if (group === 'wicket' && (key === 'height' || key === 'postInstallation')) {
-        const h = key === 'height' ? value : current.wicket.height;
-        const inst = key === 'postInstallation' ? value : current.wicket.postInstallation;
-        updatedGroup.postLength = (inst === 'бетонирование' && h) ? String(Number(h) + 1000) : updatedGroup.postLength;
+      if (group === 'wicket') {
+        if (key === 'postInstallation') {
+          // Если переключились на бетонирование — рассчитываем автоматически, если на колонны/платформу — сбрасываем старую авто-длину
+          updatedGroup.postLength = value === 'бетонирование' && current.wicket.height ? String(Number(current.wicket.height) + 1000) : '';
+        } else if (key === 'height' && current.wicket.postInstallation === 'бетонирование') {
+          // Пересчитываем только если уже выбрано бетонирование
+          updatedGroup.postLength = value ? String(Number(value) + 1000) : '';
+        }
       }
       return { ...current, [group]: updatedGroup };
     });
