@@ -47,9 +47,6 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
     </fieldset>
   );
 }
-
-
-
 type OrderState = {
   step: number;
   name: string;
@@ -151,9 +148,9 @@ function WicketOpeningChoice({ value, onChange }: {
 }) {
   return <fieldset className="wicket-opening-field">
     <legend>Вариант открытия калитки<span className="required-mark"> *</span></legend>
-    <div className="wicket-opening-grid" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+    <div className="grid grid-cols-2 gap-4 mt-2 max-w-[430px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
       {wicketOpeningCards.map((option, index) => <label
-        className={`wicket-opening-card w-[202px] h-[130px] ${value === option.value ? 'is-selected' : ''}`}
+        className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`}
         key={option.value}
       >
         <input
@@ -167,9 +164,9 @@ function WicketOpeningChoice({ value, onChange }: {
           onChange={() => onChange(option.value)}
           data-testid={`choice-wicket-opening-${index + 1}`}
         />
-        <img src={option.image} alt="" width={202} height={130} className="w-full object-contain" />
+        <img src={option.image} alt="" className="w-full max-h-full object-contain" />
         <span className="wicket-opening-card-label hidden">{option.value}</span>
-        {value === option.value && <span className="wicket-opening-check" aria-hidden="true">
+        {value === option.value && <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
         </span>}
       </label>)}
