@@ -71,12 +71,12 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
                 isSelected ? 'border-gray-900 bg-light-primary shadow-xl z-10' : 'border-gray-200 hover:border-gray-300 shadow-none'
               }`}
               style={{
-                transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+                scale: isSelected ? '1.04' : '1',
               }}
               key={option.value}
             >
               <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-              <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
+              <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" style={{ imageRendering: 'pixelated' }} />
               <span className="wicket-opening-card-label hidden">{option.label}</span>
               {value === option.value && (
                 <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
