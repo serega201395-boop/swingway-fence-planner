@@ -29,7 +29,6 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
   return (
     <fieldset className="wicket-opening-field">
       <legend>Направление отката<span className="required-mark"> *</span></legend>
-      {/* ⚡️ Убрали wicket-opening-grid, теперь сетка на 100% управляется чистым Tailwind */}
       <div className="grid grid-cols-2 gap-4 mt-2 max-w-[510px]" role="radiogroup" aria-label="Направление отката">
         {slidingDirectionCards.map((option) => (
           <label className={`w-[242px] h-[148px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
@@ -47,84 +46,27 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
     </fieldset>
   );
 }
-type OrderState = {
-  step: number;
-  name: string;
-  fenceType: string;
-  color: string;
-  noSections: boolean;
-  sections: FenceRow[];
-  noWicket: boolean;
-  wicket: {
-    width: string; height: string; quantity: string; openingOption: WicketOpening;
-    hingeVariant: string; hingeCount: string; lock: string;
-  };
-  noSwing: boolean;
-  swing: { width: string; height: string; opening: string; hingeVariant: string; hingeCount: string };
-  noSliding: boolean;
-  sliding: { width: string; height: string; direction: string };
-};
 
-const STORAGE_KEY = 'fence-order-state-v1';
-const initialState: OrderState = {
-  step: 1, name: '', fenceType: '', color: '7024', noSections: false,
-  sections: [{ id: 'section-1', quantity: '1', width: '', height: '' }],
-  noWicket: false, wicket: {
-    width: '', height: '', quantity: '1', openingOption: 'На улицу, петли справа',
-    hingeVariant: '', hingeCount: '', lock: '',
-  },
-  noSwing: false, swing: { width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '' },
-  noSliding: false, sliding: { width: '', height: '', direction: 'Влево' },
-};
-const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
-const emptyGateErrors = { wicketHinge: false, swingHinge: false };
-
-function restoreState(): OrderState {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return initialState;
-    const saved = JSON.parse(raw) as Partial<OrderState>;
-    const savedWicket = (saved.wicket ?? {}) as Partial<OrderState['wicket']> & {
-      opening?: string;
-      hinges?: string;
-    };
-    const { opening: legacyOpening, hinges: legacyHinges, ...savedWicketFields } = savedWicket;
-    const savedOpeningOption = savedWicketFields.openingOption;
-    const openingOption = wicketOpeningValues.includes(savedOpeningOption as WicketOpening)
-      ? savedOpeningOption as WicketOpening
-      : `${legacyOpening === 'Внутрь' ? 'Во двор' : 'На улицу'}, петли ${legacyHinges === 'Слева' ? 'слева' : 'справа'}` as WicketOpening;
-    return {
-      ...initialState, ...saved,
-      step: Number.isInteger(saved.step) && saved.step! >= 1 && saved.step! <= 3 ? saved.step! : 1,
-      fenceType: typeof saved.fenceType === 'string' ? saved.fenceType : initialState.fenceType,
-      sections: Array.isArray(saved.sections) ? saved.sections.map((row, i) => ({
-        id: typeof row.id === 'string' ? row.id : `section-${i + 1}`,
-        quantity: String(row.quantity ?? '1'), width: String(row.width ?? ''), height: String(row.height ?? ''),
-      })) : initialState.sections,
-      wicket: { ...initialState.wicket, ...savedWicketFields, openingOption },
-      swing: { ...initialState.swing, ...(saved.swing ?? {}) },
-      sliding: { ...initialState.sliding, ...(saved.sliding ?? {}) },
-    };
-  } catch {
-    return initialState;
-  }
-}
-
-type FieldProps = {
-  label: string; value: string; onChange: (value: string) => void; type?: string;
-  suffix?: string; required?: boolean; error?: boolean; id: string; min?: string; step?: string; placeholder?: string;
-};
-function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder }: FieldProps) {
-  return <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
-    <span className="field-label">
-      {label}{required && <span className="required-mark"> *</span>}
-    </span>
-    <span className="input-wrap">
-      <input id={id} data-testid={`input-${id}`} type={type} value={value} min={min} step={step} placeholder={placeholder}
-        required={required} aria-invalid={error || undefined} onChange={(event) => onChange(event.target.value)} />
-      {suffix && <span className="input-suffix">{suffix}</span>}
-    </span>
-  </label>;
+function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  return (
+    <fieldset className="wicket-opening-field">
+      <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
+      <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Вариант открытия ворот">
+        {swingOpeningCards.map((option) => (
+          <label className={`w-[385px] h-[110px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
+            <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+            <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
+            <span className="wicket-opening-card-label hidden">{option.label}</span>
+            {value === option.value && (
+              <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              </span>
+            )}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
 }
 
 function WicketOpeningChoice({ value, onChange }: {
@@ -172,8 +114,120 @@ function WicketOpeningChoice({ value, onChange }: {
   );
 }
 
+function Choice({ id, label, value, options, required, error, onChange }: {
+  id: string; label: string; value: string; options: string[]; required?: boolean; error?: boolean; onChange: (value: string) => void;
+}) {
+  return (
+    <div className={`field ${error ? 'field-error' : ''}`}>
+      <label className="field-label" htmlFor={id}>
+        {label}{required && <span className="required-mark"> *</span>}
+      </label>
+      <div className="input-wrap">
+        <select
+          id={id}
+          value={value}
+          required={required}
+          aria-invalid={error || undefined}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full h-10 px-3 border border-gray-200 rounded-lg bg-white outline-none focus:border-dark"
+        >
+          <option value="">Выберите вариант...</option>
+          {options.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
 
- 
+type OrderState = {
+  step: number;
+  name: string;
+  fenceType: string;
+  color: string;
+  noSections: boolean;
+  sections: FenceRow[];
+  noWicket: boolean;
+  wicket: {
+    width: string; height: string; quantity: string; openingOption: WicketOpening;
+    hingeVariant: string; hingeCount: string; lock: string;
+  };
+  noSwing: boolean;
+  swing: { width: string; height: string; opening: string; hingeVariant: string; hingeCount: string };
+  noSliding: boolean;
+  sliding: { width: string; height: string; direction: string };
+};
+
+const STORAGE_KEY = 'fence-order-state-v1';
+const initialState: OrderState = {
+  step: 1, name: '', fenceType: '', color: '7024', noSections: false,
+  sections: [{ id: 'section-1', quantity: '1', width: '', height: '' }],
+  noWicket: false, wicket: {
+    width: '', height: '', quantity: '1', openingOption: 'На улицу, петли справа',
+    hingeVariant: '', hingeCount: '', lock: '',
+  },
+  noSwing: false, swing: { width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '' },
+  noSliding: false, sliding: { width: '', height: '', direction: 'Влево' },
+};
+const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
+const emptyGateErrors = { wicketHinge: false, swingHinge: false };
+
+function restoreState(): OrderState {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return initialState;
+    const saved = JSON.parse(raw) as Partial<OrderState>;
+    const savedWicket = (saved.wicket ?? {}) as Partial<OrderState['wicket']> & {
+      opening?: string;
+      hinges?: string;
+    };
+    const { opening: legacyOpening, hinges: legacyHinges, ...savedWicketFields } = savedWicket;
+    const savedOpeningOption = savedWicketFields.openingOption;
+    let openingOption = wicketOpeningValues.includes(savedOpeningOption as WicketOpening)
+      ? savedOpeningOption as WicketOpening
+      : `${legacyOpening === 'Внутрь' ? 'Во двор' : 'На улицу'}, петли ${legacyHinges === 'Слева' ? 'слева' : 'справа'}` as WicketOpening;
+    
+    if (!wicketOpeningValues.includes(openingOption)) {
+      openingOption = 'На улицу, петли справа';
+    }
+
+    return {
+      ...initialState, ...saved,
+      step: Number.isInteger(saved.step) && saved.step! >= 1 && saved.step! <= 3 ? saved.step! : 1,
+      fenceType: typeof saved.fenceType === 'string' ? saved.fenceType : initialState.fenceType,
+      sections: Array.isArray(saved.sections) ? saved.sections.map((row, i) => ({
+        id: typeof row.id === 'string' ? row.id : `section-${i + 1}`,
+        quantity: String(row.quantity ?? '1'), width: String(row.width ?? ''), height: String(row.height ?? ''),
+      })) : initialState.sections,
+      wicket: { ...initialState.wicket, ...savedWicketFields, openingOption },
+      swing: { ...initialState.swing, ...(saved.swing ?? {}) },
+      sliding: { ...initialState.sliding, ...(saved.sliding ?? {}) },
+    };
+  } catch {
+    return initialState;
+  }
+}
+
+type FieldProps = {
+  label: string; value: string; onChange: (value: string) => void; type?: string;
+  suffix?: string; required?: boolean; error?: boolean; id: string; min?: string; step?: string; placeholder?: string;
+};
+function Field({ label, value, onChange, type = 'text', suffix, required, error, id, min, step, placeholder }: FieldProps) {
+  return <label className={`field ${error ? 'field-error' : ''}`} htmlFor={id}>
+    <span className="field-label">
+      {label}{required && <span className="required-mark"> *</span>}
+    </span>
+    <span className="input-wrap">
+      <input id={id} data-testid={`input-${id}`} type={type} value={value} min={min} step={step} placeholder={placeholder}
+        required={required} aria-invalid={error || undefined} onChange={(event) => onChange(event.target.value)} />
+      {suffix && <span className="input-suffix">{suffix}</span>}
+    </span>
+  </label>;
+}
+
 export function FenceOrder() {
   const [form, setForm] = useState<OrderState>(restoreState);
   const [nameError, setNameError] = useState(false);
@@ -513,28 +567,6 @@ export function FenceOrder() {
   </main>;
 }
 
-function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
-  return (
-    <fieldset className="wicket-opening-field">
-      <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
-      <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Вариант открытия ворот">
-        {swingOpeningCards.map((option) => (
-          <label className={`w-[385px] h-[110px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
-            <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-            <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
-            <span className="wicket-opening-card-label hidden">{option.label}</span>
-            {value === option.value && (
-              <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-              </span>
-            )}
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
-
 function GatePanel({ title, caption, absent, onAbsent, absentText, children }: {
   title: string; caption: string; absent: boolean; onAbsent: (value: boolean) => void; absentText: string; children: ReactNode;
 }) {
@@ -561,4 +593,3 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
     {absent ? <p className="absent">Отсутствует</p> : <div>{rows}</div>}
   </section>;
 }
-
