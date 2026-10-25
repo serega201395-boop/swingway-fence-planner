@@ -625,6 +625,7 @@ export function FenceOrder() {
 
           {form.step === 2 && (
             <div className="form-content gate-content">
+              {/* --- БЛОК 1: КАЛИТКА --- */}
               <GatePanel title="Калитка" caption="Проходная дверь в ограждении" absent={form.noWicket} onAbsent={(v) => {
                 update('noWicket', v);
                 setGateErrors((current) => ({ ...current, wicketHinge: false }));
@@ -640,6 +641,7 @@ export function FenceOrder() {
                   <Field id="wicket-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.wicket.hingeCount} onChange={(v) => changeNested('wicket', 'hingeCount', v)} />
                 </div>
                 <Choice id="wicket-lock" label="Замок" value={form.wicket.lock} options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']} onChange={(v) => changeNested('wicket', 'lock', v)} />
+                
                 <div className="border-t border-[#eceeef] pt-5 mt-3">
                   <div className="flex flex-col gap-1.5 mb-4">
                     <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов калитки<span className="text-red-500"> *</span></span>
@@ -661,7 +663,7 @@ export function FenceOrder() {
                     {gateErrors.wicketPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
                   </div>
 
- {form.wicket.postInstallation !== '' && (
+                  {form.wicket.postInstallation !== '' && (
                     <div className="field-grid two-col animate-fadeIn">
                       <SectionSelectWithCustom id="wicket-post-section" label="Сечение столбов калитки" value={form.wicket.postSection} options={POST_SECTIONS} onChange={(v) => changeNested('wicket', 'postSection', v)} />
                       {form.wicket.postInstallation === 'бетонирование' && <Field id="wicket-post-length-auto" label="Длина столбов (рассчитано автоматически)" value={form.wicket.postLength} suffix="мм" disabled onChange={() => {}} />}
@@ -671,6 +673,7 @@ export function FenceOrder() {
                   )}
                 </div>
 
+                <div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
                   <label htmlFor="wicket-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к калитке</label>
                   <span className="input-wrap block">
                     <textarea
@@ -683,6 +686,9 @@ export function FenceOrder() {
                   </span>
                 </div>
               </GatePanel>
+
+      
+               {/* --- БЛОК 2: РАСПАШНЫЕ ВОРОТА --- */}
               <GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
                 update('noSwing', v);
                 setGateErrors((current) => ({ ...current, swingHinge: false }));
@@ -693,7 +699,7 @@ export function FenceOrder() {
                 </div>
                 <SwingOpeningChoice value={form.swing.opening} onChange={(val) => changeNested('swing', 'opening', val)} />
                 <div className="hinge-config">
-                  <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.swingHinge} onChange={(v) => changeNested('swing', 'hingeVariant', v)} />
+                  <Choice id="swing-hinge-variant" label="Вариант петель" value={form.swing.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли aluminum']} required error={gateErrors.swingHinge} onChange={(v) => changeNested('swing', 'hingeVariant', v)} />
                   <Field id="swing-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.swing.hingeCount} onChange={(v) => changeNested('swing', 'hingeCount', v)} />
                 </div>
 
@@ -728,6 +734,7 @@ export function FenceOrder() {
                   )}
                 </div>
 
+                <div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
                   <label htmlFor="swing-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к распашным воротам</label>
                   <span className="input-wrap block">
                     <textarea
@@ -740,6 +747,8 @@ export function FenceOrder() {
                   </span>
                 </div>
               </GatePanel>
+
+              {/* --- БЛОК 3: ОТКАТНЫЕ ВОРОТА --- */}
               <GatePanel title="Откатные ворота (орієнтація ззовні)" caption="Створка сдвигается вдоль линии ограждения" absent={form.noSliding} onAbsent={(v) => update('noSliding', v)} absentText="У меня нет откатных ворот">
                 <div className="field-grid two-col">
                   <Field id="sliding-width" label="Ширина (ширина проєму)" type="number" min="1" suffix="мм" value={form.sliding.width} onChange={(v) => changeNested('sliding', 'width', v)} />
@@ -795,6 +804,7 @@ export function FenceOrder() {
                   )}
                 </div>
 
+                <div className="field mt-5 animate-fadeIn border-t border-[#eceeef] pt-4">
                   <label htmlFor="sliding-comment" className="field-label text-[#1f2937] text-[14.5px] font-normal block mb-1.5">Примечание к откатным воротам</label>
                   <span className="input-wrap block">
                     <textarea
@@ -809,6 +819,7 @@ export function FenceOrder() {
               </GatePanel>
             </div>
           )}
+
 
           {form.step === 3 && (
             <div className="form-content review-content">
