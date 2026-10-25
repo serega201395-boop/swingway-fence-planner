@@ -47,34 +47,23 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
   );
 }
 
-function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
   return (
     <fieldset className="wicket-opening-field">
-      <legend>Направление отката<span className="required-mark"> *</span></legend>
-      <div className="grid grid-cols-2 gap-4 mt-2 max-w-[510px]" role="radiogroup" aria-label="Направление отката">
-        {slidingDirectionCards.map((option) => {
-          const isSelected = value === option.value;
-          return (
-            <label 
-              className={`w-[242px] h-[148px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected ? 'border-gray-900 bg-light-primary shadow-xl z-10' : 'border-gray-200 hover:border-gray-300 shadow-none'
-              }`}
-              style={{
-                transform: isSelected ? 'scale(1.04)' : 'scale(1)',
-              }}
-              key={option.value}
-            >
-              <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-              <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
-              <span className="wicket-opening-card-label hidden">{option.label}</span>
-              {value === option.value && (
-                <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-                </span>
-              )}
-            </label>
-          );
-        })}
+      <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
+      <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Вариант открытия ворот">
+        {swingOpeningCards.map((option) => (
+          <label className={`w-[385px] h-[110px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
+            <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+            <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" />
+            <span className="wicket-opening-card-label hidden">{option.label}</span>
+            {value === option.value && (
+              <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              </span>
+            )}
+          </label>
+        ))}
       </div>
     </fieldset>
   );
