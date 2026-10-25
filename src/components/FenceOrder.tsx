@@ -1017,13 +1017,11 @@ function Absent() {
 function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
   return (
     <section className="review-gate">
-      {/* Идеальный отступ снизу pb-3.5 отодвигает разделительную линию для идеального баланса пустого пространства */}
       <div className="review-gate-head flex items-center justify-between border-b border-[#eceeef] pb-3.5 mb-3">
         <h3>{title}</h3>
         <button 
           type="button" 
           onClick={onEdit} 
-          {/* rounded-[6px] создает эргономичный прямоугольный вид со сдержанным скруглением */}
           className="px-3 py-1 text-[11px] font-medium text-gray-500 bg-white border border-gray-300 rounded-[6px] shadow-sm transition-all duration-150 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 active:scale-[0.96] cursor-pointer focus:outline-none"
           style={{ lineHeight: '1.2' }}
         >
@@ -1034,6 +1032,3 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
     </section>
   );
 }
-
-
-
