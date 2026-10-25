@@ -1016,7 +1016,7 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
 
   // Стили для обычного состояния кнопки
   const baseStyle = {
-    fontSize: '14px',
+    fontSize: '12px',
     lineHeight: '1',
     width: '90px',
     height: '28px',
