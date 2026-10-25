@@ -92,16 +92,19 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
 }
 
 
-function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+function WicketOpeningChoice({ value, onChange }: {
+  value: WicketOpening;
+  onChange: (value: WicketOpening) => void;
+}) {
   return (
-    <fieldset className="wicket-opening-field">
-      <legend>Направление отката<span className="required-mark"> *</span></legend>
-      <div className="grid grid-cols-2 gap-4 mt-2 max-w-[510px]" role="radiogroup" aria-label="Направление отката">
-        {slidingDirectionCards.map((option) => {
+    <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
+      <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
+      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+        {wicketOpeningCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
-            <label 
-              className={`w-[242px] h-[148px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+            <label
+              className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
                 isSelected ? 'border-gray-900 bg-light-primary shadow-[0_15px_30px_-5px_rgba(0,0,0,0.14),0_10px_15px_-6px_rgba(0,0,0,0.1)] z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
@@ -109,18 +112,28 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
               }}
               key={option.value}
             >
-              <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
+              <input
+                className="wicket-opening-input"
+                type="radio"
+                name="wicket-opening"
+                value={option.value}
+                aria-label={option.value}
+                checked={isSelected}
+                required
+                onChange={() => onChange(option.value)}
+                data-testid={`choice-wicket-opening-${index + 1}`}
+              />
               <img 
                 src={option.image} 
-                alt={option.label} 
+                alt="" 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.08)' : 'scale(1)',
+                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
                   imageRendering: '-webkit-optimize-contrast'
-                }} 
+                }}
               />
-              <span className="wicket-opening-card-label hidden">{option.label}</span>
-              {value === option.value && (
+              <span className="wicket-opening-card-label hidden">{option.value}</span>
+              {isSelected && (
                 <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
                 </span>
@@ -132,6 +145,7 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
     </fieldset>
   );
 }
+
 
 
 
