@@ -81,7 +81,7 @@ function WicketOpeningChoice({ value, onChange }: {
           const isSelected = value === option.value;
           return (
             <label
-              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${isSelected ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`}
+              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer ${isSelected ? 'border-dark bg-light-primary shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}
               key={option.value}
             >
               <input
