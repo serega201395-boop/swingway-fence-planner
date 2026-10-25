@@ -170,8 +170,6 @@ function WicketOpeningChoice({ value, onChange }: {
   );
 }
 
-
-
 export function FenceOrder() {
   const [form, setForm] = useState<OrderState>(restoreState);
   const [nameError, setNameError] = useState(false);
