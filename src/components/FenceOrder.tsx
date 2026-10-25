@@ -837,8 +837,8 @@ export function FenceOrder() {
               )}
 
 
-            <div className="card-footer">
-            <button type="button" className="button button-quiet" onClick={() => form.step > 1 && update('step', form.step - 1)} disabled={form.step === 1} data-testid="button-back">
+          <div className="card-footer">
+            <button type="button" className="button button-quiet" onClick={() => form.step > 1 && setStep(form.step - 1)} disabled={form.step === 1} data-testid="button-back">
               <ChevronLeft size={17} /> Назад
             </button>
             <span className={`save-note ${storageStatus === 'error' ? 'save-note-error' : ''}`} role="status">
@@ -849,11 +849,8 @@ export function FenceOrder() {
               ? <button type="button" className="button button-dark" onClick={next} data-testid="button-next">Продолжить <ChevronRight size={17} /></button>
               : <button type="button" className="button button-dark" onClick={submitOrder} data-testid="button-submit">Оформить заказ <ChevronRight size={17} /></button>}
           </div>
-        
-        </section> {/* Теперь этот тег правильно закрывает <section className="wizard-card"> */}
-
-      </div> {/* Этот тег правильно закрывает <div className="page-wrap"> */}
-      
+        </div>
+      </section>
       <footer className="page-footer"><span>Конфигуратор ограждения</span><span>Состав заказа можно изменить в любой момент</span></footer>
     </main>
   );
