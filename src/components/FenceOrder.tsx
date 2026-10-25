@@ -222,7 +222,7 @@ type OrderState = {
   noSections: boolean;
   sections: FenceRow[];
   noWicket: boolean;
-  wicket: {
+    wicket: {
     width: string; 
     height: string; 
     quantity: string; 
@@ -234,6 +234,7 @@ type OrderState = {
     postLength: string; 
     platformSize: string; 
     postSection: string;
+    comment: string; // <-- ДОБАВИТЬ ЭТУ СТРОКУ (отвечает зап римечание)
   };
   noSwing: boolean;
   swing: { width: string; height: string; opening: string; hingeVariant: string; hingeCount: string };
@@ -250,6 +251,7 @@ const initialState: OrderState = {
     width: '', height: '', quantity: '1', openingOption: 'На улицу, петли справа',
     hingeVariant: '', hingeCount: '', lock: '',
     postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2'
+    comment: '' // <-- ДОБАВИТЬ ЭТУ СТРОКУ
   },
   noSwing: false, swing: { width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '' },
   noSliding: false, sliding: { width: '', height: '', direction: 'Влево' },
