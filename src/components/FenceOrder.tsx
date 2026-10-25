@@ -779,6 +779,7 @@ export function FenceOrder() {
 
                   {form.sliding.postInstallation !== '' && (
                     <div className="flex flex-col gap-4 animate-fadeIn">
+                      {/* Настройки Опорного столба */}
                       <div className="field-grid two-col bg-[#fafbfb] p-3 rounded-lg border border-[#e6e9eb]">
                         <SectionSelectWithCustom id="sliding-support-section" label="Сечение опорного столба/рамки" value={form.sliding.supportPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'supportPostSection', v)} />
                         {form.sliding.postInstallation === 'бетонирование' ? (
@@ -788,6 +789,7 @@ export function FenceOrder() {
                         )}
                       </div>
 
+                      {/* Настройки Упорного столба */}
                       <div className="field-grid two-col bg-[#fafbfb] p-3 rounded-lg border border-[#e6e9eb]">
                         <SectionSelectWithCustom id="sliding-catch-section" label="Сечение упорного столба" value={form.sliding.catchPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'catchPostSection', v)} />
                         {form.sliding.postInstallation === 'бетонирование' ? (
