@@ -1010,7 +1010,41 @@ function ModalGroup({ title, children }: { title: string; children: ReactNode })
   );
 }
 
+import { useState } from 'react'; // Убедитесь, что useState импортирован вверху файла
+
 function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: boolean; rows: ReactNode[]; onEdit: () => void }) {
+  // Локальный стейт для отслеживания наведения мыши
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Стили для обычного состояния кнопки
+  const baseStyle = {
+    fontSize: '14px',
+    lineHeight: '1',
+    width: '90px',
+    height: '28px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: '500',
+    color: '#6b7280',
+    backgroundColor: '#f9fafb',
+    border: '1px solid #e5e7eb',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease-in-out',
+    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    outline: 'none',
+  };
+
+  // Стили, которые принудительно добавятся ПРИ НАВЕДЕНИИ
+  const hoverStyle = {
+    ...baseStyle,
+    color: '#111827',
+    backgroundColor: '#ffffff',
+    borderColor: '#6b7280', // Более четкая и темная рамка
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', // Выразительная объемная тень
+  };
+
   return (
     <section className="review-gate">
       <div className="review-gate-head flex items-center justify-between border-b border-[#eceeef] pb-3 mb-3">
@@ -1018,11 +1052,12 @@ function ReviewGate({ title, absent, rows, onEdit }: { title: string; absent: bo
         <button 
           type="button" 
           onClick={onEdit} 
-         /* { w-[84px] — кнопка немного расширена под шрифт 14px }
-         /* hover:border-gray-500 — делает рамку чёткой и контрастной при наведении */
-         /* hover:shadow-md — создаёт глубокую, стильную тень */
-          className="w-[84px] h-7 flex items-center justify-center font-medium text-gray-500 bg-[#f9fafb] border border-[#e5e7eb] rounded-[5px] shadow-sm transition-all duration-200 hover:bg-white hover:text-gray-900 hover:border-gray-500 hover:shadow-md active:scale-[0.96] cursor-pointer focus:outline-none"
-          style={{ fontSize: '14px', lineHeight: '1' }}
+          // Управляем наведением через стандартные события JS
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          // Применяем нужный объект стилей в зависимости от состояния
+          style={isHovered ? hoverStyle : baseStyle}
+          className="active:scale-[0.96]" // Эффект нажатия оставляем
         >
           Изменить
         </button>
