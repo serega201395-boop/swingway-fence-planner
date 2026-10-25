@@ -109,7 +109,7 @@ function WicketOpeningChoice({ value, onChange }: {
               }`}
               style={{
                 transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                boxShadow: isSelected ? '0 12px 24px -4px rgba(26, 54, 114, 0.22), 0 6px 12px -4px rgba(29, 78, 216, 0.16)' : 'none',
+                boxShadow: isSelected ? '0 14px 28px -4px rgba(10, 25, 47, 0.42), 0 8px 14px -4px rgba(15, 32, 67, 0.35)' : 'none',
               }}
               key={option.value}
             >
