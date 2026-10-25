@@ -130,10 +130,13 @@ function Choice({ id, label, value, options, required, error, onChange }: {
               key={option}
               type="button"
               onClick={() => onChange(option)}
+              style={{
+                backgroundColor: isSelected ? '#30373d' : '#ffffff',
+                color: isSelected ? '#ffffff' : '#4a5568',
+                borderColor: isSelected ? '#30373d' : '#e5e7eb',
+              }}
               className={`px-4 py-2 text-[14px] font-medium rounded-lg border transition-all cursor-pointer ${
-                isSelected
-                  ? 'bg-[#30373d] text-white border-[#30373d] shadow-sm'
-                  : 'bg-white text-[#4a5568] border-gray-200 hover:border-gray-300'
+                isSelected ? 'shadow-sm scale-[0.99]' : 'hover:border-gray-300'
               }`}
             >
               {option}
