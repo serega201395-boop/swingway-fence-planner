@@ -29,7 +29,7 @@ function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: 
   return (
     <fieldset className="wicket-opening-field">
       <legend>Направление отката<span className="required-mark"> *</span></legend>
-      <div className="grid grid-cols-2 gap-4 mt-2 max-w-[510px]" role="radiogroup" aria-label="Направление отката">
+      <div className="flex flex-wrap gap-4 mt-2" role="radiogroup" aria-label="Направление отката">
         {slidingDirectionCards.map((option) => (
           <label className={`w-[242px] h-[148px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="sliding-direction" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
@@ -51,7 +51,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
   return (
     <fieldset className="wicket-opening-field">
       <legend>Вариант открытия ворот<span className="required-mark"> *</span></legend>
-      <div className="flex flex-wrap gap-3 p-1.5" role="radiogroup" aria-label="Вариант открытия ворот">
+      <div className="flex flex-wrap gap-4 mt-2" role="radiogroup" aria-label="Вариант открытия ворот">
         {swingOpeningCards.map((option) => (
           <label className={`w-[385px] h-[110px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all ${value === option.value ? 'border-dark bg-light-primary shadow-sm scale-[0.99]' : 'border-gray-200 hover:border-gray-300 active:scale-[0.99]'}`} key={option.value}>
             <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
@@ -76,7 +76,7 @@ function WicketOpeningChoice({ value, onChange }: {
   return (
     <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
       <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
-      <div className="grid grid-cols-2 gap-3 mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+      <div className="flex flex-wrap gap-4 mt-2" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
         {wicketOpeningCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
@@ -122,7 +122,7 @@ function Choice({ id, label, value, options, required, error, onChange }: {
       <span className="block text-[#1f2937] text-[14.5px] font-normal">
         {label}{required && <span className="text-red-500"> *</span>}
       </span>
-      <div className="flex flex-wrap gap-2.5" role="radiogroup" aria-label={label}>
+      <div className="flex flex-wrap gap-4 mt-1" role="radiogroup" aria-label={label}>
         {options.map((option) => {
           const isSelected = value === option;
           return (
@@ -132,8 +132,8 @@ function Choice({ id, label, value, options, required, error, onChange }: {
               onClick={() => onChange(option)}
               className={`px-4 py-2 text-[14px] font-medium rounded-lg border transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-[#2d3748] text-white border-[#2d3748] shadow-sm'
-                  : 'bg-white text-[#4a5568] border-gray-200 hover:border-gray-300'
+                  ? 'bg-[#2d3748] text-white border-[#2d3748] shadow-sm scale-[0.99]'
+                  : 'bg-white text-[#4a5568] border-gray-200 hover:border-gray-300 active:scale-[0.99]'
               }`}
             >
               {option}
