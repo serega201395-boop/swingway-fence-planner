@@ -97,15 +97,15 @@ function WicketOpeningChoice({ value, onChange }: {
   onChange: (value: WicketOpening) => void;
 }) {
   return (
-    <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
+    <fieldset className="border-0 p-0 m-0 w-[434px] max-w-[434px] block">
       <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
-      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px] min-h-[145px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+      <div className="grid grid-cols-2 gap-3 content-start justify-items-center items-center mt-2 w-[434px] max-w-[434px] h-[138px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
         {wicketOpeningCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
-            <div className="w-[210px] h-[135px] flex items-center justify-center" key={option.value}>
+            <div className="w-[210px] h-[135px] flex items-center justify-center relative" key={option.value}>
               <label
-                className={`overflow-hidden relative flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
+                className={`overflow-hidden absolute flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
                   isSelected 
                     ? 'border-gray-900 bg-light-primary shadow-xl z-10 w-[210px] h-[135px] p-1' 
                     : 'border-gray-200 hover:border-gray-300 shadow-none w-[202px] h-[130px] p-2'
@@ -142,9 +142,6 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
-
-
-
 
 
 function Choice({ id, label, value, options, required, error, onChange }: {
