@@ -118,28 +118,25 @@ function Choice({ id, label, value, options, required, error, onChange }: {
   id: string; label: string; value: string; options: string[]; required?: boolean; error?: boolean; onChange: (value: string) => void;
 }) {
   return (
-    <div className={`field ${error ? 'field-error' : ''}`}>
-      <label className="field-label" htmlFor={id}>
-        {label}{required && <span className="required-mark"> *</span>}
-      </label>
-      <div className="input-wrap">
-        <select
-          id={id}
-          value={value}
-          required={required}
-          aria-invalid={error || undefined}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full h-10 px-3 border border-gray-200 rounded-lg bg-white outline-none focus:border-dark"
-        >
-          <option value="">Выберите вариант...</option>
-          {options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
+    <fieldset className={`choice-field ${error ? 'choice-field-error' : ''}`} aria-describedby={error ? `${id}-error` : undefined}>
+      <legend>{label}{required && <span className="required-mark"> *</span>}</legend>
+      <div className="choice-group" role="radiogroup" aria-label={label} aria-required={required || undefined} aria-invalid={error || undefined}>
+        {options.map((option, index) => (
+          <button
+            type="button"
+            role="radio"
+            aria-checked={value === option}
+            className={`choice ${value === option ? 'selected' : ''}`}
+            key={option}
+            onClick={() => onChange(option)}
+            data-testid={`choice-${id}-${index + 1}`}
+          >
+            {option}
+          </button>
+        ))}
       </div>
-    </div>
+      {error && <p className="choice-error" id={`${id}-error`} role="alert">Выберите один вариант.</p>}
+    </fieldset>
   );
 }
 
@@ -347,7 +344,6 @@ export function FenceOrder() {
       <span className="topbar-note">Конфигуратор заказа</span>
     </header>
 
-    <div className="page-wrap">
       <section className="intro">
         <div className="eyebrow">Индивидуальная комплектация</div>
         <h1>Соберите свой<br className="desktop-break" /> заказ ограждения</h1>
@@ -483,7 +479,7 @@ export function FenceOrder() {
     {modalOpen && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}>
       <section className="order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <header className="modal-header">
-          <div><div className="modal-kicker">СВОДКА КОМПЛЕКТАЦИИ</div><h2 id="modal-title">Итоговый заказ</h2><p>Проверьте состав заказа перед завершением.</p></div>
+          <div><div className="modal-kicker">СВОДКА КОМПНЕКТАЦИИ</div><h2 id="modal-title">Итоговый заказ</h2><p>Проверьте состав заказа перед завершением.</p></div>
           <button type="button" className="icon-button modal-close" aria-label="Закрыть окно" onClick={() => setModalOpen(false)} data-testid="button-close-modal"><X size={20} /></button>
         </header>
         <div className="modal-body">
