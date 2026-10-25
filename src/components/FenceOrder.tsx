@@ -99,52 +99,50 @@ function WicketOpeningChoice({ value, onChange }: {
   return (
     <fieldset className="border-0 p-0 m-0 w-[420px] max-w-[420px] block">
       <legend className="block text-[#1f2937] text-[14.5px] font-normal mb-1.5">Вариант открытия калитки<span className="text-red-500"> *</span></legend>
-      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
+      <div className="grid grid-cols-2 gap-3 content-start mt-2 w-[420px] max-w-[420px] min-h-[145px]" role="radiogroup" aria-label="Вариант открытия калитки" aria-required="true">
         {wicketOpeningCards.map((option, index) => {
           const isSelected = value === option.value;
           return (
-            <label
-              className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected 
-                  ? 'border-gray-900 bg-light-primary shadow-xl z-10' 
-                  : 'border-gray-200 hover:border-gray-300 shadow-none'
-              }`}
-              style={{
-                scale: isSelected ? '1.04' : '1',
-                transform: 'translateZ(0)',
-              }}
-              key={option.value}
-            >
-              <input
-                className="wicket-opening-input"
-                type="radio"
-                name="wicket-opening"
-                value={option.value}
-                aria-label={option.value}
-                checked={isSelected}
-                required
-                onChange={() => onChange(option.value)}
-                data-testid={`choice-wicket-opening-${index + 1}`}
-              />
-              <img 
-                src={option.image} 
-                alt="" 
-                className="w-full max-h-full object-contain" 
-                style={{ imageRendering: '-webkit-optimize-contrast' }}
-              />
-              <span className="wicket-opening-card-label hidden">{option.value}</span>
-              {isSelected && (
-                <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-                </span>
-              )}
-            </label>
+            <div className="w-[210px] h-[135px] flex items-center justify-center" key={option.value}>
+              <label
+                className={`overflow-hidden relative flex items-center justify-center border rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
+                  isSelected 
+                    ? 'border-gray-900 bg-light-primary shadow-xl z-10 w-[210px] h-[135px] p-1' 
+                    : 'border-gray-200 hover:border-gray-300 shadow-none w-[202px] h-[130px] p-2'
+                }`}
+              >
+                <input
+                  className="wicket-opening-input"
+                  type="radio"
+                  name="wicket-opening"
+                  value={option.value}
+                  aria-label={option.value}
+                  checked={isSelected}
+                  required
+                  onChange={() => onChange(option.value)}
+                  data-testid={`choice-wicket-opening-${index + 1}`}
+                />
+                <img 
+                  src={option.image} 
+                  alt="" 
+                  className="w-full h-full object-contain" 
+                  style={{ imageRendering: '-webkit-optimize-contrast' }}
+                />
+                <span className="wicket-opening-card-label hidden">{option.value}</span>
+                {isSelected && (
+                  <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                  </span>
+                )}
+              </label>
+            </div>
           );
         })}
       </div>
     </fieldset>
   );
 }
+
 
 
 
