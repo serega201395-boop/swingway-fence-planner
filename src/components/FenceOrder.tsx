@@ -850,7 +850,6 @@ export function FenceOrder() {
               : <button type="button" className="button button-dark" onClick={submitOrder} data-testid="button-submit">Оформить заказ <ChevronRight size={17} /></button>}
           </div>
         </div>
-      </section>
       <footer className="page-footer"><span>Конфигуратор ограждения</span><span>Состав заказа можно изменить в любой момент</span></footer>
     </main>
 
