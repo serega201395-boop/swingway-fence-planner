@@ -778,43 +778,43 @@ export function FenceOrder() {
                     {gateErrors.slidingPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
                   </div>
 
-                                   {form.sliding.postInstallation !== '' && (
+                  {form.sliding.postInstallation !== '' && (
                     <div className="flex flex-col gap-4 animate-fadeIn">
                       
-                      {/* Строка Опорного столба: Сечение и Высота выстроены в линию */}
+                      {/* Ряд 1: Опорный столб (Сечение | Высота | Размер платформы) */}
                       <div className="field-grid three-col">
                         <SectionSelectWithCustom id="sliding-support-section" label="Сечение опорного столба/рамки" value={form.sliding.supportPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'supportPostSection', v)} />
+                        
                         {form.sliding.postInstallation === 'бетонирование' ? (
                           <Field id="sliding-support-length-auto" label="Длина опорного столба (авто)" value={form.sliding.supportPostLength} suffix="мм" disabled onChange={() => {}} />
                         ) : (
                           <Field id="sliding-support-length-manual" label="Высота опорного столба (вручную)" type="number" min="1" value={form.sliding.supportPostLength} placeholder="Высота в мм" suffix="мм" required onChange={(v) => changeNested('sliding', 'supportPostLength', v)} />
                         )}
+
+                        {form.sliding.postInstallation === 'на_платформе' ? (
+                          <Field id="sliding-support-platform-size" label="Размер металлической платформы" value={form.sliding.platformSize} placeholder="200х200х8" required onChange={(v) => changeNested('sliding', 'platformSize', v)} />
+                        ) : (
+                          <div className="hidden sm:block" aria-hidden="true" />
+                        )}
                       </div>
 
-                      {/* Строка Упорного столба: Сечение и Высота выстроены в линию */}
+                      {/* Ряд 2: Упорный столб (Сечение | Высота | Размер платформы) */}
                       <div className="field-grid three-col">
                         <SectionSelectWithCustom id="sliding-catch-section" label="Сечение упорного столба" value={form.sliding.catchPostSection} options={POST_SECTIONS} onChange={(v) => changeNested('sliding', 'catchPostSection', v)} />
+                        
                         {form.sliding.postInstallation === 'бетонирование' ? (
                           <Field id="sliding-catch-length-auto" label="Длина упорного столба (авто)" value={form.sliding.catchPostLength} suffix="мм" disabled onChange={() => {}} />
                         ) : (
                           <Field id="sliding-catch-length-manual" label="Высота упорного столба (вручную)" type="number" min="1" value={form.sliding.catchPostLength} placeholder="Высота в мм" suffix="мм" required onChange={(v) => changeNested('sliding', 'catchPostLength', v)} />
                         )}
+
+                        {form.sliding.postInstallation === 'на_платформе' ? (
+                          <Field id="sliding-catch-platform-size" label="Размер металлической платформы" value={form.sliding.platformSize} placeholder="200х200х8" required onChange={(v) => changeNested('sliding', 'platformSize', v)} />
+                        ) : (
+                          <div className="hidden sm:block" aria-hidden="true" />
+                        )}
                       </div>
 
-
-                      {/* Общее поле платформы, выстроенное по сетке */}
-                      {form.sliding.postInstallation === 'на_платформе' && (
-                        <div className="field-grid three-col mt-2">
-                          <Field 
-                            id="sliding-platform-size" 
-                            label="Размер металлической платформы" 
-                            value={form.sliding.platformSize} 
-                            placeholder="Пример: 200х200х8" 
-                            required 
-                            onChange={(v) => changeNested('sliding', 'platformSize', v)} 
-                          />
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
@@ -835,6 +835,7 @@ export function FenceOrder() {
               </GatePanel>
             </div>
           )}
+
 
 
 
