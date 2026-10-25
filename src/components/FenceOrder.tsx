@@ -24,6 +24,14 @@ const slidingDirectionCards = [
   { value: 'Влево', image: '/images/vorota-livorych.png', label: 'Відкатування вліво' },
   { value: 'Вправо', image: '/images/vorota-pravorych.png', label: 'Відкатування вправо' }
 ];
+const POST_SECTIONS = [
+  '40х80х2',
+  '60х80х2',
+  '80х80х2',
+  '80х80х3',
+  '100х100х3',
+  '120х120х3'
+];
 
 function SlidingDirectionChoice({ value, onChange }: { value: string; onChange: (val: string) => void }) {
   return (
@@ -215,14 +223,24 @@ type OrderState = {
   sections: FenceRow[];
   noWicket: boolean;
   wicket: {
-    width: string; height: string; quantity: string; openingOption: WicketOpening;
-    hingeVariant: string; hingeCount: string; lock: string;
+    width: string; 
+    height: string; 
+    quantity: string; 
+    openingOption: WicketOpening;
+    hingeVariant: string; 
+    hingeCount: string; 
+    lock: string;
+    postInstallation: 'бетонирование' | 'на_платформе' | 'к_колоннам' | '';
+    postLength: string; 
+    platformSize: string; 
+    postSection: string;
   };
   noSwing: boolean;
   swing: { width: string; height: string; opening: string; hingeVariant: string; hingeCount: string };
   noSliding: boolean;
   sliding: { width: string; height: string; direction: string };
 };
+
 
 const STORAGE_KEY = 'fence-order-state-v1';
 const initialState: OrderState = {
@@ -231,12 +249,14 @@ const initialState: OrderState = {
   noWicket: false, wicket: {
     width: '', height: '', quantity: '1', openingOption: 'На улицу, петли справа',
     hingeVariant: '', hingeCount: '', lock: '',
+    postInstallation: '', postLength: '', platformSize: '200х200х8', postSection: '40х80х2'
   },
   noSwing: false, swing: { width: '', height: '', opening: 'Внутрь', hingeVariant: '', hingeCount: '' },
   noSliding: false, sliding: { width: '', height: '', direction: 'Влево' },
 };
 const steps = ['Основное', 'Ворота и калитка', 'Проверка'];
-const emptyGateErrors = { wicketHinge: false, swingHinge: false };
+const emptyGateErrors = { wicketHinge: false, swingHinge: false, wicketPostInstallation: false };
+
 
 function restoreState(): OrderState {
   try {
@@ -290,6 +310,33 @@ function Field({ label, value, onChange, type = 'text', suffix, required, error,
     </span>
   </label>;
 }
+function SectionSelectWithCustom({ label, value, onChange, options, id }: {
+  label: string; value: string; onChange: (val: string) => void; options: string[]; id: string;
+}) {
+  const [isCustom, setIsCustom] = useState(!options.includes(value) && value !== '');
+  return (
+    <div className="field">
+      <span className="field-label">{label}<span className="required-mark"> *</span></span>
+      <div className="flex flex-col gap-2">
+        {!isCustom ? (
+          <select id={id} className="w-full h-10 px-3 border border-[#dfe3e6] rounded-[7px] bg-white text-[14px] outline-none" value={value} onChange={(e) => {
+            if (e.target.value === 'custom') { setIsCustom(true); onChange(''); }
+            else { onChange(e.target.value); }
+          }}>
+            <option value="" disabled>Выберите сечение</option>
+            {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+            <option value="custom">Другой размер...</option>
+          </select>
+        ) : (
+          <div className="input-wrap">
+            <input id={id} type="text" value={value} placeholder="Например, 100х50х3" onChange={(e) => onChange(e.target.value)} className="w-full h-10 px-3 border border-[#dfe3e6] rounded-[7px] outline-none" />
+            <button type="button" onClick={() => { setIsCustom(false); onChange(options); }} className="absolute right-2 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 rounded">Из списка</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function FenceOrder() {
   const [form, setForm] = useState<OrderState>(restoreState);
@@ -315,10 +362,19 @@ export function FenceOrder() {
   }, [modalOpen]);
 
   const update = <K extends keyof OrderState>(key: K, value: OrderState[K]) => setForm((current) => ({ ...current, [key]: value }));
-  const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: string) => {
-    setForm((current) => ({ ...current, [group]: { ...current[group], [key]: value } }));
-    if (group === 'wicket' && key === 'hingeVariant') setGateErrors((current) => ({ ...current, wicketHinge: false }));
-    if (group === 'swing' && key === 'hingeVariant') setGateErrors((current) => ({ ...current, swingHinge: false }));
+  const changeNested = (group: 'wicket' | 'swing' | 'sliding', key: string, value: any) => {
+    setForm((current) => {
+      const updatedGroup = { ...current[group], [key]: value };
+      if (group === 'wicket' && (key === 'height' || key === 'postInstallation')) {
+        const h = key === 'height' ? value : current.wicket.height;
+        const inst = key === 'postInstallation' ? value : current.wicket.postInstallation;
+        updatedGroup.postLength = (inst === 'бетонирование' && h) ? String(Number(h) + 1000) : updatedGroup.postLength;
+      }
+      return { ...current, [group]: updatedGroup };
+    });
+    if (group === 'wicket' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, wicketHinge: false }));
+    if (group === 'wicket' && key === 'postInstallation') setGateErrors((c) => ({ ...c, wicketPostInstallation: false }));
+    if (group === 'swing' && key === 'hingeVariant') setGateErrors((c) => ({ ...c, swingHinge: false }));
   };
   const setStep = (step: number) => {
     update('step', step);
@@ -329,11 +385,14 @@ export function FenceOrder() {
   const validateGateChoices = () => {
     const errors = {
       wicketHinge: !form.noWicket && !form.wicket.hingeVariant,
+      wicketPostInstallation: !form.noWicket && !form.wicket.postInstallation,
       swingHinge: !form.noSwing && !form.swing.hingeVariant,
     };
     setGateErrors(errors);
     return !Object.values(errors).some(Boolean);
   };
+
+
   const next = () => {
     if (form.step === 1 && !form.name.trim()) { setNameError(true); document.getElementById('order-name')?.focus(); return; }
     if (form.step === 2 && !validateGateChoices()) return;
@@ -379,14 +438,19 @@ export function FenceOrder() {
       {!form.noSections && <button className="text-button" type="button" onClick={addSection}><Plus size={16} /> Добавить секцию</button>}
     </div>
     <div className="review-gates-grid">
-      <ReviewGate title="Калитка" absent={form.noWicket} rows={[
+            <ReviewGate title="Калитка" absent={form.noWicket} rows={[
         summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : ''),
         summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : ''),
         summaryRow('Вариант открытия калитки', form.wicket.openingOption),
-        summaryRow('Вариант петель', form.wicket.hingeVariant), summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : ''),
+        summaryRow('Вариант петель', form.wicket.hingeVariant), 
+        summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : ''),
         summaryRow('Замок', form.wicket.lock),
-      ]} onEdit={() => setStep(2)} />
+        summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку (+1000 мм авто)' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе на фундамент' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано'),
+        summaryRow('Сечение столбов калитки', form.wicket.postSection),
+        form.wicket.postInstallation === 'на_платформе' ? summaryRow('Размер платформы', form.wicket.platformSize) : null,
+        form.wicket.postInstallation !== '' ? summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '—') : null,
+      ].filter(Boolean)} onEdit={() => setStep(2)} />
       <ReviewGate title="Распашные ворота" absent={form.noSwing} rows={[
         summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : ''),
         summaryRow('Высота (высота габаритна)', form.swing.height ? `${form.swing.height} мм` : ''),
@@ -495,7 +559,38 @@ export function FenceOrder() {
                   <Choice id="wicket-hinge-variant" label="Вариант петель" value={form.wicket.hingeVariant} options={['Петли болтовые', 'Петли скрытые', 'Петли алюминиевые']} required error={gateErrors.wicketHinge} onChange={(v) => changeNested('wicket', 'hingeVariant', v)} />
                   <Field id="wicket-hinge-count" label="Количество петель на створку (шт)" type="number" min="1" step="1" value={form.wicket.hingeCount} onChange={(v) => changeNested('wicket', 'hingeCount', v)} />
                 </div>
-                <Choice id="wicket-lock" label="Замок" value={form.wicket.lock} options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']} onChange={(v) => changeNested('wicket', 'lock', v)} />
+               <Choice id="wicket-lock" label="Замок" value={form.wicket.lock} options={['Электромеханический', 'Электромеханическая защёлка', 'Механический']} onChange={(v) => changeNested('wicket', 'lock', v)} />
+
+<div className="border-t border-[#eceeef] pt-5 mt-3">
+  <div className="flex flex-col gap-1.5 mb-4">
+    <span className="block text-[#1f2937] text-[14.5px] font-medium">Вариант установки столбов калитки<span className="text-red-500"> *</span></span>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Вариант установки столбов">
+      {[
+        { id: 'бетонирование', label: 'Под бетонировку', desc: 'Автомат. +1000 мм' },
+        { id: 'на_платформе', label: 'На платформе', desc: 'На готовый фундамент' },
+        { id: 'к_колоннам', label: 'Крепление к колоннам', desc: 'Фиксация к анкерам' }
+      ].map((item) => {
+        const isSelected = form.wicket.postInstallation === item.id;
+        return (
+          <button key={item.id} type="button" onClick={() => changeNested('wicket', 'postInstallation', item.id)} className={`p-3 text-left border rounded-lg transition-all cursor-pointer ${isSelected ? 'border-gray-900 bg-[#f9fafb] ring-1 ring-gray-950' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+            <div className="text-[13px] font-bold text-gray-900">{item.label}</div>
+            <div className="text-[11px] text-gray-500 mt-0.5">{item.desc}</div>
+          </button>
+        );
+      })}
+    </div>
+    {gateErrors.wicketPostInstallation && <p className="text-xs text-red-500 mt-0.5" role="alert">Выберите вариант установки столбов.</p>}
+  </div>
+
+  {form.wicket.postInstallation !== '' && (
+    <div className="field-grid two-col animate-fadeIn">
+      <SectionSelectWithCustom id="wicket-post-section" label="Сечение столбов калитки" value={form.wicket.postSection} options={POST_SECTIONS} onChange={(v) => changeNested('wicket', 'postSection', v)} />
+      {form.wicket.postInstallation === 'бетонирование' && <Field id="wicket-post-length-auto" label="Длина столбов (рассчитано автоматически)" value={form.wicket.postLength} suffix="мм" disabled onChange={() => {}} />}
+      {form.wicket.postInstallation === 'на_платформе' && <Field id="wicket-platform-size" label="Размер металлической платформы" value={form.wicket.platformSize} placeholder="Пример: 200х200х8" required onChange={(v) => changeNested('wicket', 'platformSize', v)} />}
+      {form.wicket.postInstallation === 'к_колоннам' && <Field id="wicket-post-length-manual" label="Высота столбов (укажите вручную)" type="number" min="1" value={form.wicket.postLength} placeholder="Введите высоту в мм" suffix="мм" required onChange={(v) => changeNested('wicket', 'postLength', v)} />}
+    </div>
+  )}
+</div>
               </GatePanel>
 
               <GatePanel title="Распашные ворота" caption="Две створки с открыванием внутрь или наружу" absent={form.noSwing} onAbsent={(v) => {
@@ -569,13 +664,13 @@ export function FenceOrder() {
                     </div>
                   )) : <div className="summary-row"><span>Комплектация</span><strong>Не добавлены секции</strong></div>}
               </ModalGroup>
-              <ModalGroup title="Калитка">
+                            <ModalGroup title="Калитка">
                 {form.noWicket ? <Absent /> : <>
                   {summaryRow('Ширина (ширина проєму)', form.wicket.width ? `${form.wicket.width} мм` : '')}
                   {summaryRow('Высота (высота габаритна)', form.wicket.height ? `${form.wicket.height} мм` : '')}
                   {summaryRow('Количество', form.wicket.quantity ? `${form.wicket.quantity} шт.` : '')}
                   {summaryRow('Вариант открытия калитки', form.wicket.openingOption)}
-                  <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '0px' }}>
+                  <div style={{ width: '193px', height: '124px', marginTop: '6px', marginBottom: '6px' }}>
                     <img
                       src={wicketOpeningCards.find((option) => option.value === form.wicket.openingOption)?.image}
                       alt={`Схема открытия калитки: ${form.wicket.openingOption}`}
@@ -585,8 +680,13 @@ export function FenceOrder() {
                   {summaryRow('Вариант петель', form.wicket.hingeVariant)}
                   {summaryRow('Количество петель на створку', form.wicket.hingeCount ? `${form.wicket.hingeCount} шт.` : '')}
                   {summaryRow('Замок', form.wicket.lock)}
+                  {summaryRow('Вариант установки столбов', form.wicket.postInstallation === 'бетонирование' ? 'Под бетонировку (+1000 мм авто)' : form.wicket.postInstallation === 'на_платформе' ? 'На платформе на фундамент' : form.wicket.postInstallation === 'к_колоннам' ? 'Крепление к колоннам' : 'Не выбрано')}
+                  {summaryRow('Сечение столбов калитки', form.wicket.postSection)}
+                  {form.wicket.postInstallation === 'на_платформе' && summaryRow('Размер платформы', form.wicket.platformSize)}
+                  {form.wicket.postInstallation !== '' && summaryRow('Высота/длина столбов калитки', form.wicket.postLength ? `${form.wicket.postLength} мм` : '—')}
                 </>}
               </ModalGroup>
+
               <ModalGroup title="Распашные ворота">
                 {form.noSwing ? <Absent /> : <>
                   {summaryRow('Ширина (ширина проєму)', form.swing.width ? `${form.swing.width} мм` : '')}
