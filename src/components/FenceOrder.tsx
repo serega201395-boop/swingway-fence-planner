@@ -68,15 +68,24 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
           return (
             <label 
               className={`w-[385px] h-[110px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
-                isSelected ? 'border-gray-900 bg-light-primary shadow-xl z-10' : 'border-gray-200 hover:border-gray-300 shadow-none'
+                isSelected ? 'border-gray-900 bg-light-primary z-10' : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
               style={{
-                scale: isSelected ? '1.04' : '1',
+                transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isSelected ? '0 12px 24px -4px rgba(10, 25, 47, 0.42), 0 6px 12px -4px rgba(15, 32, 67, 0.35)' : 'none',
               }}
               key={option.value}
             >
               <input className="wicket-opening-input" type="radio" name="swing-opening" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} />
-              <img src={option.image} alt={option.label} className="w-full max-h-full object-contain" style={{ imageRendering: 'pixelated' }} />
+              <img 
+                src={option.image} 
+                alt={option.label} 
+                className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
+                style={{ 
+                  transform: isSelected ? 'scale(1.07)' : 'scale(1)',
+                  imageRendering: '-webkit-optimize-contrast'
+                }} 
+              />
               <span className="wicket-opening-card-label hidden">{option.label}</span>
               {value === option.value && (
                 <span className="wicket-opening-check absolute top-1.5 right-1.5 bg-dark rounded-full p-0.5" aria-hidden="true">
@@ -90,6 +99,7 @@ function SwingOpeningChoice({ value, onChange }: { value: string; onChange: (val
     </fieldset>
   );
 }
+
 
 
 function WicketOpeningChoice({ value, onChange }: {
@@ -129,7 +139,7 @@ function WicketOpeningChoice({ value, onChange }: {
                 alt="" 
                 className="w-full max-h-full object-contain transition-transform duration-200 ease-in-out" 
                 style={{ 
-                  transform: isSelected ? 'scale(1.0476)' : 'scale(1)',
+                  transform: isSelected ? 'scale(1.08)' : 'scale(1)',
                   imageRendering: '-webkit-optimize-contrast'
                 }}
               />
