@@ -81,11 +81,14 @@ function WicketOpeningChoice({ value, onChange }: {
           const isSelected = value === option.value;
           return (
             <label
-              className={`w-[202px] h-[130px] overflow-hidden relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
+              className={`w-[202px] h-[130px] relative flex items-center justify-center border rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out ${
                 isSelected 
-                  ? 'border-black bg-light-primary scale-105 shadow-lg outline-2 outline-black z-10' 
-                  : 'border-gray-200 hover:border-gray-300 scale-100'
+                  ? 'border-gray-900 bg-light-primary shadow-xl z-10' 
+                  : 'border-gray-200 hover:border-gray-300 shadow-none'
               }`}
+              style={{
+                transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+              }}
               key={option.value}
             >
               <input
@@ -117,6 +120,7 @@ function WicketOpeningChoice({ value, onChange }: {
     </fieldset>
   );
 }
+
 
 
 function Choice({ id, label, value, options, required, error, onChange }: {
